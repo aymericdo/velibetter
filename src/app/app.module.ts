@@ -33,7 +33,7 @@ import { AgmCoreModule } from '@agm/core';
       }
     }),
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyBc2sRgXIxcE9iSpRFeGRA_LoaBMB7ZHyE'
+      apiKey: process.env.GOOGLE_MAPS_KEY || '',
     })
   ],
   providers: [],
