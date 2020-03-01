@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Station, ApiService } from './services/api.service';
-
-interface Marker {
-  lat: number;
-  lng: number;
-  alpha: number;
-}
+import { fetchingStations } from './actions/stations';
+import { Store, select } from '@ngrx/store';
+import { AppState } from './reducers';
+import { isLoading, markers, Marker } from './reducers/stations';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -14,31 +12,21 @@ interface Marker {
 })
 export class AppComponent implements OnInit {
   title = 'Velibetter';
-  stations: Array<Station>;
-  markers: Array<Marker>;
+  markers$: Observable<Marker[]>;
+  isLoading$: Observable<boolean>;
 
   lat = 48.859889;
   lng = 2.346878;
   zoom = 13;
 
-  constructor(private apiService: ApiService) {}
-
-  ngOnInit() {
-    this.fetchData();
+  constructor(
+    private store: Store<AppState>,
+  ) {
+    this.isLoading$ = store.pipe(select(isLoading));
+    this.markers$ = store.pipe(select(markers));
   }
 
-  fetchData() {
-    this.apiService.fetch().subscribe(
-      (data: Array<Station>) => {
-        this.stations = data;
-        this.markers = this.stations.map(s => ({
-          lat: s.lat,
-          lng: s.lon,
-          alpha: 0.4,
-        }));
-      }, (err) => {
-        console.log(err);
-      }
-    );
+  ngOnInit() {
+    this.store.dispatch(fetchingStations());
   }
 }

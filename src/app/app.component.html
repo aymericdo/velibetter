@@ -4,13 +4,20 @@
   </mat-toolbar-row>
 </mat-toolbar>
 <main>
-  <agm-map [latitude]="lat" [zoom]="zoom" [longitude]="lng">
-    <agm-marker
-        *ngFor="let marker of markers"
+  <ng-container *ngIf="!(isLoading$ | async); else isLoading">
+    <agm-map [latitude]="lat" [zoom]="zoom" [longitude]="lng">
+      <agm-marker
+        *ngFor="let marker of markers$ | async"
         [latitude]="marker.lat"
         [longitude]="marker.lng"
         [opacity]="marker.alpha"
       >
       </agm-marker>
-  </agm-map>
+    </agm-map>
+  </ng-container>
+  <ng-template #isLoading>
+    <div class="loading-container">
+      <mat-spinner></mat-spinner>
+    </div>
+  </ng-template>
 </main>

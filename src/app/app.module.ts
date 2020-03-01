@@ -6,11 +6,14 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
-import { MatToolbarModule, MatCardModule, MatButtonModule } from '@angular/material';
+import { MatToolbarModule, MatCardModule, MatButtonModule, MatProgressSpinnerModule } from '@angular/material';
 import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 import { reducers, metaReducers } from './reducers';
 import { AgmCoreModule } from '@agm/core';
+import { AppEffects } from './app.effects';
 
 @NgModule({
   declarations: [
@@ -22,6 +25,7 @@ import { AgmCoreModule } from '@agm/core';
     BrowserModule,
     HttpClientModule,
     MatButtonModule,
+    MatProgressSpinnerModule,
     MatCardModule,
     MatToolbarModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
@@ -32,9 +36,14 @@ import { AgmCoreModule } from '@agm/core';
         strictActionImmutability: true
       }
     }),
+    EffectsModule.forRoot([
+      AppEffects,
+    ]),
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyCcsw2lr7StRPLt0nv3KybPFtT0U4hzyks',
-    })
+    }),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
+    EffectsModule.forRoot([AppEffects])
   ],
   providers: [],
   bootstrap: [AppComponent]
