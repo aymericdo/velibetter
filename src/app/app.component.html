@@ -5,12 +5,19 @@
 </mat-toolbar>
 <main>
   <ng-container *ngIf="!(isLoading$ | async); else isLoading">
-    <agm-map [latitude]="lat" [zoom]="zoom" [longitude]="lng">
+    <agm-map [latitude]="defaultCoord.lat" [zoom]="zoom" [longitude]="defaultCoord.lng">
       <agm-marker
         *ngFor="let marker of markers$ | async"
         [latitude]="marker.lat"
         [longitude]="marker.lng"
         [opacity]="marker.alpha"
+      >
+      </agm-marker>
+      <agm-marker
+        *ngIf="!!(currentPosition$ | async)"
+        [latitude]="(currentPosition$ | async)?.lat"
+        [longitude]="(currentPosition$ | async)?.lng"
+        [opacity]="1"
       >
       </agm-marker>
     </agm-map>
