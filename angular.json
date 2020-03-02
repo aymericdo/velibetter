@@ -129,6 +129,14 @@
               "devServerTarget": "velib-pwa:serve:production"
             }
           }
+        },
+        "deploy": {
+          "builder": "@netlify-builder/deploy:deploy",
+          "options": {
+            "outputPath": "dist/velib-pwa",
+            "netlifyToken": "",
+            "siteId": "aaa97e93-65f2-4f3a-a214-f3e218cf3438"
+          }
         }
       }
     }
