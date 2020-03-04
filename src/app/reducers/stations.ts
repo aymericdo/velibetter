@@ -1,13 +1,14 @@
-import { Action, createReducer, on, createSelector } from "@ngrx/store";
+import { Action, createReducer, on, createSelector } from '@ngrx/store';
 import {
   fetchingAllStations,
   setStations,
   fetchingClosestStations
-} from "../actions/stations";
-import { Station } from "../services/api.service";
-import { AppState } from ".";
+} from '../actions/stations';
+import { Station } from '../services/api.service';
+import { AppState } from '.';
 
 export interface Marker {
+  id: number;
   lat: number;
   lng: number;
   alpha: number;
@@ -61,6 +62,7 @@ export const stations = createSelector(
 );
 export const markers = createSelector(selectStations, (state: StationState) =>
   state.list.map(s => ({
+    id: s.stationId,
     lat: s.lat,
     lng: s.lng,
     alpha: 0.4

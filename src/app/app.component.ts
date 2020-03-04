@@ -22,6 +22,7 @@ export class AppComponent implements OnInit, OnDestroy {
   isLoading$: Observable<boolean>;
   currentPosition$: Observable<{ lat: number; lng: number }>;
   watcher: number = null;
+  currentLatLngBounds: LatLngBounds;
 
   // Châtelet
   defaultCoord = { lat: 48.859889, lng: 2.346878 };
@@ -85,8 +86,18 @@ export class AppComponent implements OnInit, OnDestroy {
  }
 
   boundsChange(event: LatLngBounds) {
-    this.store.dispatch(
-      fetchingClosestStations({ latLngBoundsLiteral: event.toJSON() })
-    );
+    this.currentLatLngBounds = event;
   }
+
+  idle() {
+    if (this.currentLatLngBounds) {
+      this.store.dispatch(
+        fetchingClosestStations({ latLngBoundsLiteral: this.currentLatLngBounds.toJSON() })
+      );
+    }
+  }
+
+  trackByFn(index: number, marker: Marker): number {
+    return marker.id;
+ }
 }
