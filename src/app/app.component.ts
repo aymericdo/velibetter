@@ -85,9 +85,8 @@ export class AppComponent implements OnInit, OnDestroy {
   };
 
   boundsChange(event: LatLngBounds) {
-    console.log(event);
-    // this.store.dispatch(
-    //   fetchingClosestStations({ latLngBoundsLiteral: event.toJSON() })
-    // );
+    this.store.dispatch(
+      fetchingClosestStations({ latLngBoundsLiteral: event.toJSON() })
+    );
   }
 }

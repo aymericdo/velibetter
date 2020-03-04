@@ -16,17 +16,19 @@ export interface Station {
   providedIn: "root"
 })
 export class ApiService {
-  private baseURL = "https://velibetter.herokuapp.com/station-info-list/";
+  private baseURL = "https://velibetter.herokuapp.com";
   constructor(private httpClient: HttpClient) {}
   fetchClosest(
     latLngBoundsLiteral: LatLngBoundsLiteral
   ): Observable<Station[]> {
     return this.httpClient.post(
-      `${this.baseURL}/closest`,
+      `${this.baseURL}/closest-station-list/`,
       latLngBoundsLiteral
     ) as Observable<Station[]>;
   }
   fetchAll(): Observable<Station[]> {
-    return this.httpClient.get(this.baseURL) as Observable<Station[]>;
+    return this.httpClient.get(
+      `${this.baseURL}/station-info-list/`
+    ) as Observable<Station[]>;
   }
 }
