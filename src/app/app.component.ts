@@ -1,23 +1,23 @@
-import { Component, OnDestroy, OnInit, EventEmitter } from "@angular/core";
+import { Component, OnDestroy, OnInit, EventEmitter } from '@angular/core';
 import {
   fetchingAllStations,
   fetchingClosestStations
-} from "./actions/stations";
-import { Store, select } from "@ngrx/store";
-import { AppState } from "./reducers";
-import { isLoading, markers, Marker } from "./reducers/stations";
-import { Observable } from "rxjs";
-import { setPosition } from "./actions/position";
-import { currentPosition } from "./reducers/position";
-import { LatLngBounds } from "@agm/core";
+} from './actions/stations';
+import { Store, select } from '@ngrx/store';
+import { AppState } from './reducers';
+import { isLoading, markers, Marker } from './reducers/stations';
+import { Observable } from 'rxjs';
+import { setPosition } from './actions/position';
+import { currentPosition } from './reducers/position';
+import { LatLngBounds } from '@agm/core';
 
 @Component({
-  selector: "app-root",
-  templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.scss"]
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  title = "Velibetter";
+  title = 'Velibetter';
   markers$: Observable<Marker[]>;
   isLoading$: Observable<boolean>;
   currentPosition$: Observable<{ lat: number; lng: number }>;
@@ -40,7 +40,7 @@ export class AppComponent implements OnInit, OnDestroy {
       { timeout: 0 }
     );
 
-    this.store.dispatch(fetchingAllStations());
+    // this.store.dispatch(fetchingAllStations());
   }
 
   ngOnDestroy(): void {
@@ -56,7 +56,7 @@ export class AppComponent implements OnInit, OnDestroy {
         })
       );
     }
-  };
+ }
 
   handleLocationError = error => {
     switch (error.code) {
@@ -82,7 +82,7 @@ export class AppComponent implements OnInit, OnDestroy {
       case 1:
       // ...user said no ☹️
     }
-  };
+ }
 
   boundsChange(event: LatLngBounds) {
     this.store.dispatch(

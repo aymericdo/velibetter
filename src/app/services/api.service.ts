@@ -18,6 +18,7 @@ export interface Station {
 export class ApiService {
   private baseURL = "https://velibetter.herokuapp.com";
   constructor(private httpClient: HttpClient) {}
+
   fetchClosest(
     latLngBoundsLiteral: LatLngBoundsLiteral
   ): Observable<Station[]> {
@@ -26,6 +27,7 @@ export class ApiService {
       latLngBoundsLiteral
     ) as Observable<Station[]>;
   }
+
   fetchAll(): Observable<Station[]> {
     return this.httpClient.get(
       `${this.baseURL}/station-info-list/`

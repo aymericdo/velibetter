@@ -2,12 +2,23 @@ main {
   height: calc(100vh - 64px);
 }
 
-agm-map {
+.map {
   height: 100%;
+
+  &.-disabled {
+    opacity: 0.5;
+  }
+
+  agm-map {
+    height: 100%;
+  }
 }
 
 .loading-container {
+  position: absolute;
+  top: 0;
   height: 100%;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -4,12 +4,13 @@
   </mat-toolbar-row>
 </mat-toolbar>
 <main>
-  <ng-container *ngIf="!(isLoading$ | async); else isLoading">
-    <agm-map 
-      [latitude]="(currentPosition$ | async)?.lat || defaultCoord.lat" 
-      [zoom]="zoom" 
+  <div class="map" [class.-disabled]="isLoading$ | async">
+    <agm-map
+      [latitude]="(currentPosition$ | async)?.lat || defaultCoord.lat"
+      [zoom]="zoom"
       [longitude]="(currentPosition$ | async)?.lng || defaultCoord.lng"
-      (boundsChange)="boundsChange($event)">
+      (boundsChange)="boundsChange($event)"
+    >
       <agm-marker
         *ngFor="let marker of markers$ | async"
         [latitude]="marker.lat"
@@ -25,10 +26,8 @@
       >
       </agm-marker>
     </agm-map>
-  </ng-container>
-  <ng-template #isLoading>
-    <div class="loading-container">
-      <mat-spinner></mat-spinner>
-    </div>
-  </ng-template>
+  </div>
+  <div *ngIf="isLoading$ | async" class="loading-container">
+    <mat-spinner></mat-spinner>
+  </div>
 </main>
