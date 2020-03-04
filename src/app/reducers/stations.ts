@@ -62,7 +62,7 @@ export const stations = createSelector(
 export const markers = createSelector(selectStations, (state: StationState) =>
   state.list.map(s => ({
     lat: s.lat,
-    lng: s.lon,
+    lng: s.lng,
     alpha: 0.4
   }))
 );

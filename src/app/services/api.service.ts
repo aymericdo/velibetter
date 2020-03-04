@@ -7,7 +7,7 @@ export interface Station {
   stationId: number;
   name: string;
   lat: number;
-  lon: number;
+  lng: number;
   capacity: number;
   stationCode: string;
 }
