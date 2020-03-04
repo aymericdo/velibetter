@@ -1,6 +1,6 @@
 {
-  "name": "velib-pwa",
-  "short_name": "velib-pwa",
+  "name": "Velibetter",
+  "short_name": "Velibetter",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",

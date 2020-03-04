@@ -20,16 +20,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'velib-pwa'`, () => {
+  it(`should have as title 'Velibetter'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('velib-pwa');
+    expect(app.title).toEqual('Velibetter');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('velib-pwa app is running!');
+    expect(compiled.querySelector('.content span').textContent).toContain('Velibetter app is running!');
   });
 });
