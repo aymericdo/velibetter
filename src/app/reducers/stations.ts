@@ -1,11 +1,11 @@
-import { Action, createReducer, on, createSelector } from '@ngrx/store';
+import { Action, createReducer, on, createSelector } from "@ngrx/store";
 import {
-  fetchingAllStations,
+  fetchingAllStationsInfo,
   setStations,
-  fetchingClosestStations
-} from '../actions/stations';
-import { Station } from '../services/api.service';
-import { AppState } from '.';
+  fetchingClosestStationsInfo
+} from "../actions/stations";
+import { StationInfo } from "../services/api.service";
+import { AppState } from ".";
 
 export interface Marker {
   id: number;
@@ -15,7 +15,7 @@ export interface Marker {
 }
 
 export interface StationState {
-  list: Station[];
+  list: StationInfo[];
   isLoading: boolean;
 }
 
@@ -26,13 +26,13 @@ const initialState: StationState = {
 
 export const stationsReducer = createReducer(
   initialState,
-  on(fetchingAllStations, state => {
+  on(fetchingAllStationsInfo, state => {
     return {
       ...state,
       isLoading: true
     };
   }),
-  on(fetchingClosestStations, state => {
+  on(fetchingClosestStationsInfo, state => {
     return {
       ...state,
       isLoading: true
