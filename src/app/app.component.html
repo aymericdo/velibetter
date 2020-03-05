@@ -9,6 +9,7 @@
       [latitude]="(currentPosition$ | async)?.lat || defaultCoord.lat"
       [zoom]="zoom"
       [longitude]="(currentPosition$ | async)?.lng || defaultCoord.lng"
+      [streetViewControl]="false"
       (idle)="idle()"
       (boundsChange)="boundsChange($event)"
     >

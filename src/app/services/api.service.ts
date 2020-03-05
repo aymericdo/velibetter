@@ -36,7 +36,7 @@ export class ApiService {
     latLngBoundsLiteral: LatLngBoundsLiteral
   ): Observable<StationInfo[]> {
     return this.httpClient.post(
-      `${this.baseURL}/closest-station-list/`,
+      `${this.baseURL}/closest-station-info-list/`,
       latLngBoundsLiteral
     ) as Observable<StationInfo[]>;
   }
