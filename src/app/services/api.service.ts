@@ -47,16 +47,16 @@ export class ApiService {
     ) as Observable<StationInfo[]>;
   }
 
-  fetchClosestStatus(stationIds: number[]): Observable<StationInfo[]> {
+  fetchClosestStatus(stationIds: number[]): Observable<StationStatus[]> {
     return this.httpClient.post(
       `${this.baseURL}/station-status-list/`,
       stationIds
-    ) as Observable<StationInfo[]>;
+    ) as Observable<StationStatus[]>;
   }
 
-  fetchStationStatus(stationId: number): Observable<StationInfo[]> {
+  fetchStationStatus(stationId: number): Observable<StationStatus[]> {
     return this.httpClient.get(
       `${this.baseURL}/station-status/${stationId}`
-    ) as Observable<StationInfo[]>;
+    ) as Observable<StationStatus[]>;
   }
 }

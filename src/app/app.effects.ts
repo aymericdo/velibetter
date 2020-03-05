@@ -4,11 +4,14 @@ import { EMPTY } from "rxjs";
 import { catchError, map, mergeMap } from "rxjs/operators";
 import {
   fetchingAllStationsInfo,
-  setStations,
+  setStationsInfo,
   fetchingClosestStationsInfo
 } from "./actions/stations";
 import { ApiService, StationInfo, StationStatus } from "./services/api.service";
-import { fetchingClosestStationsStatus } from "./actions/stations";
+import {
+  fetchingClosestStationsStatus,
+  setStationsStatus
+} from "./actions/stations";
 
 @Injectable()
 export class AppEffects {
@@ -20,7 +23,7 @@ export class AppEffects {
       mergeMap(({ latLngBoundsLiteral }) =>
         this.apiService.fetchClosestInfo(latLngBoundsLiteral).pipe(
           map((stations: Array<StationInfo>) =>
-            setStations({ list: stations })
+            setStationsInfo({ list: stations })
           ),
           catchError(() => EMPTY)
         )
@@ -34,7 +37,21 @@ export class AppEffects {
       mergeMap(() =>
         this.apiService.fetchAllInfo().pipe(
           map((stations: Array<StationInfo>) =>
-            setStations({ list: stations })
+            setStationsInfo({ list: stations })
+          ),
+          catchError(() => EMPTY)
+        )
+      )
+    )
+  );
+
+  fetchingClosestStationsStatus$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fetchingClosestStationsStatus),
+      mergeMap(({ stationIds }) =>
+        this.apiService.fetchClosestStatus(stationIds).pipe(
+          map((stations: Array<StationStatus>) =>
+            setStationsStatus({ list: stations })
           ),
           catchError(() => EMPTY)
         )

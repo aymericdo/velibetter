@@ -1,36 +1,40 @@
-import { Component, OnDestroy, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnDestroy, OnInit, EventEmitter } from "@angular/core";
 import {
   fetchingAllStationsInfo,
   fetchingClosestStationsInfo
-} from './actions/stations';
-import { Store, select } from '@ngrx/store';
-import { AppState } from './reducers';
-import { isLoading, markers, Marker } from './reducers/stations';
-import { Observable } from 'rxjs';
-import { setPosition } from './actions/position';
-import { currentPosition } from './reducers/position';
-import { LatLngBounds } from '@agm/core';
+} from "./actions/stations";
+import { Store, select } from "@ngrx/store";
+import { AppState } from "./reducers";
+import { isLoading, markers, Marker } from "./reducers/stations";
+import { Observable } from "rxjs";
+import { setPosition } from "./actions/position";
+import { currentPosition } from "./reducers/position";
+import { LatLngBounds } from "@agm/core";
+import { fetchingClosestStationsStatus } from "./actions/stations";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  selector: "app-root",
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.scss"]
 })
 export class AppComponent implements OnInit, OnDestroy {
-  title = 'Velibetter';
+  title = "Velibetter";
   markers$: Observable<Marker[]>;
   isLoading$: Observable<boolean>;
   currentPosition$: Observable<{ lat: number; lng: number }>;
   watcher: number = null;
   currentLatLngBounds: LatLngBounds;
 
-  fabButtons = [{
-    id: 1,
-    icon: 'directions_bike',
-  }, {
-    id: 2,
-    icon: 'lock',
-  }];
+  fabButtons = [
+    {
+      id: 1,
+      icon: "directions_bike"
+    },
+    {
+      id: 2,
+      icon: "lock"
+    }
+  ];
 
   // Châtelet
   defaultCoord = { lat: 48.859889, lng: 2.346878 };
@@ -65,7 +69,7 @@ export class AppComponent implements OnInit, OnDestroy {
         })
       );
     }
-  }
+  };
 
   handleLocationError = error => {
     switch (error.code) {
@@ -91,7 +95,7 @@ export class AppComponent implements OnInit, OnDestroy {
       case 1:
       // ...user said no ☹️
     }
-  }
+  };
 
   boundsChange(event: LatLngBounds) {
     this.currentLatLngBounds = event;
