@@ -17,10 +17,12 @@ import { EffectsModule } from '@ngrx/effects';
 import { reducers, metaReducers } from './reducers';
 import { AgmCoreModule } from '@agm/core';
 import { AppEffects } from './app.effects';
+import { SpeedDialFabComponent } from './speed-dial-fab/speed-dial-fab.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    SpeedDialFabComponent,
   ],
   imports: [
     AppRoutingModule,

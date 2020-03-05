@@ -28,6 +28,11 @@
       >
       </agm-marker>
     </agm-map>
+    <app-speed-dial-fab
+      (redirect)="navigateTo($event)"
+      [mainButtonIcon]="'navigation'"
+      [fabButtons]="fabButtons"
+    ></app-speed-dial-fab>
   </div>
   <div *ngIf="isLoading$ | async" class="loading-container">
     <mat-spinner></mat-spinner>
