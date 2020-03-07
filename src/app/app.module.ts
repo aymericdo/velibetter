@@ -17,18 +17,26 @@ import { EffectsModule } from '@ngrx/effects';
 import { reducers, metaReducers } from './reducers';
 import { AgmCoreModule } from '@agm/core';
 import { AppEffects } from './app.effects';
-import { SpeedDialFabComponent } from './speed-dial-fab/speed-dial-fab.component';
+import { DepartureComponent } from './departure/departure.component';
+import { ArrivalComponent } from './arrival/arrival.component';
+import { SpeedDialFabComponent } from './shared/speed-dial-fab/speed-dial-fab.component';
+import { ListComponent } from './shared/list/list.component';
+import { LayoutModule } from '@angular/cdk/layout';
 
 @NgModule({
   declarations: [
     AppComponent,
     SpeedDialFabComponent,
+    DepartureComponent,
+    ArrivalComponent,
+    ListComponent,
   ],
   imports: [
     AppRoutingModule,
     BrowserAnimationsModule,
     BrowserModule,
     HttpClientModule,
+    LayoutModule,
     MatButtonModule,
     MatProgressSpinnerModule,
     MatCardModule,

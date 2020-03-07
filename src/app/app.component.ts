@@ -1,6 +1,5 @@
-import { Component, OnDestroy, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
-  fetchingAllStationsInfo,
   fetchingClosestStationsInfo
 } from './actions/stations';
 import { Store, select } from '@ngrx/store';
@@ -10,6 +9,10 @@ import { Observable } from 'rxjs';
 import { setPosition } from './actions/position';
 import { currentPosition } from './reducers/position';
 import { LatLngBounds } from '@agm/core';
+import { Router } from '@angular/router';
+import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
+import { setIsMobile } from './actions/screen';
+import { isMobile } from './reducers/screen';
 
 @Component({
   selector: 'app-root',
@@ -21,14 +24,16 @@ export class AppComponent implements OnInit, OnDestroy {
   markers$: Observable<Marker[]>;
   isLoading$: Observable<boolean>;
   currentPosition$: Observable<{ lat: number; lng: number }>;
+  isMobile$: Observable<boolean>;
+
   watcher: number = null;
   currentLatLngBounds: LatLngBounds;
 
   fabButtons = [{
-    id: 1,
+    id: 0,
     icon: 'directions_bike',
   }, {
-    id: 2,
+    id: 1,
     icon: 'lock',
   }];
 
@@ -36,10 +41,15 @@ export class AppComponent implements OnInit, OnDestroy {
   defaultCoord = { lat: 48.859889, lng: 2.346878 };
   zoom = 16;
 
-  constructor(private store: Store<AppState>) {
+  constructor(
+    private store: Store<AppState>,
+    private router: Router,
+    private breakpointObserver: BreakpointObserver,
+  ) {
     this.isLoading$ = store.pipe(select(isLoading));
     this.markers$ = store.pipe(select(markers));
     this.currentPosition$ = store.pipe(select(currentPosition));
+    this.isMobile$ = store.pipe(select(isMobile));
   }
 
   ngOnInit() {
@@ -49,7 +59,16 @@ export class AppComponent implements OnInit, OnDestroy {
       { timeout: 0 }
     );
 
-    // this.store.dispatch(fetchingAllStations());
+    this.breakpointObserver.observe([
+      Breakpoints.XSmall,
+      Breakpoints.Small,
+    ]).subscribe((result: BreakpointState) => {
+      if (result.matches) {
+        this.store.dispatch(setIsMobile({ isMobile: true }));
+      } else {
+        this.store.dispatch(setIsMobile({ isMobile: false }));
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -112,6 +131,13 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   navigateTo(id: number): void {
-    console.log(id);
+    switch (id) {
+      case 0: {
+        this.router.navigate(['departure']); break;
+      }
+      case 1: {
+        this.router.navigate(['arrival']); break;
+      }
+    }
   }
 }

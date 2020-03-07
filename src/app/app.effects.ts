@@ -1,14 +1,13 @@
-import { Injectable } from "@angular/core";
-import { Actions, ofType, createEffect } from "@ngrx/effects";
-import { EMPTY } from "rxjs";
-import { catchError, map, mergeMap } from "rxjs/operators";
+import { Injectable } from '@angular/core';
+import { Actions, ofType, createEffect } from '@ngrx/effects';
+import { EMPTY } from 'rxjs';
+import { catchError, map, mergeMap } from 'rxjs/operators';
 import {
   fetchingAllStationsInfo,
   setStations,
   fetchingClosestStationsInfo
-} from "./actions/stations";
-import { ApiService, StationInfo, StationStatus } from "./services/api.service";
-import { fetchingClosestStationsStatus } from "./actions/stations";
+} from './actions/stations';
+import { ApiService, StationInfo } from './services/api.service';
 
 @Injectable()
 export class AppEffects {

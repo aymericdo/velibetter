@@ -1,0 +1,14 @@
+:host {
+  position: absolute;
+  bottom: 0;
+  height: calc(100vh - 64px);
+  width: 100%;
+  z-index: 200;
+  background: red;
+
+  &.-is-splitted {
+    position: absolute;
+    left: 0;
+    width: 60%;
+  }
+}
