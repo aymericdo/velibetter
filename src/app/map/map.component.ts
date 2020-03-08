@@ -7,8 +7,8 @@ import { Router, NavigationEnd } from '@angular/router';
 import { isLoading, markers, Marker } from '../reducers/station-info';
 import { currentPosition } from '../reducers/position';
 import { fetchingClosestStationsInfo } from '../actions/station-info';
-import { stationsStatusById } from '../reducers/station-status';
-import { filter, take } from 'rxjs/operators';
+import { direction } from '../reducers/station-status';
+import { fetchingDestination } from '../actions/station-status';
 
 @Component({
   selector: 'app-map',
@@ -42,18 +42,15 @@ export class MapComponent {
     this.markers$ = store.pipe(select(markers));
     this.isLoading$ = store.pipe(select(isLoading));
     this.currentPosition$ = store.pipe(select(currentPosition));
+    this.destination$ = store.pipe(select(direction));
     router.events.subscribe((val) => {
-      // see also
       if (val instanceof NavigationEnd) {
-        if (val.url.split('/').length > 1 && ['departure', 'arrival'].includes(val.url.split('/')[1])) {
-            this.travelMode = val.url.split('/')[1] === 'departure' ? 'WALKING' : 'BICYCLING'; {  {} }
-            this.destination$ = store.pipe(
-            select(stationsStatusById(+val.url.split('/')[2])),
-            take(1),
-          );
+        if (val.url.split('/').length > 2 && ['departure', 'arrival'].includes(val.url.split('/')[1])) {
+          this.travelMode = val.url.split('/')[1] === 'departure' ? 'WALKING' : 'BICYCLING';
+          this.store.dispatch(fetchingDestination({ stationId: +val.url.split('/')[2] }));
         }
       }
-   });
+    });
   }
 
   boundsChange(event: LatLngBounds) {

@@ -3,17 +3,20 @@ import { StationStatus } from '../services/api.service';
 import { AppState } from '.';
 import {
   fetchingClosestStationsStatus,
-  setStationsStatus
+  setStationsStatus,
+  setDirection
 } from '../actions/station-status';
 
 export interface StationState {
   list: StationStatus[];
   isLoading: boolean;
+  direction: StationStatus;
 }
 
 const initialState: StationState = {
   list: [],
-  isLoading: false
+  isLoading: false,
+  direction: null,
 };
 
 export const stationsReducer = createReducer(
@@ -27,8 +30,14 @@ export const stationsReducer = createReducer(
   on(setStationsStatus, (state, { list }) => {
     return {
       ...state,
-      list: list.concat(list),
+      list,
       isLoading: false,
+    };
+  }),
+  on(setDirection, (state, { direction }) => {
+    return {
+      ...state,
+      direction,
     };
   }),
 );
@@ -49,4 +58,8 @@ export const stationsStatus = createSelector(
 export const stationsStatusById = (id: number) => createSelector(
   selectStationStatus,
   (state: StationState) => state.list.find(status => status.stationId === id)
+);
+export const direction = createSelector(
+  selectStationStatus,
+  (state: StationState) => state.direction
 );
