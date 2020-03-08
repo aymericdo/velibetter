@@ -10,6 +10,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { StoreModule } from '@ngrx/store';
@@ -22,6 +23,9 @@ import { ArrivalComponent } from './arrival/arrival.component';
 import { SpeedDialFabComponent } from './shared/speed-dial-fab/speed-dial-fab.component';
 import { ListComponent } from './shared/list/list.component';
 import { LayoutModule } from '@angular/cdk/layout';
+import { MapComponent } from './map/map.component';
+import { LoadingComponent } from './shared/loading/loading.component';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -30,6 +34,8 @@ import { LayoutModule } from '@angular/cdk/layout';
     DepartureComponent,
     ArrivalComponent,
     ListComponent,
+    MapComponent,
+    LoadingComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -38,8 +44,10 @@ import { LayoutModule } from '@angular/cdk/layout';
     HttpClientModule,
     LayoutModule,
     MatButtonModule,
+    MatListModule,
     MatProgressSpinnerModule,
     MatCardModule,
+    MatSidenavModule,
     MatToolbarModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production

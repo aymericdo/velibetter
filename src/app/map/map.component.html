@@ -1,0 +1,35 @@
+<div
+  class="map"
+  [class.-disabled]="isLoading$ | async"
+>
+  <agm-map
+    [latitude]="(currentPosition$ | async)?.lat || defaultCoord.lat"
+    [zoom]="zoom"
+    [longitude]="(currentPosition$ | async)?.lng || defaultCoord.lng"
+    [streetViewControl]="false"
+    (idle)="idle()"
+    (boundsChange)="boundsChange($event)"
+  >
+    <agm-marker
+      *ngFor="let marker of markers$ | async; trackBy: trackByFn"
+      [latitude]="marker.lat"
+      [longitude]="marker.lng"
+      [opacity]="marker.alpha"
+    >
+    </agm-marker>
+    <agm-marker
+      *ngIf="!!(currentPosition$ | async)"
+      [latitude]="(currentPosition$ | async)?.lat"
+      [longitude]="(currentPosition$ | async)?.lng"
+      [opacity]="1"
+    >
+    </agm-marker>
+  </agm-map>
+  <app-speed-dial-fab
+    *ngIf="!isDisplayingListPages()"
+    (redirect)="navigateTo($event)"
+    [mainButtonIcon]="'navigation'"
+    [fabButtons]="fabButtons"
+  ></app-speed-dial-fab>
+</div>
+<app-loading *ngIf="isLoading$ | async"></app-loading>

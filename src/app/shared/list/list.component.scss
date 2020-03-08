@@ -1,14 +1,12 @@
 :host {
-  position: absolute;
-  bottom: 0;
-  height: calc(100vh - 64px);
-  width: 100%;
-  z-index: 200;
+  display: block;
   background: white;
+  z-index: 200;
+  height: 100%;
+  position: relative;
 
-  &.-is-splitted {
-    position: absolute;
-    left: 0;
-    width: 60%;
+  mat-nav-list {
+    max-height: calc(100% - 8px);
+    overflow-y: auto;
   }
 }

@@ -3,13 +3,9 @@ import {
   fetchingAllStationsInfo,
   setStationsInfo,
   fetchingClosestStationsInfo
-} from '../actions/stations';
-import { StationInfo, StationStatus } from '../services/api.service';
+} from '../actions/station-info';
+import { StationInfo } from '../services/api.service';
 import { AppState } from '.';
-import {
-  fetchingClosestStationsStatus,
-  setStationsStatus
-} from '../actions/stations';
 
 export interface Marker {
   id: number;
@@ -19,14 +15,12 @@ export interface Marker {
 }
 
 export interface StationState {
-  infoList: StationInfo[];
-  statusList: StationStatus[];
+  list: StationInfo[];
   isLoading: boolean;
 }
 
 const initialState: StationState = {
-  infoList: [],
-  statusList: [],
+  list: [],
   isLoading: false
 };
 
@@ -44,46 +38,30 @@ export const stationsReducer = createReducer(
       isLoading: true
     };
   }),
-  // on(fetchingClosestStationsStatus, state => {
-  //   return {
-  //     ...state,
-  //     isLoading: true
-  //   };
-  // }),
   on(setStationsInfo, (state, { list }) => {
     return {
       ...state,
-      infoList: list,
+      list,
       isLoading: false
     };
   }),
-  on(setStationsStatus, (state, { list }) => {
-    return {
-      ...state,
-      statusList: list,
-    };
-  })
 );
 
 export function reducer(state: StationState | undefined, action: Action) {
   return stationsReducer(state, action);
 }
 
-export const selectStations = (state: AppState) => state.stations;
+export const selectStationInfo = (state: AppState) => state.stationInfo;
 export const isLoading = createSelector(
-  selectStations,
+  selectStationInfo,
   (state: StationState) => state.isLoading
 );
 export const stationsInfo = createSelector(
-  selectStations,
-  (state: StationState) => state.infoList
+  selectStationInfo,
+  (state: StationState) => state.list
 );
-export const stationsStatus = createSelector(
-  selectStations,
-  (state: StationState) => state.statusList
-);
-export const markers = createSelector(selectStations, (state: StationState) =>
-  state.infoList.map(s => ({
+export const markers = createSelector(selectStationInfo, (state: StationState) =>
+  state.list.map(s => ({
     id: s.stationId,
     lat: s.lat,
     lng: s.lng,

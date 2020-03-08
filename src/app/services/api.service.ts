@@ -12,9 +12,10 @@ export interface StationInfo {
   stationCode: string;
 }
 
-export interface StationStatus {
+export interface StationStatus extends StationInfo {
   stationCode: string;
   stationId: number;
+  distance: number;
   numBikesAvailable: number;
   numDocksAvailable: number;
   isInstalled: boolean;
@@ -23,6 +24,7 @@ export interface StationStatus {
   lastReported: number;
   mechanical: number;
   ebike: number;
+  rentalMethods: string[];
 }
 
 @Injectable({

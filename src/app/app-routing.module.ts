@@ -5,6 +5,7 @@ import { ArrivalComponent } from './arrival/arrival.component';
 
 const routes: Routes = [
   { path: 'departure', component: DepartureComponent },
+  { path: 'departure/:stationId', redirectTo: '' },
   { path: 'arrival', component: ArrivalComponent },
 ];
 

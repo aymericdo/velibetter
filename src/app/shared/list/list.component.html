@@ -1,1 +1,6 @@
-<ng-content></ng-content>
+<app-loading *ngIf="isLoading; else loaded"></app-loading>
+<ng-template #loaded>
+  <mat-nav-list>
+    <ng-content></ng-content>
+  </mat-nav-list>
+</ng-template>

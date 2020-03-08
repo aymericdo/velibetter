@@ -1,45 +1,17 @@
-<mat-toolbar color="primary">
-  <mat-toolbar-row>
-    <span>{{title}}</span>
-  </mat-toolbar-row>
-</mat-toolbar>
-<main [class.-is-splitted]="!(isMobile$ | async) && isDisplayingListPages()">
-  <div
-    class="map"
-    [class.-disabled]="isLoading$ | async"
-  >
-    <agm-map
-      [latitude]="(currentPosition$ | async)?.lat || defaultCoord.lat"
-      [zoom]="zoom"
-      [longitude]="(currentPosition$ | async)?.lng || defaultCoord.lng"
-      [streetViewControl]="false"
-      (idle)="idle()"
-      (boundsChange)="boundsChange($event)"
+<mat-sidenav-container fullscreen>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <mat-toolbar-row>
+        <span>{{title}}</span>
+      </mat-toolbar-row>
+    </mat-toolbar>
+    <main
+      [class.-is-splitted]="!(isMobile$ | async) && isDisplayingListPages()"
     >
-      <agm-marker
-        *ngFor="let marker of markers$ | async; trackBy: trackByFn"
-        [latitude]="marker.lat"
-        [longitude]="marker.lng"
-        [opacity]="marker.alpha"
-      >
-      </agm-marker>
-      <agm-marker
-        *ngIf="!!(currentPosition$ | async)"
-        [latitude]="(currentPosition$ | async)?.lat"
-        [longitude]="(currentPosition$ | async)?.lng"
-        [opacity]="1"
-      >
-      </agm-marker>
-    </agm-map>
-    <app-speed-dial-fab
-      *ngIf="!isDisplayingListPages()"
-      (redirect)="navigateTo($event)"
-      [mainButtonIcon]="'navigation'"
-      [fabButtons]="fabButtons"
-    ></app-speed-dial-fab>
-  </div>
-  <div *ngIf="isLoading$ | async" class="loading-container">
-    <mat-spinner></mat-spinner>
-  </div>
-</main>
-<router-outlet></router-outlet>
+      <app-map
+        [class.-hide]="(isMobile$ | async) && isDisplayingListPages()"
+      ></app-map>
+      <router-outlet></router-outlet>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

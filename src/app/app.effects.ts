@@ -3,15 +3,17 @@ import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { EMPTY, Observable, of } from 'rxjs';
 import { catchError, map, mergeMap, concatMap, withLatestFrom, tap, switchMap } from 'rxjs/operators';
 import {
+  setStationsStatus,
+} from './actions/station-status';
+import {
   fetchingAllStationsInfo,
   setStationsInfo,
   fetchingClosestStationsInfo,
-  setStationsStatus
-} from './actions/stations';
+} from './actions/station-info';
 import { ApiService, StationInfo, StationStatus } from './services/api.service';
 import {
   fetchingClosestStationsStatus,
-} from './actions/stations';
+} from './actions/station-status';
 import { Store, select } from '@ngrx/store';
 import { AppState } from './reducers';
 import { currentPosition } from './reducers/position';
