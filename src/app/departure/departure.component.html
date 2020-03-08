@@ -1,0 +1,7 @@
+<app-list [isLoading]="isLoading$ | async">
+  <a
+    mat-list-item [routerLink]="['/departure', station.stationId]"
+    *ngFor="let station of stationsStatus$ | async">
+      {{ station.name }} - {{ station.distance | number:'1.0-0' }}m
+  </a>
+</app-list>

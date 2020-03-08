@@ -1,10 +1,10 @@
 import { Action, createReducer, on, createSelector } from '@ngrx/store';
 import {
-  fetchingAllStations,
-  setStations,
-  fetchingClosestStations
-} from '../actions/stations';
-import { Station } from '../services/api.service';
+  fetchingAllStationsInfo,
+  setStationsInfo,
+  fetchingClosestStationsInfo
+} from '../actions/station-info';
+import { StationInfo } from '../services/api.service';
 import { AppState } from '.';
 
 export interface Marker {
@@ -15,7 +15,7 @@ export interface Marker {
 }
 
 export interface StationState {
-  list: Station[];
+  list: StationInfo[];
   isLoading: boolean;
 }
 
@@ -26,41 +26,41 @@ const initialState: StationState = {
 
 export const stationsReducer = createReducer(
   initialState,
-  on(fetchingAllStations, state => {
+  on(fetchingAllStationsInfo, state => {
     return {
       ...state,
       isLoading: true
     };
   }),
-  on(fetchingClosestStations, state => {
+  on(fetchingClosestStationsInfo, state => {
     return {
       ...state,
       isLoading: true
     };
   }),
-  on(setStations, (state, { list }) => {
+  on(setStationsInfo, (state, { list }) => {
     return {
       ...state,
       list,
       isLoading: false
     };
-  })
+  }),
 );
 
 export function reducer(state: StationState | undefined, action: Action) {
   return stationsReducer(state, action);
 }
 
-export const selectStations = (state: AppState) => state.stations;
+export const selectStationInfo = (state: AppState) => state.stationInfo;
 export const isLoading = createSelector(
-  selectStations,
+  selectStationInfo,
   (state: StationState) => state.isLoading
 );
-export const stations = createSelector(
-  selectStations,
+export const stationsInfo = createSelector(
+  selectStationInfo,
   (state: StationState) => state.list
 );
-export const markers = createSelector(selectStations, (state: StationState) =>
+export const markers = createSelector(selectStationInfo, (state: StationState) =>
   state.list.map(s => ({
     id: s.stationId,
     lat: s.lat,

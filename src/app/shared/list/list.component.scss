@@ -1,0 +1,12 @@
+:host {
+  display: block;
+  background: white;
+  z-index: 200;
+  height: 100%;
+  position: relative;
+
+  mat-nav-list {
+    max-height: calc(100% - 8px);
+    overflow-y: auto;
+  }
+}

@@ -1,8 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { DepartureComponent } from './departure/departure.component';
+import { ArrivalComponent } from './arrival/arrival.component';
 
-
-const routes: Routes = [];
+const routes: Routes = [
+  { path: 'departure', component: DepartureComponent },
+  { path: 'departure/:stationId', component: DepartureComponent },
+  { path: 'arrival', component: ArrivalComponent },
+  { path: 'arrival/:stationId', component: ArrivalComponent },
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

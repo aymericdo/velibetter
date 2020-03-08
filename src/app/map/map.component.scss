@@ -1,0 +1,18 @@
+:host {
+  display: block;
+  height: 100%;
+  width: 100%;
+  position: relative;
+
+  .map {
+    height: 100%;
+
+    &.-disabled {
+      opacity: 0.5;
+    }
+
+    agm-map {
+      height: 100%;
+    }
+  }
+}

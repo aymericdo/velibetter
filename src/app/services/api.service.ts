@@ -1,9 +1,9 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { LatLngBoundsLiteral } from "@agm/core";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { LatLngBoundsLiteral } from '@agm/core';
 
-export interface Station {
+export interface StationInfo {
   stationId: number;
   name: string;
   lat: number;
@@ -12,25 +12,52 @@ export interface Station {
   stationCode: string;
 }
 
+export interface StationStatus extends StationInfo {
+  stationCode: string;
+  stationId: number;
+  distance: number;
+  numBikesAvailable: number;
+  numDocksAvailable: number;
+  isInstalled: boolean;
+  isReturning: boolean;
+  isRenting: boolean;
+  lastReported: number;
+  mechanical: number;
+  ebike: number;
+  rentalMethods: string[];
+}
+
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class ApiService {
-  private baseURL = "https://velibetter.herokuapp.com";
+  private baseURL = 'https://velibetter.herokuapp.com';
   constructor(private httpClient: HttpClient) {}
 
-  fetchClosest(
+  fetchClosestInfo(
     latLngBoundsLiteral: LatLngBoundsLiteral
-  ): Observable<Station[]> {
+  ): Observable<StationInfo[]> {
     return this.httpClient.post(
       `${this.baseURL}/closest-station-info-list/`,
       latLngBoundsLiteral
-    ) as Observable<Station[]>;
+    ) as Observable<StationInfo[]>;
   }
 
-  fetchAll(): Observable<Station[]> {
+  fetchAllInfo(): Observable<StationInfo[]> {
     return this.httpClient.get(
       `${this.baseURL}/station-info-list/`
-    ) as Observable<Station[]>;
+    ) as Observable<StationInfo[]>;
+  }
+
+  fetchClosestStatusForDeparture(lat: number, lng: number): Observable<StationStatus[]> {
+    return this.httpClient.get(
+      `${this.baseURL}/departure/${lat}/${lng}`,
+    ) as Observable<StationStatus[]>;
+  }
+
+  fetchStationStatus(stationId: number): Observable<StationStatus[]> {
+    return this.httpClient.get(
+      `${this.baseURL}/station-status/${stationId}`
+    ) as Observable<StationStatus[]>;
   }
 }
