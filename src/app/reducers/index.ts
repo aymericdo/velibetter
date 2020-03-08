@@ -10,7 +10,7 @@ import * as fromScreen from './screen';
 export interface AppState {
   stations: fromStations.StationState;
   position: fromPosition.PositionState;
-  screen: fromScreen.PositionState;
+  screen: fromScreen.ScreenState;
 }
 
 export const reducers: ActionReducerMap<AppState> = {

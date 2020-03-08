@@ -3,7 +3,7 @@
     <span>{{title}}</span>
   </mat-toolbar-row>
 </mat-toolbar>
-<main [class.-is-splitted]="!(isMobile$ | async) && (router.url === '/arrival' || router.url === '/departure')">
+<main [class.-is-splitted]="!(isMobile$ | async) && isDisplayingListPages()">
   <div
     class="map"
     [class.-disabled]="isLoading$ | async"
@@ -32,7 +32,7 @@
       </agm-marker>
     </agm-map>
     <app-speed-dial-fab
-      *ngIf="!(router.url === '/arrival' || router.url === '/departure')"
+      *ngIf="!isDisplayingListPages()"
       (redirect)="navigateTo($event)"
       [mainButtonIcon]="'navigation'"
       [fabButtons]="fabButtons"

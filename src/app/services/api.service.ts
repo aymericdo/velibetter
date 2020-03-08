@@ -1,7 +1,7 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { LatLngBoundsLiteral } from "@agm/core";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { LatLngBoundsLiteral } from '@agm/core';
 
 export interface StationInfo {
   stationId: number;
@@ -26,10 +26,10 @@ export interface StationStatus {
 }
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class ApiService {
-  private baseURL = "https://velibetter.herokuapp.com";
+  private baseURL = 'https://velibetter.herokuapp.com';
   constructor(private httpClient: HttpClient) {}
 
   fetchClosestInfo(
@@ -47,16 +47,15 @@ export class ApiService {
     ) as Observable<StationInfo[]>;
   }
 
-  fetchClosestStatus(stationIds: number[]): Observable<StationInfo[]> {
-    return this.httpClient.post(
-      `${this.baseURL}/station-status-list/`,
-      stationIds
-    ) as Observable<StationInfo[]>;
+  fetchClosestStatusForDeparture(lat: number, lng: number): Observable<StationStatus[]> {
+    return this.httpClient.get(
+      `${this.baseURL}/departure/${lat}/${lng}`,
+    ) as Observable<StationStatus[]>;
   }
 
-  fetchStationStatus(stationId: number): Observable<StationInfo[]> {
+  fetchStationStatus(stationId: number): Observable<StationStatus[]> {
     return this.httpClient.get(
       `${this.baseURL}/station-status/${stationId}`
-    ) as Observable<StationInfo[]>;
+    ) as Observable<StationStatus[]>;
   }
 }

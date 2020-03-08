@@ -1,17 +1,32 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
-import { EMPTY } from 'rxjs';
-import { catchError, map, mergeMap } from 'rxjs/operators';
+import { EMPTY, Observable, of } from 'rxjs';
+import { catchError, map, mergeMap, concatMap, withLatestFrom, tap, switchMap } from 'rxjs/operators';
 import {
   fetchingAllStationsInfo,
-  setStations,
-  fetchingClosestStationsInfo
+  setStationsInfo,
+  fetchingClosestStationsInfo,
+  setStationsStatus
 } from './actions/stations';
-import { ApiService, StationInfo } from './services/api.service';
+import { ApiService, StationInfo, StationStatus } from './services/api.service';
+import {
+  fetchingClosestStationsStatus,
+} from './actions/stations';
+import { Store, select } from '@ngrx/store';
+import { AppState } from './reducers';
+import { currentPosition } from './reducers/position';
 
 @Injectable()
 export class AppEffects {
-  constructor(private actions$: Actions, private apiService: ApiService) {}
+  currentPosition$: Observable<{ lat: number; lng: number }>;
+
+  constructor(
+    private actions$: Actions,
+    private store: Store<AppState>,
+    private apiService: ApiService,
+  ) {
+    this.currentPosition$ = store.pipe(select(currentPosition));
+  }
 
   fetchingClosestStationsInfo$ = createEffect(() =>
     this.actions$.pipe(
@@ -19,7 +34,7 @@ export class AppEffects {
       mergeMap(({ latLngBoundsLiteral }) =>
         this.apiService.fetchClosestInfo(latLngBoundsLiteral).pipe(
           map((stations: Array<StationInfo>) =>
-            setStations({ list: stations })
+            setStationsInfo({ list: stations })
           ),
           catchError(() => EMPTY)
         )
@@ -33,7 +48,21 @@ export class AppEffects {
       mergeMap(() =>
         this.apiService.fetchAllInfo().pipe(
           map((stations: Array<StationInfo>) =>
-            setStations({ list: stations })
+            setStationsInfo({ list: stations })
+          ),
+          catchError(() => EMPTY)
+        )
+      )
+    )
+  );
+
+  fetchingClosestStationsStatus$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fetchingClosestStationsStatus),
+      mergeMap(({ lat, lng }) =>
+        this.apiService.fetchClosestStatusForDeparture(lat, lng).pipe(
+          map((stations: Array<StationStatus>) =>
+            setStationsStatus({ list: stations })
           ),
           catchError(() => EMPTY)
         )

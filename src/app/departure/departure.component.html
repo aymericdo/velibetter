@@ -1,3 +1,7 @@
 <app-list>
-  <p>departure works!</p>
+  <div *ngFor="let station of stationsStatus$ | async">
+    <h3>
+        {{ station.stationId }}
+    </h3>
+  </div>
 </app-list>

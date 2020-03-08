@@ -130,11 +130,16 @@ export class AppComponent implements OnInit, OnDestroy {
     return marker.id;
   }
 
+  isDisplayingListPages(): boolean {
+    return this.router.url === '/arrival' || this.router.url === '/departure';
+  }
+
   navigateTo(id: number): void {
     switch (id) {
       case 0: {
         this.router.navigate(['departure']); break;
       }
+
       case 1: {
         this.router.navigate(['arrival']); break;
       }

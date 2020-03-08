@@ -41,7 +41,9 @@ import { LayoutModule } from '@angular/cdk/layout';
     MatProgressSpinnerModule,
     MatCardModule,
     MatToolbarModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production
+    }),
     StoreModule.forRoot(reducers, {
       metaReducers,
       runtimeChecks: {
@@ -49,16 +51,17 @@ import { LayoutModule } from '@angular/cdk/layout';
         strictActionImmutability: true
       }
     }),
-    EffectsModule.forRoot([
-      AppEffects,
-    ]),
+    EffectsModule.forRoot([AppEffects]),
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyCcsw2lr7StRPLt0nv3KybPFtT0U4hzyks',
+      apiKey: 'AIzaSyCcsw2lr7StRPLt0nv3KybPFtT0U4hzyks'
     }),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25,
+      logOnly: environment.production
+    }),
     EffectsModule.forRoot([AppEffects])
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
