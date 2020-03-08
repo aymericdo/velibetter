@@ -46,3 +46,7 @@ export const stationsStatus = createSelector(
   selectStationStatus,
   (state: StationState) => state.list
 );
+export const stationsStatusById = (id: number) => createSelector(
+  selectStationStatus,
+  (state: StationState) => state.list.find(status => status.stationId === id)
+);

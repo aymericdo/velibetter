@@ -11,7 +11,7 @@
       <app-map
         [class.-hide]="(isMobile$ | async) && isDisplayingListPages()"
       ></app-map>
-      <router-outlet></router-outlet>
+      <router-outlet *ngIf="isDisplayingListPages()"></router-outlet>
     </main>
   </mat-sidenav-content>
 </mat-sidenav-container>

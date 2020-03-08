@@ -17,6 +17,7 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { reducers, metaReducers } from './reducers';
 import { AgmCoreModule } from '@agm/core';
+import { AgmDirectionModule } from 'agm-direction';
 import { AppEffects } from './app.effects';
 import { DepartureComponent } from './departure/departure.component';
 import { ArrivalComponent } from './arrival/arrival.component';
@@ -63,6 +64,7 @@ import { MatListModule } from '@angular/material/list';
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyCcsw2lr7StRPLt0nv3KybPFtT0U4hzyks'
     }),
+    AgmDirectionModule,
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production

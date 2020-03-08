@@ -5,8 +5,9 @@ import { ArrivalComponent } from './arrival/arrival.component';
 
 const routes: Routes = [
   { path: 'departure', component: DepartureComponent },
-  { path: 'departure/:stationId', redirectTo: '' },
+  { path: 'departure/:stationId', component: DepartureComponent },
   { path: 'arrival', component: ArrivalComponent },
+  { path: 'arrival/:stationId', component: ArrivalComponent },
 ];
 
 @NgModule({
