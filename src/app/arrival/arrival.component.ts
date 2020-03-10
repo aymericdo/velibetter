@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { StationStatus } from '../services/api.service';
+import { Station } from '../services/api.service';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../reducers';
 import { currentPosition } from '../reducers/position';
@@ -16,7 +16,7 @@ import { fetchingClosestStationsStatus } from '../actions/station-status';
 })
 export class ArrivalComponent implements OnInit {
   currentPosition$: Observable<{ lat: number; lng: number }>;
-  stationsStatus$: Observable<StationStatus[]>;
+  stationsStatus$: Observable<Station[]>;
   isLoading$: Observable<boolean>;
 
   constructor(
@@ -31,7 +31,7 @@ export class ArrivalComponent implements OnInit {
     this.currentPosition$
       .pipe(filter(Boolean), take(1))
       .subscribe((position: { lat: number; lng: number }) => {
-        this.store.dispatch(fetchingClosestStationsStatus(position));
+        this.store.dispatch(fetchingClosestStationsStatus({ isDeparture: false }));
       });
   }
 

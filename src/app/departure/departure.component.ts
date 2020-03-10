@@ -5,7 +5,7 @@ import { fetchingClosestStationsStatus } from '../actions/station-status';
 import { Observable } from 'rxjs';
 import { currentPosition } from '../reducers/position';
 import { filter, take } from 'rxjs/operators';
-import { StationStatus } from '../services/api.service';
+import { Station } from '../services/api.service';
 import { stationsStatus, isLoading } from '../reducers/station-status';
 
 @Component({
@@ -15,7 +15,7 @@ import { stationsStatus, isLoading } from '../reducers/station-status';
 })
 export class DepartureComponent implements OnInit {
   currentPosition$: Observable<{ lat: number; lng: number }>;
-  stationsStatus$: Observable<StationStatus[]>;
+  stationsStatus$: Observable<Station[]>;
   isLoading$: Observable<boolean>;
 
   constructor(
@@ -30,7 +30,7 @@ export class DepartureComponent implements OnInit {
     this.currentPosition$
       .pipe(filter(Boolean), take(1))
       .subscribe((position: { lat: number; lng: number }) => {
-        this.store.dispatch(fetchingClosestStationsStatus(position));
+        this.store.dispatch(fetchingClosestStationsStatus({ isDeparture: true }));
       });
   }
 }

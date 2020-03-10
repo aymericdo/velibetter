@@ -1,5 +1,5 @@
 import { Action, createReducer, on, createSelector } from '@ngrx/store';
-import { StationStatus } from '../services/api.service';
+import { Station } from '../services/api.service';
 import { AppState } from '.';
 import {
   fetchingClosestStationsStatus,
@@ -8,9 +8,9 @@ import {
 } from '../actions/station-status';
 
 export interface StationState {
-  list: StationStatus[];
+  list: Station[];
   isLoading: boolean;
-  direction: StationStatus;
+  direction: Station;
 }
 
 const initialState: StationState = {
@@ -49,17 +49,17 @@ export function reducer(state: StationState | undefined, action: Action) {
 export const selectStationStatus = (state: AppState) => state.stationStatus;
 export const isLoading = createSelector(
   selectStationStatus,
-  (state: StationState) => state.isLoading
+  (state: StationState) => state.isLoading,
 );
 export const stationsStatus = createSelector(
   selectStationStatus,
-  (state: StationState) => state.list
+  (state: StationState) => state.list,
 );
 export const stationsStatusById = (id: number) => createSelector(
   selectStationStatus,
-  (state: StationState) => state.list.find(status => status.stationId === id)
+  (state: StationState) => state.list.find(status => status.stationId === id),
 );
 export const direction = createSelector(
   selectStationStatus,
-  (state: StationState) => state.direction
+  (state: StationState) => state.direction,
 );

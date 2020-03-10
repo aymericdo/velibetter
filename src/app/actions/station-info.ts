@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { StationInfo } from '../services/api.service';
+import { Station } from '../services/api.service';
 import { LatLngBoundsLiteral } from '@agm/core/services/google-maps-types';
 
 export const fetchingClosestStationsInfo = createAction(
@@ -7,11 +7,7 @@ export const fetchingClosestStationsInfo = createAction(
   props<{ latLngBoundsLiteral: LatLngBoundsLiteral }>()
 );
 
-export const fetchingAllStationsInfo = createAction(
-  '[Stations] fetching all stations info'
-);
-
 export const setStationsInfo = createAction(
   '[Stations] set stations info',
-  props<{ list: StationInfo[] }>()
+  props<{ list: Station[] }>()
 );
