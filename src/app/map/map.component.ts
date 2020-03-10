@@ -10,6 +10,7 @@ import { fetchingClosestStationsInfo } from '../actions/station-info';
 import { fetchingDestination } from '../actions/station-status';
 import { direction } from '../reducers/station-status';
 import { take } from 'rxjs/operators';
+import { ApiService, StationStatus } from '../services/api.service';
 
 @Component({
   selector: 'app-map',
@@ -28,6 +29,7 @@ export class MapComponent {
   zoom = 16;
   currentLatLngBounds: LatLngBounds;
   travelMode: string;
+  selectedStationStatus: StationStatus;
 
   fabButtons = [{
     id: 0,
@@ -40,6 +42,7 @@ export class MapComponent {
   constructor(
     private store: Store<AppState>,
     private router: Router,
+    private apiService: ApiService
   ) {
     this.markers$ = store.pipe(select(markers));
     this.isLoading$ = store.pipe(select(isLoading));
@@ -74,6 +77,12 @@ export class MapComponent {
         );
       }
     }
+  }
+
+  clickedMarker(stationId: number) {
+    this.apiService.fetchStationStatus(stationId).subscribe((station) => {
+      this.selectedStationStatus = station;
+    });
   }
 
   trackByFn(index: number, marker: Marker): number {

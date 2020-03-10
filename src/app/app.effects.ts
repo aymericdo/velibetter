@@ -1,23 +1,23 @@
-import { Injectable } from '@angular/core';
-import { Actions, ofType, createEffect } from '@ngrx/effects';
-import { EMPTY, Observable, of } from 'rxjs';
-import { catchError, map, mergeMap, take } from 'rxjs/operators';
+import { Injectable } from "@angular/core";
+import { Actions, ofType, createEffect } from "@ngrx/effects";
+import { EMPTY, Observable, of } from "rxjs";
+import { catchError, map, mergeMap, take } from "rxjs/operators";
 import {
-  setStationsStatus, fetchingDestination, setDirection,
-} from './actions/station-status';
+  setStationsStatus,
+  fetchingDestination,
+  setDirection
+} from "./actions/station-status";
 import {
   fetchingAllStationsInfo,
   setStationsInfo,
-  fetchingClosestStationsInfo,
-} from './actions/station-info';
-import { ApiService, StationInfo, StationStatus } from './services/api.service';
-import {
-  fetchingClosestStationsStatus,
-} from './actions/station-status';
-import { Store, select } from '@ngrx/store';
-import { AppState } from './reducers';
-import { currentPosition } from './reducers/position';
-import { stationsStatusById } from './reducers/station-status';
+  fetchingClosestStationsInfo
+} from "./actions/station-info";
+import { ApiService, StationInfo, StationStatus } from "./services/api.service";
+import { fetchingClosestStationsStatus } from "./actions/station-status";
+import { Store, select } from "@ngrx/store";
+import { AppState } from "./reducers";
+import { currentPosition } from "./reducers/position";
+import { stationsStatusById } from "./reducers/station-status";
 
 @Injectable()
 export class AppEffects {
@@ -26,7 +26,7 @@ export class AppEffects {
   constructor(
     private actions$: Actions,
     private store: Store<AppState>,
-    private apiService: ApiService,
+    private apiService: ApiService
   ) {
     this.currentPosition$ = store.pipe(select(currentPosition));
   }
@@ -78,10 +78,9 @@ export class AppEffects {
       ofType(fetchingDestination),
       mergeMap(({ stationId }) => {
         let direction = null;
-        this.store.pipe(
-          select(stationsStatusById(stationId)),
-          take(1),
-        ).subscribe(d => direction = d);
+        this.store
+          .pipe(select(stationsStatusById(stationId)), take(1))
+          .subscribe(d => (direction = d));
 
         if (direction) {
           return of(setDirection({ direction }));
@@ -93,7 +92,7 @@ export class AppEffects {
             catchError(() => EMPTY)
           );
         }
-      }),
-    ),
+      })
+    )
   );
 }

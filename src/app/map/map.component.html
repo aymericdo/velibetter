@@ -12,10 +12,19 @@
   >
     <agm-marker
       *ngFor="let marker of markers$ | async; trackBy: trackByFn"
-      [latitude]="marker.lat"
+      [latitude]="marker.lat" 
       [longitude]="marker.lng"
       [opacity]="marker.alpha"
+      (markerClick)="clickedMarker(marker.id)"
     >
+    <agm-info-window [disableAutoPan]="true">
+      <strong>{{ selectedStationStatus?.name }}</strong>
+      <ul>
+        <li>mechanical: {{ selectedStationStatus?.mechanical }}</li>
+        <li>ebike: {{ selectedStationStatus?.ebike }}</li>
+        <li>docks: {{ selectedStationStatus?.numDocksAvailable }}</li>
+      </ul>
+    </agm-info-window>
     </agm-marker>
     <agm-marker
       *ngIf="!!(currentPosition$ | async)"
