@@ -10,7 +10,6 @@ import { fetchingClosestStationsInfo } from '../actions/station-info';
 import { fetchingDestination } from '../actions/station-status';
 import { direction } from '../reducers/station-status';
 import { take } from 'rxjs/operators';
-
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',

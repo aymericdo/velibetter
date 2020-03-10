@@ -12,7 +12,6 @@ export interface Marker {
   id: number;
   lat: number;
   lng: number;
-  alpha: number;
 }
 
 export interface StationState {
@@ -73,6 +72,5 @@ export const markers = createSelector(selectStationInfo, (state: StationState) =
     id: s.stationId,
     lat: s.lat,
     lng: s.lng,
-    alpha: 0.4
   }))
 );
