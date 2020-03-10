@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { LatLngBounds } from '@agm/core';
+import { LatLngBounds, LatLngBoundsLiteral } from '@agm/core/services/google-maps-types';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../reducers';
 import { Router, NavigationEnd } from '@angular/router';
-import { isLoading, markers, Marker } from '../reducers/station-info';
+import { isLoading, markers, Marker, latLngBoundsLiteral } from '../reducers/station-info';
 import { currentPosition } from '../reducers/position';
 import { fetchingClosestStationsInfo } from '../actions/station-info';
-import { direction } from '../reducers/station-status';
 import { fetchingDestination } from '../actions/station-status';
+import { direction } from '../reducers/station-status';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-map',
@@ -20,6 +21,7 @@ export class MapComponent {
   isLoading$: Observable<boolean>;
   currentPosition$: Observable<{ lat: number; lng: number }>;
   destination$: Observable<{ lat: number; lng: number }>;
+  latLngBoundsLiteral$: Observable<LatLngBoundsLiteral>;
 
   // Châtelet
   defaultCoord = { lat: 48.859889, lng: 2.346878 };
@@ -43,6 +45,8 @@ export class MapComponent {
     this.isLoading$ = store.pipe(select(isLoading));
     this.currentPosition$ = store.pipe(select(currentPosition));
     this.destination$ = store.pipe(select(direction));
+    this.latLngBoundsLiteral$ = store.pipe(select(latLngBoundsLiteral));
+
     router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
         if (val.url.split('/').length > 2 && ['departure', 'arrival'].includes(val.url.split('/')[1])) {
@@ -59,11 +63,16 @@ export class MapComponent {
 
   idle() {
     if (this.currentLatLngBounds) {
-      this.store.dispatch(
-        fetchingClosestStationsInfo({
-          latLngBoundsLiteral: this.currentLatLngBounds.toJSON()
-        })
-      );
+      let latLngBoundsLiteralLastSaved;
+      this.latLngBoundsLiteral$.pipe(take(1)).subscribe(latLng => latLngBoundsLiteralLastSaved = latLng);
+
+      if (JSON.stringify(latLngBoundsLiteralLastSaved) !== JSON.stringify(this.currentLatLngBounds.toJSON())) {
+        this.store.dispatch(
+          fetchingClosestStationsInfo({
+            latLngBoundsLiteral: this.currentLatLngBounds.toJSON(),
+          }),
+        );
+      }
     }
   }
 

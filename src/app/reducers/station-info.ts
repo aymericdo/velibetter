@@ -6,6 +6,7 @@ import {
 } from '../actions/station-info';
 import { StationInfo } from '../services/api.service';
 import { AppState } from '.';
+import { LatLngBoundsLiteral } from '@agm/core/services/google-maps-types';
 
 export interface Marker {
   id: number;
@@ -17,11 +18,13 @@ export interface Marker {
 export interface StationState {
   list: StationInfo[];
   isLoading: boolean;
+  latLngBoundsLiteral: LatLngBoundsLiteral;
 }
 
 const initialState: StationState = {
   list: [],
-  isLoading: false
+  isLoading: false,
+  latLngBoundsLiteral: null,
 };
 
 export const stationsReducer = createReducer(
@@ -32,10 +35,11 @@ export const stationsReducer = createReducer(
       isLoading: true
     };
   }),
-  on(fetchingClosestStationsInfo, state => {
+  on(fetchingClosestStationsInfo, (state, { latLngBoundsLiteral }) => {
     return {
       ...state,
-      isLoading: true
+      latLngBoundsLiteral,
+      isLoading: true,
     };
   }),
   on(setStationsInfo, (state, { list }) => {
@@ -59,6 +63,10 @@ export const isLoading = createSelector(
 export const stationsInfo = createSelector(
   selectStationInfo,
   (state: StationState) => state.list
+);
+export const latLngBoundsLiteral = createSelector(
+  selectStationInfo,
+  (state: StationState) => state.latLngBoundsLiteral
 );
 export const markers = createSelector(selectStationInfo, (state: StationState) =>
   state.list.map(s => ({
