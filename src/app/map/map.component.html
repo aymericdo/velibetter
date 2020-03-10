@@ -14,8 +14,9 @@
       *ngFor="let marker of markers$ | async; trackBy: trackByFn"
       [latitude]="marker.lat" 
       [longitude]="marker.lng"
-      [opacity]="marker.alpha"
       (markerClick)="clickedMarker(marker.id)"
+      [opacity]="1"
+      [iconUrl]="'/assets/directions_bike.svg'"
     >
     <agm-info-window [disableAutoPan]="true">
       <strong>{{ selectedStationStatus?.name }}</strong>
@@ -31,6 +32,7 @@
       [latitude]="(currentPosition$ | async)?.lat"
       [longitude]="(currentPosition$ | async)?.lng"
       [opacity]="1"
+      [iconUrl]="'/assets/my_location.svg'"
     >
     </agm-marker>
     <agm-direction
