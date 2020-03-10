@@ -10,3 +10,13 @@ export const setStationsStatus = createAction(
   '[Stations] set stations status',
   props<{ list: StationStatus[] }>()
 );
+
+export const fetchingDestination = createAction(
+  '[Stations] fetching destination',
+  props<{ stationId: number }>(),
+);
+
+export const setDirection = createAction(
+  '[Stations] set direction',
+  props<{ direction: StationStatus }>(),
+);

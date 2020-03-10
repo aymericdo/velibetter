@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { EMPTY, Observable, of } from 'rxjs';
-import { catchError, map, mergeMap, concatMap, withLatestFrom, tap, switchMap } from 'rxjs/operators';
+import { catchError, map, mergeMap, take } from 'rxjs/operators';
 import {
-  setStationsStatus,
+  setStationsStatus, fetchingDestination, setDirection,
 } from './actions/station-status';
 import {
   fetchingAllStationsInfo,
@@ -17,6 +17,7 @@ import {
 import { Store, select } from '@ngrx/store';
 import { AppState } from './reducers';
 import { currentPosition } from './reducers/position';
+import { stationsStatusById } from './reducers/station-status';
 
 @Injectable()
 export class AppEffects {
@@ -70,5 +71,29 @@ export class AppEffects {
         )
       )
     )
+  );
+
+  fetchingDestination$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fetchingDestination),
+      mergeMap(({ stationId }) => {
+        let direction = null;
+        this.store.pipe(
+          select(stationsStatusById(stationId)),
+          take(1),
+        ).subscribe(d => direction = d);
+
+        if (direction) {
+          return of(setDirection({ direction }));
+        } else {
+          return this.apiService.fetchStationStatus(stationId).pipe(
+            map((station: StationStatus) =>
+              setDirection({ direction: station })
+            ),
+            catchError(() => EMPTY)
+          );
+        }
+      }),
+    ),
   );
 }

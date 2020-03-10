@@ -55,9 +55,9 @@ export class ApiService {
     ) as Observable<StationStatus[]>;
   }
 
-  fetchStationStatus(stationId: number): Observable<StationStatus[]> {
+  fetchStationStatus(stationId: number): Observable<StationStatus> {
     return this.httpClient.get(
       `${this.baseURL}/station-status/${stationId}`
-    ) as Observable<StationStatus[]>;
+    ) as Observable<StationStatus>;
   }
 }
