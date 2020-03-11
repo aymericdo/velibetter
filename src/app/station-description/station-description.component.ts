@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable, combineLatest } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable, combineLatest, Subject } from 'rxjs';
 import { Station, Coordinate } from '../interfaces';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../reducers';
 import { currentPosition } from '../reducers/position';
 import { selectedStation } from '../reducers/stations-map';
-import { filter, map, withLatestFrom } from 'rxjs/operators';
+import { filter, map, withLatestFrom, takeUntil } from 'rxjs/operators';
 import { selectStation } from '../actions/stations-map';
 import { Router, NavigationEnd, Event } from '@angular/router';
 
@@ -14,10 +14,12 @@ import { Router, NavigationEnd, Event } from '@angular/router';
   templateUrl: './station-description.component.html',
   styleUrls: ['./station-description.component.scss']
 })
-export class StationDescriptionComponent implements OnInit {
+export class StationDescriptionComponent implements OnInit, OnDestroy {
   currentPosition$: Observable<{ lat: number; lng: number }>;
   selectedStation$: Observable<Station>;
   routerUrl: string;
+
+  private destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private store: Store<AppState>,
@@ -36,13 +38,14 @@ export class StationDescriptionComponent implements OnInit {
       ),
     ]).pipe(
       map(([position, val]) => val),
+      takeUntil(this.destroy$),
     ).subscribe((val: NavigationEnd) => {
       this.selectStationFct(+val.url.split('/')[2]);
     });
   }
 
   ngOnInit(): void {
-    this.currentPosition$.pipe(filter(Boolean))
+    this.currentPosition$.pipe(filter(Boolean), takeUntil(this.destroy$))
       .subscribe((position) => {
         this.selectStationFct(+this.routerUrl.split('/')[2]);
       });
@@ -50,5 +53,10 @@ export class StationDescriptionComponent implements OnInit {
 
   selectStationFct(stationId: number): void {
     this.store.dispatch(selectStation({ stationId }));
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 }
