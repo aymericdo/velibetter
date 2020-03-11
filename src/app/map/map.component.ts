@@ -7,7 +7,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { isLoading, markers, latLngBoundsLiteral, selectedStation } from '../reducers/stations-map';
 import { currentPosition } from '../reducers/position';
 import { fetchingStationsInPolygon, selectStation, unselectStationMap } from '../actions/stations-map';
-import { fetchingDestination } from '../actions/stations-list';
+import { fetchingDestination, unsetDestination } from '../actions/stations-list';
 import { destination } from '../reducers/stations-list';
 import { take, filter, map } from 'rxjs/operators';
 import { Station, Marker } from '../interfaces';
@@ -57,15 +57,19 @@ export class MapComponent {
       router.events.pipe(
         filter(event =>
           event instanceof NavigationEnd
-          && event.url.split('/').length > 2
+          && event.url.split('/').length > 1
           && ['departure', 'arrival'].includes(event.url.split('/')[1]),
         )
       ),
     ]).pipe(
       map(([position, val]) => val),
     ).subscribe((val: NavigationEnd) => {
-      this.travelMode = val.url.split('/')[1] === 'departure' ? 'WALKING' : 'BICYCLING';
-      this.store.dispatch(fetchingDestination({ stationId: +val.url.split('/')[2] }));
+      if (val.url.split('/').length > 2) {
+        this.travelMode = val.url.split('/')[1] === 'departure' ? 'WALKING' : 'BICYCLING';
+        this.store.dispatch(fetchingDestination({ stationId: +val.url.split('/')[2] }));
+      } else {
+        this.store.dispatch(unsetDestination());
+      }
     });
   }
 

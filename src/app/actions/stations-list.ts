@@ -16,6 +16,10 @@ export const fetchingDestination = createAction(
   props<{ stationId: number }>(),
 );
 
+export const unsetDestination = createAction(
+  '[Stations List] unset destination',
+);
+
 export const setDestination = createAction(
   '[Stations List] set destination',
   props<{ destination: Station }>(),

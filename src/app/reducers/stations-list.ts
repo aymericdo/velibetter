@@ -4,7 +4,8 @@ import { AppState } from '.';
 import {
   fetchingClosestStations,
   setStationsList,
-  setDestination
+  setDestination,
+  unsetDestination
 } from '../actions/stations-list';
 
 export interface StationState {
@@ -38,6 +39,12 @@ export const stationsReducer = createReducer(
     return {
       ...state,
       destination,
+    };
+  }),
+  on(unsetDestination, state => {
+    return {
+      ...state,
+      destination: null,
     };
   }),
 );
