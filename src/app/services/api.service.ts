@@ -8,7 +8,7 @@ import { Coordinate, Station } from '../interfaces';
   providedIn: 'root'
 })
 export class ApiService {
-  private baseURL = 'http://127.0.0.1:8000';
+  private baseURL = 'https://velibetter.fr/';
   constructor(private httpClient: HttpClient) {}
 
   fetchClosestInfo(
