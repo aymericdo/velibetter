@@ -2,6 +2,10 @@
   class="map"
   [class.-disabled]="isLoading$ | async"
 >
+  <div id="station-popup-dismiss"
+    *ngIf="(selectedStation$ | async)"
+    (click)="unselectStation()">
+  </div>
   <agm-map
     [latitude]="(currentPosition$ | async)?.lat || defaultCoord.lat"
     [zoom]="zoom"
@@ -12,20 +16,23 @@
   >
     <agm-marker
       *ngFor="let marker of markers$ | async; trackBy: trackByFn"
-      [latitude]="marker.lat" 
+      [latitude]="marker.lat"
       [longitude]="marker.lng"
       (markerClick)="clickedMarker(marker.id)"
       [opacity]="1"
       [iconUrl]="'/assets/directions_bike.svg'"
     >
-    <agm-info-window [disableAutoPan]="true">
-      <strong>{{ selectedStationStatus?.name }}</strong>
-      <ul>
-        <li>mechanical: {{ selectedStationStatus?.mechanical }}</li>
-        <li>ebike: {{ selectedStationStatus?.ebike }}</li>
-        <li>docks: {{ selectedStationStatus?.numDocksAvailable }}</li>
-      </ul>
-    </agm-info-window>
+      <agm-info-window
+        [isOpen]="(selectedStation$ | async)?.stationId === marker.id"
+        [disableAutoPan]="true"
+      >
+        <strong>{{ (selectedStation$ | async)?.name }}</strong>
+        <ul>
+          <li>mechanical: {{ (selectedStation$ | async)?.mechanical }}</li>
+          <li>ebike: {{ (selectedStation$ | async)?.ebike }}</li>
+          <li>docks: {{ (selectedStation$ | async)?.numDocksAvailable }}</li>
+        </ul>
+      </agm-info-window>
     </agm-marker>
     <agm-marker
       *ngIf="!!(currentPosition$ | async)"
@@ -44,7 +51,7 @@
     </agm-direction>
   </agm-map>
   <app-speed-dial-fab
-    *ngIf="!isDisplayingListPages()"
+    *ngIf="!!(currentPosition$ | async) && !isDisplayingListPages()"
     (redirect)="navigateTo($event)"
     [mainButtonIcon]="'navigation'"
     [fabButtons]="fabButtons"

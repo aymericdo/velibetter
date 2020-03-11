@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../reducers';
-import { fetchingClosestStationsStatus } from '../actions/station-status';
+import { fetchingClosestStations } from '../actions/stations-list';
 import { Observable } from 'rxjs';
 import { currentPosition } from '../reducers/position';
 import { filter, take } from 'rxjs/operators';
-import { Station } from '../services/api.service';
-import { stationsStatus, isLoading } from '../reducers/station-status';
+import { Station } from '../interfaces';
+import { stationsStatus, isLoading } from '../reducers/stations-list';
 
 @Component({
   selector: 'app-departure',
@@ -30,7 +30,7 @@ export class DepartureComponent implements OnInit {
     this.currentPosition$
       .pipe(filter(Boolean), take(1))
       .subscribe((position: { lat: number; lng: number }) => {
-        this.store.dispatch(fetchingClosestStationsStatus({ isDeparture: true }));
+        this.store.dispatch(fetchingClosestStations({ isDeparture: true }));
       });
   }
 }

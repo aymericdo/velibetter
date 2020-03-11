@@ -1,102 +1,110 @@
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { EMPTY, Observable, of } from 'rxjs';
-import { catchError, map, mergeMap, take } from 'rxjs/operators';
+import { catchError, map, mergeMap, take, withLatestFrom, filter } from 'rxjs/operators';
 import {
-  setStationsStatus,
+  setStationsList,
   fetchingDestination,
-  setDirection
-} from './actions/station-status';
+  setDestination
+} from './actions/stations-list';
 import {
-  setStationsInfo,
-  fetchingClosestStationsInfo
-} from './actions/station-info';
-import { ApiService, Station } from './services/api.service';
-import { fetchingClosestStationsStatus } from './actions/station-status';
+  setStationsMap,
+  fetchingStationsInPolygon,
+  selectStationMap,
+  setStationMap,
+} from './actions/stations-map';
+import { ApiService } from './services/api.service';
+import { fetchingClosestStations } from './actions/stations-list';
 import { Store, select } from '@ngrx/store';
 import { AppState } from './reducers';
 import { currentPosition } from './reducers/position';
-import { stationsStatusById } from './reducers/station-status';
+import { stationsStatusById } from './reducers/stations-list';
+import { Coordinate, Station } from './interfaces';
+import { selectedStation, stationsMap } from './reducers/stations-map';
 
 @Injectable()
 export class AppEffects {
+  currentPosition$: Observable<Coordinate>;
+
   constructor(
     private actions$: Actions,
     private store: Store<AppState>,
     private apiService: ApiService
-  ) {}
+  ) { }
 
-  fetchingClosestStationsInfo$ = createEffect(() =>
+  fetchingStationsInPolygon$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fetchingClosestStationsInfo),
-      mergeMap(({ latLngBoundsLiteral }) => {
-        // temp because I don't understand how combineLatest works
-        let position = null;
-        this.store
-            .pipe(select(currentPosition), take(1))
-            .subscribe(p => (position = p));
-
-        return this.apiService.fetchClosestInfo(latLngBoundsLiteral, position).pipe(
+      ofType(fetchingStationsInPolygon),
+      withLatestFrom(this.store.pipe(select(currentPosition))),
+      mergeMap(([{ latLngBoundsLiteral }, position]) =>
+        this.apiService.fetchClosestInfo(latLngBoundsLiteral, position as Coordinate).pipe(
           map((stations: Array<Station>) =>
-            setStationsInfo({ list: stations })
+            setStationsMap({ list: stations })
           ),
           catchError(() => EMPTY)
-        );
-      })
+        )
+      )
     )
   );
 
-  fetchingClosestStationsStatus$ = createEffect(() =>
+  fetchingClosestStations$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fetchingClosestStationsStatus),
-      mergeMap(({ isDeparture }) => {
-        // temp because I don't understand how combineLatest works
-        let position = null;
-        this.store
-            .pipe(select(currentPosition), take(1))
-            .subscribe(p => (position = p));
+      ofType(fetchingClosestStations),
+      withLatestFrom(this.store.pipe(select(currentPosition), filter(Boolean))),
+      mergeMap(([{ isDeparture }, position]) =>
+        isDeparture ?
+          this.apiService.fetchClosestStatusForDeparture(position as Coordinate).pipe(
+            map((stations: Array<Station>) =>
+              setStationsList({ list: stations })
+            ),
+            catchError(() => EMPTY)
+          )
+        :
+          this.apiService.fetchClosestStatusForArrival(position as Coordinate).pipe(
+            map((stations: Array<Station>) =>
+              setStationsList({ list: stations })
+            ),
+            catchError(() => EMPTY)
+          )
+      )
+    )
+  );
 
-        return (
-          isDeparture ?
-            this.apiService.fetchClosestStatusForDeparture(position).pipe(
-              map((stations: Array<Station>) =>
-                setStationsStatus({ list: stations })
-              ),
-              catchError(() => EMPTY)
-            )
-          :
-            this.apiService.fetchClosestStatusForArrival(position).pipe(
-              map((stations: Array<Station>) =>
-                setStationsStatus({ list: stations })
-              ),
-              catchError(() => EMPTY)
-            )
-        );
-      })
+  selectStationMap$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(selectStationMap),
+      withLatestFrom(this.store.pipe(select(stationsMap))),
+      map(([{ stationId }, list]) => list.find(s => s.stationId === stationId) as Station),
+      filter((station) => !station.distance),
+      withLatestFrom(this.store.pipe(select(currentPosition))),
+      mergeMap(([{ stationId }, position]) =>
+        this.apiService.fetchStation(stationId, position as Coordinate).pipe(
+          map((station: Station) =>
+            setStationMap({ station })
+          ),
+          catchError(() => EMPTY)
+        ),
+      ),
     )
   );
 
   fetchingDestination$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fetchingDestination),
-      mergeMap(({ stationId }) => {
-        // temp because I don't understand how combineLatest works
-        let direction = null;
+      withLatestFrom(this.store.pipe(select(currentPosition), filter(Boolean))),
+      mergeMap(([{ stationId }, position]) => {
+        // I don't understand how combineLatest could be useful in this case
+        let destination = null;
         this.store
           .pipe(select(stationsStatusById(stationId)), take(1))
-          .subscribe(d => (direction = d));
+          .subscribe(d => (destination = d));
 
-        let position = null;
-        this.store
-            .pipe(select(currentPosition), take(1))
-            .subscribe(p => (position = p));
-
-        if (direction) {
-          return of(setDirection({ direction }));
+        if (destination) {
+          return of(setDestination({ destination }));
         } else {
-          return this.apiService.fetchStation(stationId, position).pipe(
+          return this.apiService.fetchStation(stationId, position as Coordinate).pipe(
             map((station: Station) =>
-              setDirection({ direction: station })
+              setDestination({ destination: station })
             ),
             catchError(() => EMPTY)
           );
