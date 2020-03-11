@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { LatLngBounds, LatLngBoundsLiteral } from '@agm/core/services/google-maps-types';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../reducers';
 import { Router, NavigationEnd } from '@angular/router';
-import { isLoading, markers, Marker, latLngBoundsLiteral } from '../reducers/station-info';
+import { isLoading, markers, latLngBoundsLiteral, selectedStation } from '../reducers/stations-map';
 import { currentPosition } from '../reducers/position';
-import { fetchingClosestStationsInfo } from '../actions/station-info';
-import { fetchingDestination } from '../actions/station-status';
-import { direction } from '../reducers/station-status';
-import { take } from 'rxjs/operators';
-import { ApiService, StationStatus } from '../services/api.service';
+import { fetchingStationsInPolygon, selectStationMap, unselectStationMap } from '../actions/stations-map';
+import { fetchingDestination } from '../actions/stations-list';
+import { destination } from '../reducers/stations-list';
+import { take, filter, map } from 'rxjs/operators';
+import { Station, Marker } from '../interfaces';
 
 @Component({
   selector: 'app-map',
@@ -23,13 +23,13 @@ export class MapComponent {
   currentPosition$: Observable<{ lat: number; lng: number }>;
   destination$: Observable<{ lat: number; lng: number }>;
   latLngBoundsLiteral$: Observable<LatLngBoundsLiteral>;
+  selectedStation$: Observable<Station>;
 
   // Châtelet
   defaultCoord = { lat: 48.859889, lng: 2.346878 };
   zoom = 16;
   currentLatLngBounds: LatLngBounds;
   travelMode: string;
-  selectedStationStatus: StationStatus;
 
   fabButtons = [{
     id: 0,
@@ -42,21 +42,28 @@ export class MapComponent {
   constructor(
     private store: Store<AppState>,
     private router: Router,
-    private apiService: ApiService
   ) {
     this.markers$ = store.pipe(select(markers));
     this.isLoading$ = store.pipe(select(isLoading));
     this.currentPosition$ = store.pipe(select(currentPosition));
-    this.destination$ = store.pipe(select(direction));
+    this.destination$ = store.pipe(select(destination));
     this.latLngBoundsLiteral$ = store.pipe(select(latLngBoundsLiteral));
+    this.selectedStation$ = store.pipe(select(selectedStation));
 
-    router.events.subscribe((val) => {
-      if (val instanceof NavigationEnd) {
-        if (val.url.split('/').length > 2 && ['departure', 'arrival'].includes(val.url.split('/')[1])) {
-          this.travelMode = val.url.split('/')[1] === 'departure' ? 'WALKING' : 'BICYCLING';
-          this.store.dispatch(fetchingDestination({ stationId: +val.url.split('/')[2] }));
-        }
-      }
+    combineLatest([
+      this.currentPosition$.pipe(filter(Boolean)),
+      router.events.pipe(
+        filter(event =>
+          event instanceof NavigationEnd
+          && event.url.split('/').length > 2
+          && ['departure', 'arrival'].includes(event.url.split('/')[1]),
+        )
+      ),
+    ]).pipe(
+      map(([position, val]) => val),
+    ).subscribe((val: NavigationEnd) => {
+      this.travelMode = val.url.split('/')[1] === 'departure' ? 'WALKING' : 'BICYCLING';
+      this.store.dispatch(fetchingDestination({ stationId: +val.url.split('/')[2] }));
     });
   }
 
@@ -71,7 +78,7 @@ export class MapComponent {
 
       if (JSON.stringify(latLngBoundsLiteralLastSaved) !== JSON.stringify(this.currentLatLngBounds.toJSON())) {
         this.store.dispatch(
-          fetchingClosestStationsInfo({
+          fetchingStationsInPolygon({
             latLngBoundsLiteral: this.currentLatLngBounds.toJSON(),
           }),
         );
@@ -80,9 +87,11 @@ export class MapComponent {
   }
 
   clickedMarker(stationId: number) {
-    this.apiService.fetchStationStatus(stationId).subscribe((station) => {
-      this.selectedStationStatus = station;
-    });
+    this.store.dispatch(selectStationMap({ stationId }));
+  }
+
+  unselectStation() {
+    this.store.dispatch(unselectStationMap());
   }
 
   trackByFn(index: number, marker: Marker): number {

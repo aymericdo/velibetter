@@ -1,6 +1,7 @@
 import { Action, createReducer, on, createSelector } from '@ngrx/store';
 import { AppState } from '.';
 import { setPosition } from '../actions/position';
+import { Coordinate } from '../interfaces';
 
 export interface PositionState {
   lat: number;
@@ -31,5 +32,5 @@ export const currentPosition = createSelector(selectPosition, (state: PositionSt
   state.lat && state.lng ? {
     lng: state.lng,
     lat: state.lat,
-  } : null)
+  } as Coordinate : null)
 );
