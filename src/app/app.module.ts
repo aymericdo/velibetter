@@ -27,6 +27,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { MapComponent } from './map/map.component';
 import { LoadingComponent } from './shared/loading/loading.component';
 import { MatListModule } from '@angular/material/list';
+import { StationDescriptionComponent } from './station-description/station-description.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { MatListModule } from '@angular/material/list';
     ListComponent,
     MapComponent,
     LoadingComponent,
+    StationDescriptionComponent,
   ],
   imports: [
     AppRoutingModule,

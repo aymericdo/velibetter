@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
 import { LatLngBounds, LatLngBoundsLiteral } from '@agm/core/services/google-maps-types';
 import { Store, select } from '@ngrx/store';
@@ -6,11 +6,12 @@ import { AppState } from '../reducers';
 import { Router, NavigationEnd } from '@angular/router';
 import { isLoading, markers, latLngBoundsLiteral, selectedStation } from '../reducers/stations-map';
 import { currentPosition } from '../reducers/position';
-import { fetchingStationsInPolygon, selectStationMap, unselectStationMap } from '../actions/stations-map';
+import { fetchingStationsInPolygon, selectStation, unselectStationMap } from '../actions/stations-map';
 import { fetchingDestination } from '../actions/stations-list';
 import { destination } from '../reducers/stations-list';
 import { take, filter, map } from 'rxjs/operators';
 import { Station, Marker } from '../interfaces';
+import { Coordinate } from '../interfaces/index';
 
 @Component({
   selector: 'app-map',
@@ -18,6 +19,9 @@ import { Station, Marker } from '../interfaces';
   styleUrls: ['./map.component.scss']
 })
 export class MapComponent {
+  @Input() isDisplayingListPages: boolean;
+  @Input() defaultCoord: Coordinate;
+
   markers$: Observable<Marker[]>;
   isLoading$: Observable<boolean>;
   currentPosition$: Observable<{ lat: number; lng: number }>;
@@ -25,8 +29,6 @@ export class MapComponent {
   latLngBoundsLiteral$: Observable<LatLngBoundsLiteral>;
   selectedStation$: Observable<Station>;
 
-  // Châtelet
-  defaultCoord = { lat: 48.859889, lng: 2.346878 };
   zoom = 16;
   currentLatLngBounds: LatLngBounds;
   travelMode: string;
@@ -86,8 +88,8 @@ export class MapComponent {
     }
   }
 
-  clickedMarker(stationId: number) {
-    this.store.dispatch(selectStationMap({ stationId }));
+  clickedMarker(stationId: number): void {
+    this.router.navigate(['stations', stationId]);
   }
 
   unselectStation() {
@@ -96,10 +98,6 @@ export class MapComponent {
 
   trackByFn(index: number, marker: Marker): number {
     return marker.id;
-  }
-
-  isDisplayingListPages(): boolean {
-    return this.router.url === '/arrival' || this.router.url === '/departure';
   }
 
   navigateTo(id: number): void {

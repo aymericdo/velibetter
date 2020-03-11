@@ -21,18 +21,8 @@
       (markerClick)="clickedMarker(marker.id)"
       [opacity]="1"
       [iconUrl]="'/assets/directions_bike.svg'"
+      [class.-selected]="(selectedStation$ | async)?.stationId === marker.id"
     >
-      <agm-info-window
-        [isOpen]="(selectedStation$ | async)?.stationId === marker.id"
-        [disableAutoPan]="true"
-      >
-        <strong>{{ (selectedStation$ | async)?.name }}</strong>
-        <ul>
-          <li>mechanical: {{ (selectedStation$ | async)?.mechanical }}</li>
-          <li>ebike: {{ (selectedStation$ | async)?.ebike }}</li>
-          <li>docks: {{ (selectedStation$ | async)?.numDocksAvailable }}</li>
-        </ul>
-      </agm-info-window>
     </agm-marker>
     <agm-marker
       *ngIf="!!(currentPosition$ | async)"
@@ -51,7 +41,7 @@
     </agm-direction>
   </agm-map>
   <app-speed-dial-fab
-    *ngIf="!!(currentPosition$ | async) && !isDisplayingListPages()"
+    *ngIf="!!(currentPosition$ | async) && !isDisplayingListPages"
     (redirect)="navigateTo($event)"
     [mainButtonIcon]="'navigation'"
     [fabButtons]="fabButtons"

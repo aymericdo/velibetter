@@ -10,7 +10,7 @@ import {
 import {
   setStationsMap,
   fetchingStationsInPolygon,
-  selectStationMap,
+  selectStation,
   setStationMap,
 } from './actions/stations-map';
 import { ApiService } from './services/api.service';
@@ -70,21 +70,23 @@ export class AppEffects {
     )
   );
 
-  selectStationMap$ = createEffect(() =>
+  selectStation$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(selectStationMap),
+      ofType(selectStation),
       withLatestFrom(this.store.pipe(select(stationsMap))),
-      map(([{ stationId }, list]) => list.find(s => s.stationId === stationId) as Station),
-      filter((station) => !station.distance),
       withLatestFrom(this.store.pipe(select(currentPosition))),
-      mergeMap(([{ stationId }, position]) =>
-        this.apiService.fetchStation(stationId, position as Coordinate).pipe(
+      filter(([[{ stationId }, list], position]) => {
+        const station = list.find(s => s.stationId === stationId);
+        return !station || !station.distance;
+      }),
+      mergeMap(([[{ stationId }, list], position]) => {
+        return this.apiService.fetchStation(stationId, position as Coordinate).pipe(
           map((station: Station) =>
             setStationMap({ station })
           ),
           catchError(() => EMPTY)
-        ),
-      ),
+        );
+      })
     )
   );
 

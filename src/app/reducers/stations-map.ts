@@ -3,7 +3,7 @@ import {
   setStationsMap,
   fetchingStationsInPolygon,
   setStationMap,
-  selectStationMap,
+  selectStation,
   unselectStationMap,
 } from '../actions/stations-map';
 import { Station } from '../interfaces';
@@ -40,7 +40,7 @@ export const stationsReducer = createReducer(
       isLoading: false
     };
   }),
-  on(selectStationMap, (state, { stationId }) => {
+  on(selectStation, (state, { stationId }) => {
     return {
       ...state,
       selectedStation: state.list.find(s => s.stationId === stationId),

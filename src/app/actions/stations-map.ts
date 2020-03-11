@@ -12,7 +12,7 @@ export const setStationsMap = createAction(
   props<{ list: Station[] }>()
 );
 
-export const selectStationMap = createAction(
+export const selectStation = createAction(
   '[Stations Map] select station',
   props<{ stationId: number }>(),
 );

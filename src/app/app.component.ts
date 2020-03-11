@@ -19,6 +19,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   watcher: number = null;
 
+  // Châtelet
+  defaultCoord = { lat: 48.859889, lng: 2.346878 };
+
   constructor(
     private store: Store<AppState>,
     private router: Router,
@@ -67,14 +70,11 @@ export class AppComponent implements OnInit, OnDestroy {
         // timeout was hit, meaning nothing's in the cache
         // let's provide a default location:
 
-        // Châtelet
-        const defaultCoord = { lat: 48.859889, lng: 2.346878 };
-
         this.displayLocationInfo({
           coords: {
-            longitude: defaultCoord.lng,
-            latitude: defaultCoord.lat
-          }
+            longitude: this.defaultCoord.lng,
+            latitude: this.defaultCoord.lat
+          },
         } as Position);
 
         // now let's make a non-cached request to get the actual position
@@ -92,6 +92,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   isDisplayingListPages(): boolean {
-    return this.router.url === '/arrival' || this.router.url === '/departure';
+    return this.router.url === '/arrival'
+      || this.router.url === '/departure'
+      || (this.router.url.split('/').length > 1 && this.router.url.split('/')[1] === 'stations');
   }
 }

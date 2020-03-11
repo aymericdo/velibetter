@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { DepartureComponent } from './departure/departure.component';
+import { RouterModule, Routes } from '@angular/router';
 import { ArrivalComponent } from './arrival/arrival.component';
+import { DepartureComponent } from './departure/departure.component';
+import { StationDescriptionComponent } from './station-description/station-description.component';
 
 const routes: Routes = [
+  { path: 'stations/:stationId', component: StationDescriptionComponent },
   { path: 'departure', component: DepartureComponent },
   { path: 'departure/:stationId', component: DepartureComponent },
   { path: 'arrival', component: ArrivalComponent },

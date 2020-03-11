@@ -10,6 +10,8 @@
     >
       <app-map
         [class.-hide]="(isMobile$ | async) && isDisplayingListPages()"
+        [defaultCoord]="defaultCoord"
+        [isDisplayingListPages]="isDisplayingListPages()"
       ></app-map>
       <router-outlet *ngIf="isDisplayingListPages()"></router-outlet>
     </main>
