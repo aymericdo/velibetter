@@ -8,7 +8,7 @@ import { Coordinate, Station } from '../interfaces';
   providedIn: 'root'
 })
 export class ApiService {
-  private baseURL = 'https://velibetter.fr';
+  private baseURL = 'https://velibetter.herokuapp.com';
   constructor(private httpClient: HttpClient) {}
 
   fetchClosestInfo(
