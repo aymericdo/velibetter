@@ -5,7 +5,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../reducers';
 import { currentPosition } from '../reducers/position';
 import { selectedStation } from '../reducers/stations-map';
-import { filter, map, withLatestFrom, takeUntil } from 'rxjs/operators';
+import { filter, map, withLatestFrom, takeUntil, take } from 'rxjs/operators';
 import { selectStation } from '../actions/stations-map';
 import { Router, NavigationEnd, Event } from '@angular/router';
 
@@ -45,7 +45,7 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.currentPosition$.pipe(filter(Boolean), takeUntil(this.destroy$))
+    this.currentPosition$.pipe(filter(Boolean), take(1))
       .subscribe((position) => {
         this.selectStationFct(+this.routerUrl.split('/')[2]);
       });
