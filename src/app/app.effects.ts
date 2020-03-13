@@ -12,6 +12,7 @@ import {
   fetchingStationsInPolygon,
   selectStation,
   setStationMap,
+  initialFetchingStationsInPolygon,
 } from './actions/stations-map';
 import { ApiService } from './services/api.service';
 import { fetchingClosestStations } from './actions/stations-list';
@@ -34,7 +35,7 @@ export class AppEffects {
 
   fetchingStationsInPolygon$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fetchingStationsInPolygon),
+      ofType(fetchingStationsInPolygon, initialFetchingStationsInPolygon),
       withLatestFrom(this.store.pipe(select(currentPosition))),
       mergeMap(([{ latLngBoundsLiteral }, position]) =>
         this.apiService.fetchClosestInfo(latLngBoundsLiteral, position as Coordinate).pipe(

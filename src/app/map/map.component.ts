@@ -6,7 +6,7 @@ import { AppState } from '../reducers';
 import { Router, NavigationEnd } from '@angular/router';
 import { isLoading, markers, latLngBoundsLiteral, selectedStation } from '../reducers/stations-map';
 import { currentPosition } from '../reducers/position';
-import { fetchingStationsInPolygon, selectStation, unselectStationMap } from '../actions/stations-map';
+import { fetchingStationsInPolygon, unselectStationMap, initialFetchingStationsInPolygon } from '../actions/stations-map';
 import { fetchingDestination, unsetDestination } from '../actions/stations-list';
 import { destination } from '../reducers/stations-list';
 import { take, filter, map } from 'rxjs/operators';
@@ -40,6 +40,8 @@ export class MapComponent {
     id: 1,
     icon: 'lock',
   }];
+
+  firstLoadDone = false;
 
   constructor(
     private store: Store<AppState>,
@@ -83,11 +85,20 @@ export class MapComponent {
       this.latLngBoundsLiteral$.pipe(take(1)).subscribe(latLng => latLngBoundsLiteralLastSaved = latLng);
 
       if (JSON.stringify(latLngBoundsLiteralLastSaved) !== JSON.stringify(this.currentLatLngBounds.toJSON())) {
-        this.store.dispatch(
-          fetchingStationsInPolygon({
-            latLngBoundsLiteral: this.currentLatLngBounds.toJSON(),
-          }),
-        );
+        if (this.firstLoadDone) {
+          this.store.dispatch(
+            fetchingStationsInPolygon({
+              latLngBoundsLiteral: this.currentLatLngBounds.toJSON(),
+            }),
+          );
+        } else {
+          this.firstLoadDone = true;
+          this.store.dispatch(
+            initialFetchingStationsInPolygon({
+              latLngBoundsLiteral: this.currentLatLngBounds.toJSON(),
+            }),
+          );
+        }
       }
     }
   }
