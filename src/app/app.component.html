@@ -5,9 +5,16 @@
         <span>{{title}}</span>
       </mat-toolbar-row>
     </mat-toolbar>
-    <main
-      [class.-is-splitted]="!(isMobile$ | async) && isDisplayingListPages()"
-    >
+    <main [class.-is-splitted]="!(isMobile$ | async) && isDisplayingListPages()">
+      <button
+        *ngIf="!isMainRoute()"
+        mat-mini-fab
+        class="back-btn fab-secondary"
+        color="secondary"
+        (click)="back()"
+      >
+        <i class="material-icons">arrow_back</i>
+      </button>
       <app-map
         [class.-hide]="(isMobile$ | async) && isDisplayingListPages()"
         [defaultCoord]="defaultCoord"

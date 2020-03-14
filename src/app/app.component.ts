@@ -18,6 +18,7 @@ export class AppComponent implements OnInit, OnDestroy {
   isMobile$: Observable<boolean>;
 
   watcher: number = null;
+  isNotMainRoute: boolean;
 
   // Châtelet
   defaultCoord = { lat: 48.859889, lng: 2.346878 };
@@ -89,6 +90,20 @@ export class AppComponent implements OnInit, OnDestroy {
       case 1:
       // ...user said no ☹️
     }
+  }
+
+  back(): void {
+    if (['departure', 'arrival'].includes(this.router.url.split('/')[1]) && this.router.url.split('/').length > 2) {
+      this.router.navigate([this.router.url.split('/')[1]]);
+    } else if (['departure', 'arrival'].includes(this.router.url.split('/')[1])) {
+      this.router.navigate(['/']);
+    } else if (['stations'].includes(this.router.url.split('/')[1]) && this.router.url.split('/').length > 2) {
+      this.router.navigate(['/']);
+    }
+  }
+
+  isMainRoute(): boolean {
+    return this.router.url === '/';
   }
 
   isDisplayingListPages(): boolean {

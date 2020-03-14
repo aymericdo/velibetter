@@ -5,7 +5,15 @@
     display: flex;
   }
 
+  .back-btn {
+    position: absolute;
+    z-index: 4;
+    top: 16px;
+    left: 16px;
+  }
+
   main {
+    position: relative;
     height: 100%;
     overflow: auto;
 
