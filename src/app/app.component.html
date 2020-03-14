@@ -2,19 +2,20 @@
   <mat-sidenav-content>
     <mat-toolbar color="primary">
       <mat-toolbar-row>
-        <span>{{title}}</span>
+        <span *ngIf="isMainRoute(); else notMainRoute">{{title}}</span>
+        <ng-template #notMainRoute>
+          <button
+            mat-icon-button
+            class="back-btn fab-secondary"
+            color="secondary"
+            (click)="back()"
+            >
+            <i class="material-icons">arrow_back</i>
+          </button>
+        </ng-template>
       </mat-toolbar-row>
     </mat-toolbar>
     <main [class.-is-splitted]="!(isMobile$ | async) && isDisplayingListPages()">
-      <button
-        *ngIf="!isMainRoute()"
-        mat-mini-fab
-        class="back-btn fab-secondary"
-        color="secondary"
-        (click)="back()"
-      >
-        <i class="material-icons">arrow_back</i>
-      </button>
       <app-map
         [class.-hide]="(isMobile$ | async) && isDisplayingListPages()"
         [defaultCoord]="defaultCoord"
