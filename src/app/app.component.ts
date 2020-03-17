@@ -6,7 +6,7 @@ import { setPosition } from './actions/position';
 import { Router } from '@angular/router';
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 import { setIsMobile } from './actions/screen';
-import { isMobile } from './reducers/screen';
+import { getIsMobile } from './reducers/screen';
 
 @Component({
   selector: 'app-root',
@@ -28,7 +28,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private router: Router,
     private breakpointObserver: BreakpointObserver,
   ) {
-    this.isMobile$ = store.pipe(select(isMobile));
+    this.isMobile$ = store.pipe(select(getIsMobile));
   }
 
   ngOnInit() {

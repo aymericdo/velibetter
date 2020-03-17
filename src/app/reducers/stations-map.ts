@@ -87,34 +87,34 @@ export function reducer(state: StationState | undefined, action: Action) {
 }
 
 export const selectStationsMapState = (state: AppState) => state.stationsMap;
-export const isLoading = createSelector(
+export const getIsLoading = createSelector(
   selectStationsMapState,
-  (state: StationState) => state.isLoading
+  (state: StationState) => state.isLoading,
 );
-export const stationsMap = createSelector(
+export const getStationsMap = createSelector(
   selectStationsMapState,
-  (state: StationState) => state.list
+  (state: StationState) => state.list,
 );
-export const selectedStation = createSelector(
+export const getSelectedStation = createSelector(
   selectStationsMapState,
-  (state: StationState) => state.selectedStation
+  (state: StationState) => state.selectedStation,
 );
-export const latLngBoundsLiteral = createSelector(
+export const getLatLngBoundsLiteral = createSelector(
   selectStationsMapState,
-  (state: StationState) => state.latLngBoundsLiteral
+  (state: StationState) => state.latLngBoundsLiteral,
 );
-export const stationsMapById = (id: number) => createSelector(
+export const getStationsMapById = (id: number) => createSelector(
   selectStationsMapState,
   (state: StationState) => state.list.find(s => s.stationId === id),
 );
-export const isSelectingStation = createSelector(
+export const getIsSelectingStation = createSelector(
   selectStationsMapState,
-  (state: StationState) => state.isSelectingStation
+  (state: StationState) => state.isSelectingStation,
 );
-export const markers = createSelector(selectStationsMapState, (state: StationState) =>
+export const getMarkers = createSelector(selectStationsMapState, (state: StationState) =>
   state.list.map(s => ({
     id: s.stationId,
     lat: s.lat,
     lng: s.lng,
-  }))
+  })),
 );

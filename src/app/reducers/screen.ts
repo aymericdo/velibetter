@@ -24,4 +24,4 @@ export function reducer(state: ScreenState | undefined, action: Action) {
 }
 
 export const selectScreen = (state: AppState) => state.screen;
-export const isMobile = createSelector(selectScreen, (state: ScreenState) => state.isMobile);
+export const getIsMobile = createSelector(selectScreen, (state: ScreenState) => state.isMobile);

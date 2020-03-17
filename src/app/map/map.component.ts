@@ -4,11 +4,11 @@ import { LatLngBounds, LatLngBoundsLiteral } from '@agm/core/services/google-map
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../reducers';
 import { Router, NavigationEnd } from '@angular/router';
-import { isLoading, markers, latLngBoundsLiteral, selectedStation } from '../reducers/stations-map';
-import { currentPosition } from '../reducers/position';
+import { getIsLoading, getMarkers, getLatLngBoundsLiteral, getSelectedStation } from '../reducers/stations-map';
+import { getCurrentPosition } from '../reducers/position';
 import { fetchingStationsInPolygon, unselectStationMap, initialFetchingStationsInPolygon } from '../actions/stations-map';
 import { fetchingDestination, unsetDestination } from '../actions/stations-list';
-import { destination } from '../reducers/stations-list';
+import { getDestination } from '../reducers/stations-list';
 import { take, filter, map } from 'rxjs/operators';
 import { Station, Marker } from '../interfaces';
 import { Coordinate } from '../interfaces/index';
@@ -47,15 +47,15 @@ export class MapComponent {
     private store: Store<AppState>,
     private router: Router,
   ) {
-    this.markers$ = store.pipe(select(markers));
-    this.isLoading$ = store.pipe(select(isLoading));
-    this.currentPosition$ = store.pipe(select(currentPosition));
-    this.destination$ = store.pipe(select(destination));
-    this.latLngBoundsLiteral$ = store.pipe(select(latLngBoundsLiteral));
-    this.selectedStation$ = store.pipe(select(selectedStation));
+    this.markers$ = store.pipe(select(getMarkers));
+    this.isLoading$ = store.pipe(select(getIsLoading));
+    this.currentPosition$ = store.pipe(select(getCurrentPosition));
+    this.destination$ = store.pipe(select(getDestination));
+    this.latLngBoundsLiteral$ = store.pipe(select(getLatLngBoundsLiteral));
+    this.selectedStation$ = store.pipe(select(getSelectedStation));
 
     combineLatest([
-      this.currentPosition$.pipe(filter(Boolean)),
+      this.currentPosition$.pipe(filter(Boolean), take(1)),
       router.events.pipe(
         filter(event =>
           event instanceof NavigationEnd

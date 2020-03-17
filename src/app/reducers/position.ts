@@ -28,7 +28,7 @@ export function reducer(state: PositionState | undefined, action: Action) {
 }
 
 export const selectPosition = (state: AppState) => state.position;
-export const currentPosition = createSelector(selectPosition, (state: PositionState) => (
+export const getCurrentPosition = createSelector(selectPosition, (state: PositionState) => (
   state.lat && state.lng ? {
     lng: state.lng,
     lat: state.lat,

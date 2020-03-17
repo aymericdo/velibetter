@@ -3,9 +3,9 @@ import { Observable } from 'rxjs';
 import { Station } from '../interfaces';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../reducers';
-import { currentPosition } from '../reducers/position';
-import { stationsStatus } from '../reducers/stations-list';
-import { isLoading } from '../reducers/stations-map';
+import { getCurrentPosition } from '../reducers/position';
+import { getStationsStatus } from '../reducers/stations-list';
+import { getIsLoading } from '../reducers/stations-map';
 import { filter, take } from 'rxjs/operators';
 import { fetchingClosestStations } from '../actions/stations-list';
 
@@ -22,9 +22,9 @@ export class ArrivalComponent implements OnInit {
   constructor(
     private store: Store<AppState>
   ) {
-    this.currentPosition$ = store.pipe(select(currentPosition));
-    this.stationsStatus$ = store.pipe(select(stationsStatus));
-    this.isLoading$ = store.pipe(select(isLoading));
+    this.currentPosition$ = store.pipe(select(getCurrentPosition));
+    this.stationsStatus$ = store.pipe(select(getStationsStatus));
+    this.isLoading$ = store.pipe(select(getIsLoading));
   }
 
   ngOnInit(): void {

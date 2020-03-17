@@ -54,19 +54,19 @@ export function reducer(state: StationState | undefined, action: Action) {
 }
 
 export const selectStationsListState = (state: AppState) => state.stationsList;
-export const isLoading = createSelector(
+export const getIsLoading = createSelector(
   selectStationsListState,
   (state: StationState) => state.isLoading,
 );
-export const stationsStatus = createSelector(
+export const getStationsStatus = createSelector(
   selectStationsListState,
   (state: StationState) => state.list,
 );
-export const stationsStatusById = (id: number) => createSelector(
+export const getStationsStatusById = (id: number) => createSelector(
   selectStationsListState,
   (state: StationState) => state.list.find(status => status.stationId === id),
 );
-export const destination = createSelector(
+export const getDestination = createSelector(
   selectStationsListState,
   (state: StationState) => state.destination,
 );

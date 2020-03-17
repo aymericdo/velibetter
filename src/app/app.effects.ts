@@ -18,10 +18,10 @@ import { ApiService } from './services/api.service';
 import { fetchingClosestStations } from './actions/stations-list';
 import { Store, select } from '@ngrx/store';
 import { AppState } from './reducers';
-import { currentPosition } from './reducers/position';
-import { stationsStatusById } from './reducers/stations-list';
+import { getCurrentPosition } from './reducers/position';
+import { getStationsStatusById } from './reducers/stations-list';
 import { Coordinate, Station } from './interfaces';
-import { stationsMapById } from './reducers/stations-map';
+import { getStationsMapById } from './reducers/stations-map';
 
 @Injectable()
 export class AppEffects {
@@ -36,7 +36,7 @@ export class AppEffects {
   fetchingStationsInPolygon$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fetchingStationsInPolygon, initialFetchingStationsInPolygon),
-      withLatestFrom(this.store.pipe(select(currentPosition))),
+      withLatestFrom(this.store.pipe(select(getCurrentPosition))),
       mergeMap(([{ latLngBoundsLiteral }, position]) =>
         this.apiService.fetchClosestInfo(latLngBoundsLiteral, position as Coordinate).pipe(
           map((stations: Array<Station>) =>
@@ -51,7 +51,7 @@ export class AppEffects {
   fetchingClosestStations$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fetchingClosestStations),
-      withLatestFrom(this.store.pipe(select(currentPosition), filter(Boolean))),
+      withLatestFrom(this.store.pipe(select(getCurrentPosition), filter(Boolean))),
       mergeMap(([{ isDeparture }, position]) =>
         isDeparture ?
           this.apiService.fetchClosestStatusForDeparture(position as Coordinate).pipe(
@@ -74,12 +74,12 @@ export class AppEffects {
   selectingStation$ = createEffect(() =>
     this.actions$.pipe(
       ofType(selectingStation),
-      withLatestFrom(this.store.pipe(select(currentPosition))),
+      withLatestFrom(this.store.pipe(select(getCurrentPosition))),
       mergeMap(([{ stationId }, position]) => {
         // I don't understand how combineLatest could be useful in this case
         let selectedStation = null;
         this.store
-          .pipe(select(stationsMapById(stationId)), take(1))
+          .pipe(select(getStationsMapById(stationId)), take(1))
           .subscribe(s => (selectedStation = s));
 
         if (selectedStation && selectedStation.distance) {
@@ -99,12 +99,12 @@ export class AppEffects {
   fetchingDestination$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fetchingDestination),
-      withLatestFrom(this.store.pipe(select(currentPosition), filter(Boolean))),
+      withLatestFrom(this.store.pipe(select(getCurrentPosition), filter(Boolean))),
       mergeMap(([{ stationId }, position]) => {
         // I don't understand how combineLatest could be useful in this case
         let destination = null;
         this.store
-          .pipe(select(stationsStatusById(stationId)), take(1))
+          .pipe(select(getStationsStatusById(stationId)), take(1))
           .subscribe(d => (destination = d));
 
         if (destination) {

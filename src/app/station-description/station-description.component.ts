@@ -3,9 +3,9 @@ import { Observable, combineLatest, Subject } from 'rxjs';
 import { Station, Coordinate } from '../interfaces';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../reducers';
-import { currentPosition } from '../reducers/position';
-import { selectedStation, isSelectingStation } from '../reducers/stations-map';
-import { filter, map, withLatestFrom, takeUntil, take } from 'rxjs/operators';
+import { getCurrentPosition } from '../reducers/position';
+import { getSelectedStation, getIsSelectingStation } from '../reducers/stations-map';
+import { filter, map, takeUntil, take } from 'rxjs/operators';
 import { selectingStation } from '../actions/stations-map';
 import { Router, NavigationEnd, Event } from '@angular/router';
 
@@ -26,17 +26,17 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private router: Router,
   ) {
-    this.selectedStation$ = store.pipe(select(selectedStation));
-    this.currentPosition$ = store.pipe(select(currentPosition));
-    this.isSelectingStation$ = store.pipe(select(isSelectingStation));
+    this.selectedStation$ = store.pipe(select(getSelectedStation));
+    this.currentPosition$ = store.pipe(select(getCurrentPosition));
+    this.isSelectingStation$ = store.pipe(select(getIsSelectingStation));
     this.routerUrl = router.url;
 
     combineLatest([
-      this.currentPosition$.pipe(filter(Boolean)),
+      this.currentPosition$.pipe(filter(Boolean), take(1)),
       router.events.pipe(
         filter(event =>
           event instanceof NavigationEnd
-        )
+        ),
       ),
     ]).pipe(
       map(([position, val]) => val),
