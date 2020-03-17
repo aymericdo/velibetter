@@ -30,3 +30,8 @@ export const selectStation = createAction(
   '[Stations Map] set station map',
   props<{ station: Station }>()
 );
+
+export const setMapCenter = createAction(
+  '[Stations Map] set map center',
+  props<{ lat: number, lng: number }>(),
+);

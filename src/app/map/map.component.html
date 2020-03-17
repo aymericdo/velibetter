@@ -7,12 +7,13 @@
     (click)="unselectStation()">
   </div>
   <agm-map
-    [latitude]="(currentPosition$ | async)?.lat || defaultCoord.lat"
+    [latitude]="(mapCenter$ | async)?.lat"
     [zoom]="zoom"
-    [longitude]="(currentPosition$ | async)?.lng || defaultCoord.lng"
+    [longitude]="(mapCenter$ | async)?.lng"
     [streetViewControl]="false"
     (idle)="idle()"
     (boundsChange)="boundsChange($event)"
+    (centerChange)="centerChange($event)"
   >
     <agm-marker
       *ngFor="let marker of markers$ | async; trackBy: trackByFn"
@@ -40,6 +41,10 @@
     >
     </agm-direction>
   </agm-map>
+  <button mat-mini-fab class="my-location-button"
+    (click)="recenterMap()">
+    <i class="material-icons">my_location</i>
+  </button>
   <app-speed-dial-fab
     *ngIf="!!(currentPosition$ | async) && !isDisplayingListPages"
     (redirect)="navigateTo($event)"

@@ -7,14 +7,16 @@ import {
   unselectStationMap,
   initialFetchingStationsInPolygon,
 } from '../actions/stations-map';
-import { Station } from '../interfaces';
+import { Station, Coordinate } from '../interfaces';
 import { AppState } from '.';
 import { LatLngBoundsLiteral } from '@agm/core/services/google-maps-types';
+import { setMapCenter } from '../actions/stations-map';
 
 export interface StationState {
   list: Station[];
   isLoading: boolean;
   latLngBoundsLiteral: LatLngBoundsLiteral;
+  mapCenter: Coordinate;
   selectedStation: Station;
   isSelectingStation: boolean;
 }
@@ -23,6 +25,7 @@ const initialState: StationState = {
   list: [],
   isLoading: false,
   latLngBoundsLiteral: null,
+  mapCenter: null,
   selectedStation: null,
   isSelectingStation: false,
 };
@@ -80,6 +83,12 @@ export const stationsMapReducer = createReducer(
       isSelectingStation: false,
     };
   }),
+  on(setMapCenter, (state, { lat, lng }) => {
+    return {
+      ...state,
+      mapCenter: { lat, lng },
+    }
+  })
 );
 
 export function reducer(state: StationState | undefined, action: Action) {
@@ -117,4 +126,8 @@ export const getMarkers = createSelector(selectStationsMapState, (state: Station
     lat: s.lat,
     lng: s.lng,
   })),
+);
+export const getMapCenter = createSelector(
+  selectStationsMapState,
+  (state: StationState) => state.mapCenter,
 );

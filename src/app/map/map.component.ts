@@ -1,17 +1,17 @@
-import { Component, Input } from '@angular/core';
-import { Observable, combineLatest } from 'rxjs';
 import { LatLngBounds, LatLngBoundsLiteral } from '@agm/core/services/google-maps-types';
-import { Store, select } from '@ngrx/store';
-import { AppState } from '../reducers';
-import { Router, NavigationEnd } from '@angular/router';
-import { getIsLoading, getMarkers, getLatLngBoundsLiteral, getSelectedStation } from '../reducers/stations-map';
-import { getCurrentPosition } from '../reducers/position';
-import { fetchingStationsInPolygon, unselectStationMap, initialFetchingStationsInPolygon } from '../actions/stations-map';
+import { Component, Input } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { combineLatest, Observable } from 'rxjs';
+import { filter, map, take } from 'rxjs/operators';
 import { fetchingDestination, unsetDestination } from '../actions/stations-list';
-import { getDestination } from '../reducers/stations-list';
-import { take, filter, map } from 'rxjs/operators';
-import { Station, Marker } from '../interfaces';
+import { fetchingStationsInPolygon, initialFetchingStationsInPolygon, setMapCenter, unselectStationMap } from '../actions/stations-map';
+import { Marker, Station } from '../interfaces';
 import { Coordinate } from '../interfaces/index';
+import { AppState } from '../reducers';
+import { getCurrentPosition } from '../reducers/position';
+import { getDestination } from '../reducers/stations-list';
+import { getIsLoading, getLatLngBoundsLiteral, getMapCenter, getMarkers, getSelectedStation } from '../reducers/stations-map';
 
 @Component({
   selector: 'app-map',
@@ -28,7 +28,9 @@ export class MapComponent {
   destination$: Observable<{ lat: number; lng: number }>;
   latLngBoundsLiteral$: Observable<LatLngBoundsLiteral>;
   selectedStation$: Observable<Station>;
+  mapCenter$: Observable<Coordinate>;
 
+  currentMapCenter: Coordinate;
   zoom = 16;
   currentLatLngBounds: LatLngBounds;
   travelMode: string;
@@ -53,6 +55,7 @@ export class MapComponent {
     this.destination$ = store.pipe(select(getDestination));
     this.latLngBoundsLiteral$ = store.pipe(select(getLatLngBoundsLiteral));
     this.selectedStation$ = store.pipe(select(getSelectedStation));
+    this.mapCenter$ = store.pipe(select(getMapCenter));
 
     combineLatest([
       this.currentPosition$.pipe(filter(Boolean), take(1)),
@@ -73,6 +76,14 @@ export class MapComponent {
         this.store.dispatch(unsetDestination());
       }
     });
+  }
+
+  ngOnInit() {
+    let currentPosition;
+    this.currentPosition$.pipe(take(1)).subscribe((c) => {
+      currentPosition = c;
+    });
+    this.store.dispatch(setMapCenter(currentPosition || this.defaultCoord));
   }
 
   boundsChange(event: LatLngBounds) {
@@ -101,6 +112,9 @@ export class MapComponent {
         }
       }
     }
+    this.store.dispatch(
+        setMapCenter(this.currentMapCenter)
+    );
   }
 
   clickedMarker(stationId: number): void {
@@ -113,6 +127,18 @@ export class MapComponent {
 
   trackByFn(index: number, marker: Marker): number {
     return marker.id;
+  }
+
+  recenterMap() {
+    let currentPosition;
+    this.currentPosition$.pipe(take(1)).subscribe((c) => {
+      currentPosition = c;
+    });
+    this.store.dispatch(setMapCenter(currentPosition));
+  }
+
+  centerChange(center) {
+    this.currentMapCenter = center;
   }
 
   navigateTo(id: number): void {
