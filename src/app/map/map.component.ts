@@ -1,9 +1,9 @@
 import { LatLngBounds, LatLngBoundsLiteral } from '@agm/core/services/google-maps-types';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import { combineLatest, Observable } from 'rxjs';
-import { filter, map, take } from 'rxjs/operators';
+import { combineLatest, Observable, Subject } from 'rxjs';
+import { filter, map, take, takeUntil } from 'rxjs/operators';
 import { fetchingDestination, unsetDestination } from '../actions/stations-list';
 import { fetchingStationsInPolygon, initialFetchingStationsInPolygon, setMapCenter, unselectStationMap } from '../actions/stations-map';
 import { Marker, Station } from '../interfaces';
@@ -18,7 +18,7 @@ import { getIsLoading, getLatLngBoundsLiteral, getMapCenter, getMarkers, getSele
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss']
 })
-export class MapComponent {
+export class MapComponent implements OnInit, OnDestroy {
   @Input() isDisplayingListPages: boolean;
   @Input() defaultCoord: Coordinate;
 
@@ -29,6 +29,8 @@ export class MapComponent {
   latLngBoundsLiteral$: Observable<LatLngBoundsLiteral>;
   selectedStation$: Observable<Station>;
   mapCenter$: Observable<Coordinate>;
+
+  private destroy$: Subject<boolean> = new Subject<boolean>();
 
   currentMapCenter: Coordinate;
   zoom = 16;
@@ -79,11 +81,14 @@ export class MapComponent {
   }
 
   ngOnInit() {
-    let currentPosition;
-    this.currentPosition$.pipe(take(1)).subscribe((c) => {
-      currentPosition = c;
+    this.currentPosition$.pipe(takeUntil(this.destroy$)).subscribe((currentPosition) => {
+      this.store.dispatch(setMapCenter(currentPosition || this.defaultCoord));
     });
-    this.store.dispatch(setMapCenter(currentPosition || this.defaultCoord));
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 
   boundsChange(event: LatLngBounds) {

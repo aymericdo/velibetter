@@ -1,13 +1,13 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, combineLatest, Subject } from 'rxjs';
-import { Station, Coordinate } from '../interfaces';
-import { Store, select } from '@ngrx/store';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { combineLatest, Observable, Subject } from 'rxjs';
+import { filter, map, take, takeUntil } from 'rxjs/operators';
+import { selectingStation } from '../actions/stations-map';
+import { Station } from '../interfaces';
 import { AppState } from '../reducers';
 import { getCurrentPosition } from '../reducers/position';
-import { getSelectedStation, getIsSelectingStation } from '../reducers/stations-map';
-import { filter, map, takeUntil, take } from 'rxjs/operators';
-import { selectingStation } from '../actions/stations-map';
-import { Router, NavigationEnd, Event } from '@angular/router';
+import { getIsSelectingStation, getSelectedStation } from '../reducers/stations-map';
 
 @Component({
   selector: 'app-station-description',
