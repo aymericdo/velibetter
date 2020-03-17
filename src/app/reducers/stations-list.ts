@@ -20,7 +20,7 @@ const initialState: StationState = {
   destination: null,
 };
 
-export const stationsReducer = createReducer(
+export const stationsListReducer = createReducer(
   initialState,
   on(fetchingClosestStations, state => {
     return {
@@ -50,7 +50,7 @@ export const stationsReducer = createReducer(
 );
 
 export function reducer(state: StationState | undefined, action: Action) {
-  return stationsReducer(state, action);
+  return stationsListReducer(state, action);
 }
 
 export const selectStationsListState = (state: AppState) => state.stationsList;

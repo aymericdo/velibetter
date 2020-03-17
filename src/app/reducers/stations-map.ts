@@ -16,6 +16,7 @@ export interface StationState {
   isLoading: boolean;
   latLngBoundsLiteral: LatLngBoundsLiteral;
   selectedStation: Station;
+  isSelectingStation: boolean;
 }
 
 const initialState: StationState = {
@@ -23,9 +24,10 @@ const initialState: StationState = {
   isLoading: false,
   latLngBoundsLiteral: null,
   selectedStation: null,
+  isSelectingStation: false,
 };
 
-export const stationsReducer = createReducer(
+export const stationsMapReducer = createReducer(
   initialState,
   on(initialFetchingStationsInPolygon, (state, { latLngBoundsLiteral }) => {
     return {
@@ -52,6 +54,7 @@ export const stationsReducer = createReducer(
     return {
       ...state,
       selectedStation: state.list.find(s => s.stationId === stationId),
+      isSelectingStation: true,
     };
   }),
   on(unselectStationMap, (state) => {
@@ -63,17 +66,14 @@ export const stationsReducer = createReducer(
   on(setStationMap, (state, { station }) => {
     return {
       ...state,
-      list: [
-        ...state.list.filter(s => s.stationId !== station.stationId),
-        station,
-      ],
       selectedStation: { ...station },
+      isSelectingStation: false,
     };
   }),
 );
 
 export function reducer(state: StationState | undefined, action: Action) {
-  return stationsReducer(state, action);
+  return stationsMapReducer(state, action);
 }
 
 export const selectStationsMapState = (state: AppState) => state.stationsMap;
@@ -92,6 +92,10 @@ export const selectedStation = createSelector(
 export const latLngBoundsLiteral = createSelector(
   selectStationsMapState,
   (state: StationState) => state.latLngBoundsLiteral
+);
+export const isSelectingStation = createSelector(
+  selectStationsMapState,
+  (state: StationState) => state.isSelectingStation
 );
 export const markers = createSelector(selectStationsMapState, (state: StationState) =>
   state.list.map(s => ({

@@ -4,7 +4,7 @@ import { Station, Coordinate } from '../interfaces';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../reducers';
 import { currentPosition } from '../reducers/position';
-import { selectedStation } from '../reducers/stations-map';
+import { selectedStation, isSelectingStation } from '../reducers/stations-map';
 import { filter, map, withLatestFrom, takeUntil, take } from 'rxjs/operators';
 import { selectStation } from '../actions/stations-map';
 import { Router, NavigationEnd, Event } from '@angular/router';
@@ -17,6 +17,7 @@ import { Router, NavigationEnd, Event } from '@angular/router';
 export class StationDescriptionComponent implements OnInit, OnDestroy {
   currentPosition$: Observable<{ lat: number; lng: number }>;
   selectedStation$: Observable<Station>;
+  isSelectingStation$: Observable<boolean>;
   routerUrl: string;
 
   private destroy$: Subject<boolean> = new Subject<boolean>();
@@ -27,6 +28,7 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
   ) {
     this.selectedStation$ = store.pipe(select(selectedStation));
     this.currentPosition$ = store.pipe(select(currentPosition));
+    this.isSelectingStation$ = store.pipe(select(isSelectingStation));
     this.routerUrl = router.url;
 
     combineLatest([

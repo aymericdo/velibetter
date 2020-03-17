@@ -74,13 +74,8 @@ export class AppEffects {
   selectStation$ = createEffect(() =>
     this.actions$.pipe(
       ofType(selectStation),
-      withLatestFrom(this.store.pipe(select(stationsMap))),
       withLatestFrom(this.store.pipe(select(currentPosition))),
-      filter(([[{ stationId }, list], position]) => {
-        const station = list.find(s => s.stationId === stationId);
-        return !station || !station.distance;
-      }),
-      mergeMap(([[{ stationId }, list], position]) => {
+      mergeMap(([{ stationId }, position]) => {
         return this.apiService.fetchStation(stationId, position as Coordinate).pipe(
           map((station: Station) =>
             setStationMap({ station })
@@ -89,7 +84,7 @@ export class AppEffects {
         );
       })
     )
-  );
+ );
 
   fetchingDestination$ = createEffect(() =>
     this.actions$.pipe(

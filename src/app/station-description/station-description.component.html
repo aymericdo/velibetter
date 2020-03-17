@@ -1,9 +1,9 @@
-<app-loading *ngIf="!(selectedStation$ | async); else loaded"></app-loading>
-<ng-template #loaded>
-  <section class="mat-typography">
-    <h1 class="mat-display-1">{{(selectedStation$ | async)?.name}} - {{ (selectedStation$ | async)?.distance | number:'1.0-0' }}m</h1>
-    <h2 class="mat-h2">Place disponible: {{(selectedStation$ | async)?.numDocksAvailable}}</h2>
-    <h2 class="mat-h2">Vélo mécanique: {{(selectedStation$ | async)?.mechanical}}</h2>
-    <h2 class="mat-h2">Vélo électrique: {{(selectedStation$ | async)?.ebike}}</h2>
-  </section>
+<section *ngIf="!(isSelectingStation$ | async); else isLoading" class="mat-typography">
+  <h1 class="mat-display-1">{{(selectedStation$ | async)?.name}} - {{ (selectedStation$ | async)?.distance | number:'1.0-0' }}m</h1>
+  <h2 class="mat-h2">Place disponible: {{(selectedStation$ | async)?.numDocksAvailable}}</h2>
+  <h2 class="mat-h2">Vélo mécanique: {{(selectedStation$ | async)?.mechanical}}</h2>
+  <h2 class="mat-h2">Vélo électrique: {{(selectedStation$ | async)?.ebike}}</h2>
+</section>
+<ng-template #isLoading>
+  <app-loading></app-loading>
 </ng-template>

@@ -27,6 +27,6 @@ export const unselectStationMap = createAction(
 );
 
 export const setStationMap = createAction(
-  '[Stations Map] set station',
+  '[Stations Map] set station map',
   props<{ station: Station }>()
 );
