@@ -10,8 +10,8 @@ import {
 import {
   setStationsMap,
   fetchingStationsInPolygon,
+  selectingStation,
   selectStation,
-  setStationMap,
   initialFetchingStationsInPolygon,
 } from './actions/stations-map';
 import { ApiService } from './services/api.service';
@@ -21,7 +21,7 @@ import { AppState } from './reducers';
 import { currentPosition } from './reducers/position';
 import { stationsStatusById } from './reducers/stations-list';
 import { Coordinate, Station } from './interfaces';
-import { selectedStation, stationsMap } from './reducers/stations-map';
+import { stationsMapById } from './reducers/stations-map';
 
 @Injectable()
 export class AppEffects {
@@ -71,17 +71,27 @@ export class AppEffects {
     )
   );
 
-  selectStation$ = createEffect(() =>
+  selectingStation$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(selectStation),
+      ofType(selectingStation),
       withLatestFrom(this.store.pipe(select(currentPosition))),
       mergeMap(([{ stationId }, position]) => {
-        return this.apiService.fetchStation(stationId, position as Coordinate).pipe(
-          map((station: Station) =>
-            setStationMap({ station })
-          ),
-          catchError(() => EMPTY)
-        );
+        // I don't understand how combineLatest could be useful in this case
+        let selectedStation = null;
+        this.store
+          .pipe(select(stationsMapById(stationId)), take(1))
+          .subscribe(s => (selectedStation = s));
+
+        if (selectedStation && selectedStation.distance) {
+          return of(selectStation({ station: selectedStation }));
+        } else {
+          return this.apiService.fetchStation(stationId, position as Coordinate).pipe(
+            map((station: Station) =>
+              selectStation({ station })
+            ),
+            catchError(() => EMPTY)
+          );
+        }
       })
     )
  );

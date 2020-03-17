@@ -17,7 +17,7 @@ export const setStationsMap = createAction(
   props<{ list: Station[] }>()
 );
 
-export const selectStation = createAction(
+export const selectingStation = createAction(
   '[Stations Map] select station',
   props<{ stationId: number }>(),
 );
@@ -26,7 +26,7 @@ export const unselectStationMap = createAction(
   '[Stations Map] unselect station',
 );
 
-export const setStationMap = createAction(
+export const selectStation = createAction(
   '[Stations Map] set station map',
   props<{ station: Station }>()
 );

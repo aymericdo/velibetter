@@ -6,7 +6,7 @@ import { AppState } from '../reducers';
 import { currentPosition } from '../reducers/position';
 import { selectedStation, isSelectingStation } from '../reducers/stations-map';
 import { filter, map, withLatestFrom, takeUntil, take } from 'rxjs/operators';
-import { selectStation } from '../actions/stations-map';
+import { selectingStation } from '../actions/stations-map';
 import { Router, NavigationEnd, Event } from '@angular/router';
 
 @Component({
@@ -54,7 +54,7 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
   }
 
   selectStationFct(stationId: number): void {
-    this.store.dispatch(selectStation({ stationId }));
+    this.store.dispatch(selectingStation({ stationId }));
   }
 
   ngOnDestroy() {

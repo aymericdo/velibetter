@@ -2,8 +2,8 @@ import { Action, createReducer, on, createSelector } from '@ngrx/store';
 import {
   setStationsMap,
   fetchingStationsInPolygon,
-  setStationMap,
   selectStation,
+  selectingStation,
   unselectStationMap,
   initialFetchingStationsInPolygon,
 } from '../actions/stations-map';
@@ -46,14 +46,20 @@ export const stationsMapReducer = createReducer(
   on(setStationsMap, (state, { list }) => {
     return {
       ...state,
-      list,
+      list: list.map(s => {
+        const station = state.list.find(currentStation => currentStation.stationId === s.stationId);
+        if (station) {
+          return station;
+        } else {
+          return s;
+        }
+      }),
       isLoading: false
     };
   }),
-  on(selectStation, (state, { stationId }) => {
+  on(selectingStation, (state, { stationId }) => {
     return {
       ...state,
-      selectedStation: state.list.find(s => s.stationId === stationId),
       isSelectingStation: true,
     };
   }),
@@ -63,9 +69,13 @@ export const stationsMapReducer = createReducer(
       selectedStation: null,
     };
   }),
-  on(setStationMap, (state, { station }) => {
+  on(selectStation, (state, { station }) => {
     return {
       ...state,
+      list: [
+        ...state.list.filter(s => s.stationId !== station.stationId),
+        station,
+      ],
       selectedStation: { ...station },
       isSelectingStation: false,
     };
@@ -92,6 +102,10 @@ export const selectedStation = createSelector(
 export const latLngBoundsLiteral = createSelector(
   selectStationsMapState,
   (state: StationState) => state.latLngBoundsLiteral
+);
+export const stationsMapById = (id: number) => createSelector(
+  selectStationsMapState,
+  (state: StationState) => state.list.find(s => s.stationId === id),
 );
 export const isSelectingStation = createSelector(
   selectStationsMapState,
