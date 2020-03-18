@@ -35,3 +35,8 @@ export const setMapCenter = createAction(
   '[Stations Map] set map center',
   props<{ lat: number, lng: number }>(),
 );
+
+export const setZoom = createAction(
+  '[Stations Map] set zoom',
+  props<{ zoom: number }>(),
+);
