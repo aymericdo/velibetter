@@ -10,6 +10,7 @@
     [latitude]="(mapCenter$ | async)?.lat"
     [zoom]="zoom"
     [longitude]="(mapCenter$ | async)?.lng"
+    [zoomControl]="false"
     [streetViewControl]="false"
     (idle)="idle()"
     (boundsChange)="boundsChange($event)"

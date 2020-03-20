@@ -135,7 +135,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   recenterMap() {
-    let currentPosition;
+    let currentPosition: Coordinate;
     this.currentPosition$.pipe(take(1)).subscribe((c) => {
       currentPosition = c;
     });
