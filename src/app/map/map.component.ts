@@ -5,7 +5,10 @@ import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, Subject } from 'rxjs';
 import { filter, map, take, takeUntil } from 'rxjs/operators';
 import { fetchingDestination, unsetDestination } from '../actions/stations-list';
-import { fetchingStationsInPolygon, initialFetchingStationsInPolygon, setMapCenter, setZoom, unselectStationMap } from '../actions/stations-map';
+import {
+  fetchingStationsInPolygon, initialFetchingStationsInPolygon,
+  setMapCenter, setZoom, unselectStationMap,
+ } from '../actions/stations-map';
 import { Marker, Station } from '../interfaces';
 import { Coordinate } from '../interfaces/index';
 import { AppState } from '../reducers';
@@ -98,6 +101,13 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   idle() {
+    this.store.dispatch(
+      setMapCenter(this.currentMapCenter)
+    );
+    this.store.dispatch(
+      setZoom({ zoom: this.currentZoom })
+    );
+
     if (this.currentLatLngBounds) {
       let latLngBoundsLiteralLastSaved;
       this.latLngBoundsLiteral$.pipe(take(1)).subscribe(latLng => latLngBoundsLiteralLastSaved = latLng);
@@ -119,12 +129,6 @@ export class MapComponent implements OnInit, OnDestroy {
         }
       }
     }
-    this.store.dispatch(
-      setMapCenter(this.currentMapCenter)
-    );
-    this.store.dispatch(
-      setZoom({ zoom: this.currentZoom })
-    );
   }
 
   clickedMarker(stationId: number): void {
