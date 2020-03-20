@@ -38,6 +38,8 @@ export class AppComponent implements OnInit, OnDestroy {
       { timeout: 0 }
     );
 
+    window.addEventListener('deviceorientation', this.handleOrientation, true);
+
     this.breakpointObserver.observe([
       Breakpoints.XSmall,
       Breakpoints.Small,
@@ -53,6 +55,16 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     navigator.geolocation.clearWatch(this.watcher);
   }
+
+  handleOrientation(event: DeviceOrientationEvent) {
+    console.log(event);
+    const deg: number = +event.alpha;
+
+    console.log(deg);
+    // $('.arrow')
+    //     .css('-webkit-transform','rotate('+deg+'deg)')
+    //     .css('transform','rotate('+deg+'deg)');
+}
 
   displayLocationInfo = (position: Position) => {
     if (position) {

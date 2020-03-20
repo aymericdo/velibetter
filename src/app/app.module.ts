@@ -27,7 +27,7 @@ import { ListComponent } from './shared/list/list.component';
 import { LoadingComponent } from './shared/loading/loading.component';
 import { SpeedDialFabComponent } from './shared/speed-dial-fab/speed-dial-fab.component';
 import { StationDescriptionComponent } from './station-description/station-description.component';
-import {NglModule} from 'ng-lightning';
+import { NglModule } from 'ng-lightning';
 
 @NgModule({
   declarations: [
