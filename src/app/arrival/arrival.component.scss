@@ -1,4 +1,44 @@
 :host {
-  height: 100%;
-  flex: 1;
+    height: 100%;
+    flex: 1;
+    .mat-list-item-override {
+        height: inherit;
+    }
+    .row-content {
+        display: flex;
+        justify-content: space-between;
+        flex: 1;
+        padding: 10px 0;
+        .station-info {
+            display: flex;
+            flex-direction: column;
+            min-width: 80%;
+            .station-name {
+                font-weight: bold;
+            }
+            .station-details {
+                display: flex;
+                align-items: center;
+                font-weight: 400;
+                &>span {
+                    display: flex;
+                    align-items: center;
+                    margin-right: 20px;
+                }
+                .material-icons {
+                    font-size: 16px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 25px;
+                    height: 25px;
+                    border-radius: 50%;
+                    margin: 10px;
+                }
+                .dock {
+                    background-color: lightskyblue;
+                }
+            }
+        }
+    }
 }
