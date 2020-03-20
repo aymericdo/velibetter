@@ -10,13 +10,14 @@ import {
 import { Station, Coordinate } from '../interfaces';
 import { AppState } from '.';
 import { LatLngBoundsLiteral } from '@agm/core/services/google-maps-types';
-import { setMapCenter } from '../actions/stations-map';
+import { setMapCenter, setZoom } from '../actions/stations-map';
 
 export interface StationState {
   list: Station[];
   isLoading: boolean;
   latLngBoundsLiteral: LatLngBoundsLiteral;
   mapCenter: Coordinate;
+  zoom: number;
   selectedStation: Station;
   isSelectingStation: boolean;
 }
@@ -26,6 +27,7 @@ const initialState: StationState = {
   isLoading: false,
   latLngBoundsLiteral: null,
   mapCenter: null,
+  zoom: 16,
   selectedStation: null,
   isSelectingStation: false,
 };
@@ -88,6 +90,12 @@ export const stationsMapReducer = createReducer(
       ...state,
       mapCenter: { lat, lng },
     }
+  }),
+  on(setZoom, (state, { zoom }) => {
+    return {
+      ...state,
+      zoom,
+    }
   })
 );
 
@@ -130,4 +138,8 @@ export const getMarkers = createSelector(selectStationsMapState, (state: Station
 export const getMapCenter = createSelector(
   selectStationsMapState,
   (state: StationState) => state.mapCenter,
+);
+export const getZoom = createSelector(
+  selectStationsMapState,
+  (state: StationState) => state.zoom,
 );

@@ -5,13 +5,13 @@ import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, Subject } from 'rxjs';
 import { filter, map, take, takeUntil } from 'rxjs/operators';
 import { fetchingDestination, unsetDestination } from '../actions/stations-list';
-import { fetchingStationsInPolygon, initialFetchingStationsInPolygon, setMapCenter, unselectStationMap } from '../actions/stations-map';
+import { fetchingStationsInPolygon, initialFetchingStationsInPolygon, setMapCenter, setZoom, unselectStationMap } from '../actions/stations-map';
 import { Marker, Station } from '../interfaces';
 import { Coordinate } from '../interfaces/index';
 import { AppState } from '../reducers';
 import { getCurrentPosition } from '../reducers/position';
 import { getDestination } from '../reducers/stations-list';
-import { getIsLoading, getLatLngBoundsLiteral, getMapCenter, getMarkers, getSelectedStation } from '../reducers/stations-map';
+import { getIsLoading, getLatLngBoundsLiteral, getMapCenter, getMarkers, getSelectedStation, getZoom } from '../reducers/stations-map';
 
 @Component({
   selector: 'app-map',
@@ -29,11 +29,12 @@ export class MapComponent implements OnInit, OnDestroy {
   latLngBoundsLiteral$: Observable<LatLngBoundsLiteral>;
   selectedStation$: Observable<Station>;
   mapCenter$: Observable<Coordinate>;
+  zoom$: Observable<number>;
 
   private destroy$: Subject<boolean> = new Subject<boolean>();
 
   currentMapCenter: Coordinate;
-  zoom = 16;
+  currentZoom = 16;
   currentLatLngBounds: LatLngBounds;
   travelMode: string;
 
@@ -58,6 +59,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.latLngBoundsLiteral$ = store.pipe(select(getLatLngBoundsLiteral));
     this.selectedStation$ = store.pipe(select(getSelectedStation));
     this.mapCenter$ = store.pipe(select(getMapCenter));
+    this.zoom$ = store.pipe(select(getZoom));
 
     combineLatest([
       this.currentPosition$.pipe(filter(Boolean), take(1)),
@@ -118,7 +120,10 @@ export class MapComponent implements OnInit, OnDestroy {
       }
     }
     this.store.dispatch(
-        setMapCenter(this.currentMapCenter)
+      setMapCenter(this.currentMapCenter)
+    );
+    this.store.dispatch(
+      setZoom({ zoom: this.currentZoom })
     );
   }
 
@@ -136,14 +141,19 @@ export class MapComponent implements OnInit, OnDestroy {
 
   recenterMap() {
     let currentPosition: Coordinate;
-    this.currentPosition$.pipe(take(1)).subscribe((c) => {
-      currentPosition = c;
+    this.currentPosition$.pipe(take(1)).subscribe((cp) => {
+      currentPosition = cp;
     });
     this.store.dispatch(setMapCenter(currentPosition));
+    this.store.dispatch(setZoom({ zoom: 16 }));
   }
 
   centerChange(center) {
     this.currentMapCenter = center;
+  }
+
+  zoomChange(zoom) {
+    this.currentZoom = zoom;
   }
 
   navigateTo(id: number): void {

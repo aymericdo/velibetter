@@ -8,13 +8,14 @@
   </div>
   <agm-map
     [latitude]="(mapCenter$ | async)?.lat"
-    [zoom]="zoom"
+    [zoom]="(zoom$ | async)"
     [longitude]="(mapCenter$ | async)?.lng"
     [zoomControl]="false"
     [streetViewControl]="false"
     (idle)="idle()"
     (boundsChange)="boundsChange($event)"
     (centerChange)="centerChange($event)"
+    (zoomChange)="zoomChange($event)"
   >
     <agm-marker
       *ngFor="let marker of markers$ | async; trackBy: trackByFn"
