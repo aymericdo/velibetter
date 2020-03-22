@@ -26,10 +26,12 @@ import { metaReducers, reducers } from './reducers';
 import { ListComponent } from './shared/list/list.component';
 import { LoadingComponent } from './shared/loading/loading.component';
 import { SpeedDialFabComponent } from './shared/speed-dial-fab/speed-dial-fab.component';
+import { StationScoreChartComponent } from './shared/station-score-chart/station-score-chart.component';
 import { StationDescriptionComponent } from './station-description/station-description.component';
-import {NglModule} from 'ng-lightning';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
-@NgModule({
+
+@NgModule({ 
   declarations: [
     AppComponent,
     SpeedDialFabComponent,
@@ -39,6 +41,7 @@ import {NglModule} from 'ng-lightning';
     MapComponent,
     LoadingComponent,
     StationDescriptionComponent,
+    StationScoreChartComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -52,7 +55,7 @@ import {NglModule} from 'ng-lightning';
     MatCardModule,
     MatSidenavModule,
     MatToolbarModule,
-    NglModule,
+    NgxChartsModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production
     }),
