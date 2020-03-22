@@ -1,12 +1,13 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, HostListener } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from './reducers';
 import { Observable } from 'rxjs';
-import { setPosition } from './actions/position';
+import { setPosition, setDegrees } from './actions/position';
 import { Router } from '@angular/router';
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 import { setIsMobile } from './actions/screen';
 import { getIsMobile } from './reducers/screen';
+import { getDegrees } from './reducers/position';
 
 @Component({
   selector: 'app-root',
@@ -14,8 +15,18 @@ import { getIsMobile } from './reducers/screen';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
+  constructor(
+    private store: Store<AppState>,
+    private router: Router,
+    private breakpointObserver: BreakpointObserver,
+  ) {
+    this.isMobile$ = store.pipe(select(getIsMobile));
+    this.deg$ = store.pipe(select(getDegrees));
+  }
+
   title = 'Velibetter';
   isMobile$: Observable<boolean>;
+  deg$: Observable<number>;
 
   watcher: number = null;
   isNotMainRoute: boolean;
@@ -23,12 +34,9 @@ export class AppComponent implements OnInit, OnDestroy {
   // Châtelet
   defaultCoord = { lat: 48.859889, lng: 2.346878 };
 
-  constructor(
-    private store: Store<AppState>,
-    private router: Router,
-    private breakpointObserver: BreakpointObserver,
-  ) {
-    this.isMobile$ = store.pipe(select(getIsMobile));
+  @HostListener('window:deviceorientation', ['$event'])
+  onResize(event: DeviceOrientationEvent) {
+    this.store.dispatch(setDegrees({ deg: event.alpha }));
   }
 
   ngOnInit() {
@@ -52,6 +60,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     navigator.geolocation.clearWatch(this.watcher);
+  }
+
+  handleOrientation = (event: DeviceOrientationEvent): void => {
+    this.store.dispatch(setDegrees({ deg: event.alpha }));
   }
 
   displayLocationInfo = (position: Position) => {
