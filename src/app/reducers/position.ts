@@ -1,16 +1,18 @@
 import { Action, createReducer, on, createSelector } from '@ngrx/store';
 import { AppState } from '.';
-import { setPosition } from '../actions/position';
+import { setPosition, setDegrees } from '../actions/position';
 import { Coordinate } from '../interfaces';
 
 export interface PositionState {
   lat: number;
   lng: number;
+  deg: number;
 }
 
 const initialState: PositionState = {
   lat: null,
   lng: null,
+  deg: 0,
 };
 
 export const positionReducer = createReducer(initialState,
@@ -19,6 +21,12 @@ export const positionReducer = createReducer(initialState,
       ...state,
       lat,
       lng,
+    };
+  }),
+  on(setDegrees, (state, { deg }) => {
+    return {
+      ...state,
+      deg,
     };
   }),
 );
@@ -34,3 +42,4 @@ export const getCurrentPosition = createSelector(selectPosition, (state: Positio
     lat: state.lat,
   } as Coordinate : null)
 );
+export const getDegrees = createSelector(selectPosition, (state: PositionState) => state.deg);
