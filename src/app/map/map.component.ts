@@ -1,5 +1,5 @@
 import { LatLngBounds, LatLngBoundsLiteral } from '@agm/core/services/google-maps-types';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, Subject } from 'rxjs';
@@ -24,6 +24,8 @@ import { getIsLoading, getLatLngBoundsLiteral, getMapCenter, getMarkers, getSele
 export class MapComponent implements OnInit, OnDestroy {
   @Input() isDisplayingListPages: boolean;
   @Input() defaultCoord: Coordinate;
+  @Input() isIOS: boolean;
+  @Output() requestPermissionsIOS = new EventEmitter<any>();
 
   markers$: Observable<Marker[]>;
   isLoading$: Observable<boolean>;

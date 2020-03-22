@@ -31,6 +31,9 @@ export class AppComponent implements OnInit, OnDestroy {
   watcher: number = null;
   isNotMainRoute: boolean;
 
+  overlayClicked = false;
+  isIOS = false;
+
   // Châtelet
   defaultCoord = { lat: 48.859889, lng: 2.346878 };
 
@@ -40,6 +43,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.isIOS = ((/iPad|iPhone|iPod/.test(navigator.userAgent)) && (typeof (DeviceMotionEvent as any).requestPermission === 'function'));
+
     this.watcher = navigator.geolocation.watchPosition(
       this.displayLocationInfo,
       this.handleLocationError,
@@ -58,6 +63,12 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
 
+  // for requesting permission on iOs 13 devices
+  requestPermissionsIOS() {
+    this.requestDeviceOrientationIOS();
+    this.overlayClicked = true;
+  }
+
   ngOnDestroy(): void {
     navigator.geolocation.clearWatch(this.watcher);
   }
@@ -74,6 +85,23 @@ export class AppComponent implements OnInit, OnDestroy {
           lng: position.coords.longitude
         })
       );
+    }
+  }
+
+  // requesting device orientation permission
+  requestDeviceOrientationIOS() {
+    if (typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
+      (DeviceOrientationEvent as any).requestPermission()
+        .then(permissionState => {
+          if (permissionState === 'granted') {
+            window.addEventListener('deviceorientation', (event: DeviceOrientationEvent) => {
+              this.store.dispatch(setDegrees({ deg: event.alpha }));
+            });
+          }
+        })
+        .catch(console.error);
+    } else {
+      // handle regular non iOS 13+ devices
     }
   }
 

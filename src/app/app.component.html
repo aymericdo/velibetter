@@ -21,6 +21,8 @@
         [class.-hide]="(isMobile$ | async) && isDisplayingListPages()"
         [defaultCoord]="defaultCoord"
         [isDisplayingListPages]="isDisplayingListPages()"
+        [isIOS]="isIOS"
+        (requestPermissionsIOS)="requestPermissionsIOS()"
       ></app-map>
       <router-outlet *ngIf="isDisplayingListPages()"></router-outlet>
     </main>
