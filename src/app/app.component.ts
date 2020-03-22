@@ -8,6 +8,7 @@ import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/l
 import { setIsMobile } from './actions/screen';
 import { getIsMobile } from './reducers/screen';
 import { getDegrees } from './reducers/position';
+import { DEFAULT_COORD } from './map/map.component';
 
 @Component({
   selector: 'app-root',
@@ -28,14 +29,10 @@ export class AppComponent implements OnInit, OnDestroy {
   isMobile$: Observable<boolean>;
   deg$: Observable<number>;
 
-  watcher: number = null;
   isNotMainRoute: boolean;
-
-  overlayClicked = false;
   isIOS = false;
 
-  // Châtelet
-  defaultCoord = { lat: 48.859889, lng: 2.346878 };
+  private watcher: number = null;
 
   @HostListener('window:deviceorientation', ['$event'])
   onResize(event: DeviceOrientationEvent) {
@@ -63,12 +60,6 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
 
-  // for requesting permission on iOs 13 devices
-  requestPermissionsIOS() {
-    this.requestDeviceOrientationIOS();
-    this.overlayClicked = true;
-  }
-
   ngOnDestroy(): void {
     navigator.geolocation.clearWatch(this.watcher);
   }
@@ -88,11 +79,16 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
+   // for requesting permission on iOS 13 devices
+   requestPermissionsIOS() {
+    this.requestDeviceOrientationIOS();
+  }
+
   // requesting device orientation permission
   requestDeviceOrientationIOS() {
     if (typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
       (DeviceOrientationEvent as any).requestPermission()
-        .then(permissionState => {
+        .then((permissionState: 'granted' | 'denied' | 'default') => {
           if (permissionState === 'granted') {
             window.addEventListener('deviceorientation', (event: DeviceOrientationEvent) => {
               this.store.dispatch(setDegrees({ deg: event.alpha }));
@@ -113,8 +109,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
         this.displayLocationInfo({
           coords: {
-            longitude: this.defaultCoord.lng,
-            latitude: this.defaultCoord.lat
+            longitude: DEFAULT_COORD.lng,
+            latitude: DEFAULT_COORD.lat
           },
         } as Position);
 

@@ -19,7 +19,6 @@
     <main [class.-is-splitted]="!(isMobile$ | async) && isDisplayingListPages()">
       <app-map
         [class.-hide]="(isMobile$ | async) && isDisplayingListPages()"
-        [defaultCoord]="defaultCoord"
         [isDisplayingListPages]="isDisplayingListPages()"
         [isIOS]="isIOS"
         (requestPermissionsIOS)="requestPermissionsIOS()"

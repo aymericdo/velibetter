@@ -43,13 +43,10 @@
     >
     </agm-direction>
   </agm-map>
-  <button mat-mini-fab class="my-location-button"
+  <button
+    *ngIf="!!(currentPosition$ | async)"
+    mat-mini-fab class="my-location-button"
     (click)="recenterMap()">
-    <i class="material-icons">my_location</i>
-  </button>
-  <button *ngIf="isIOS" mat-mini-fab
-    class="ios-permission"
-    (click)="requestPermissionsIOS.emit()">
     <i class="material-icons">my_location</i>
   </button>
   <app-speed-dial-fab

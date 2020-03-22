@@ -5,7 +5,6 @@ import {
   selectStation,
   selectingStation,
   unselectStationMap,
-  initialFetchingStationsInPolygon,
 } from '../actions/stations-map';
 import { Station, Coordinate } from '../interfaces';
 import { AppState } from '.';
@@ -34,18 +33,11 @@ const initialState: StationState = {
 
 export const stationsMapReducer = createReducer(
   initialState,
-  on(initialFetchingStationsInPolygon, (state, { latLngBoundsLiteral }) => {
-    return {
-      ...state,
-      latLngBoundsLiteral,
-      isLoading: true,
-    };
-  }),
   on(fetchingStationsInPolygon, (state, { latLngBoundsLiteral }) => {
     return {
       ...state,
       latLngBoundsLiteral,
-      isLoading: false,
+      isLoading: state.list.length === 0,
     };
   }),
   on(setStationsMap, (state, { list }) => {

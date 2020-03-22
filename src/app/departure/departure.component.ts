@@ -17,8 +17,6 @@ export class DepartureComponent implements OnInit {
   currentPosition$: Observable<{ lat: number; lng: number }>;
   stationsStatus$: Observable<Station[]>;
   isLoading$: Observable<boolean>;
-  data: [81, 19];
-  labels: ["score", ""]
 
   constructor(
     private store: Store<AppState>

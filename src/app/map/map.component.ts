@@ -6,7 +6,7 @@ import { combineLatest, Observable, Subject } from 'rxjs';
 import { filter, map, take, takeUntil } from 'rxjs/operators';
 import { fetchingDestination, unsetDestination } from '../actions/stations-list';
 import {
-  fetchingStationsInPolygon, initialFetchingStationsInPolygon,
+  fetchingStationsInPolygon,
   setMapCenter, setZoom, unselectStationMap,
  } from '../actions/stations-map';
 import { Marker, Station } from '../interfaces';
@@ -15,6 +15,11 @@ import { AppState } from '../reducers';
 import { getCurrentPosition } from '../reducers/position';
 import { getDestination } from '../reducers/stations-list';
 import { getIsLoading, getLatLngBoundsLiteral, getMapCenter, getMarkers, getSelectedStation, getZoom } from '../reducers/stations-map';
+import { isEqual } from 'lodash';
+
+// Châtelet
+export const DEFAULT_COORD = { lat: 48.859889, lng: 2.346878 };
+const DEFAULT_ZOOM = 16;
 
 @Component({
   selector: 'app-map',
@@ -23,7 +28,6 @@ import { getIsLoading, getLatLngBoundsLiteral, getMapCenter, getMarkers, getSele
 })
 export class MapComponent implements OnInit, OnDestroy {
   @Input() isDisplayingListPages: boolean;
-  @Input() defaultCoord: Coordinate;
   @Input() isIOS: boolean;
   @Output() requestPermissionsIOS = new EventEmitter<any>();
 
@@ -36,12 +40,8 @@ export class MapComponent implements OnInit, OnDestroy {
   mapCenter$: Observable<Coordinate>;
   zoom$: Observable<number>;
 
-  private destroy$: Subject<boolean> = new Subject<boolean>();
-
-  currentMapCenter: Coordinate;
-  currentZoom = 16;
-  currentLatLngBounds: LatLngBounds;
   travelMode: string;
+  compassView = false;
 
   fabButtons = [{
     id: 0,
@@ -51,7 +51,10 @@ export class MapComponent implements OnInit, OnDestroy {
     icon: 'lock',
   }];
 
-  firstLoadDone = false;
+  private currentMapCenter: Coordinate;
+  private currentLatLngBounds: LatLngBounds;
+  private currentZoom = DEFAULT_ZOOM;
+  private destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private store: Store<AppState>,
@@ -89,7 +92,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.currentPosition$.pipe(takeUntil(this.destroy$)).subscribe((currentPosition) => {
-      this.store.dispatch(setMapCenter(currentPosition || this.defaultCoord));
+      this.store.dispatch(setMapCenter(currentPosition || DEFAULT_COORD));
     });
   }
 
@@ -114,21 +117,12 @@ export class MapComponent implements OnInit, OnDestroy {
       let latLngBoundsLiteralLastSaved;
       this.latLngBoundsLiteral$.pipe(take(1)).subscribe(latLng => latLngBoundsLiteralLastSaved = latLng);
 
-      if (JSON.stringify(latLngBoundsLiteralLastSaved) !== JSON.stringify(this.currentLatLngBounds.toJSON())) {
-        if (this.firstLoadDone) {
+      if (!isEqual(latLngBoundsLiteralLastSaved, this.currentLatLngBounds)) {
           this.store.dispatch(
             fetchingStationsInPolygon({
               latLngBoundsLiteral: this.currentLatLngBounds.toJSON(),
             }),
           );
-        } else {
-          this.firstLoadDone = true;
-          this.store.dispatch(
-            initialFetchingStationsInPolygon({
-              latLngBoundsLiteral: this.currentLatLngBounds.toJSON(),
-            }),
-          );
-        }
       }
     }
   }
@@ -146,12 +140,23 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   recenterMap() {
-    let currentPosition: Coordinate;
-    this.currentPosition$.pipe(take(1)).subscribe((cp) => {
-      currentPosition = cp;
-    });
-    this.store.dispatch(setMapCenter(currentPosition));
-    this.store.dispatch(setZoom({ zoom: 16 }));
+    let position: Coordinate;
+    let zoom: number;
+    let mapCenter: Coordinate;
+    this.currentPosition$.pipe(take(1)).subscribe((cp) => { position = cp; });
+    this.zoom$.pipe(take(1)).subscribe((z) => { zoom = z; });
+    this.mapCenter$.pipe(take(1)).subscribe((mc) => { mapCenter = mc; });
+
+    if (!isEqual(mapCenter, position) || zoom !== DEFAULT_ZOOM) {
+      this.store.dispatch(setMapCenter(position));
+      this.store.dispatch(setZoom({ zoom: DEFAULT_ZOOM }));
+    } else {
+      if (this.isIOS) {
+        this.requestPermissionsIOS.emit();
+      } else {
+        this.compassView = true;
+      }
+    }
   }
 
   centerChange(center) {

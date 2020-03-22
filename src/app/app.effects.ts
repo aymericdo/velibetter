@@ -12,7 +12,6 @@ import {
   fetchingStationsInPolygon,
   selectingStation,
   selectStation,
-  initialFetchingStationsInPolygon,
 } from './actions/stations-map';
 import { ApiService } from './services/api.service';
 import { fetchingClosestStations } from './actions/stations-list';
@@ -35,7 +34,7 @@ export class AppEffects {
 
   fetchingStationsInPolygon$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fetchingStationsInPolygon, initialFetchingStationsInPolygon),
+      ofType(fetchingStationsInPolygon),
       withLatestFrom(this.store.pipe(select(getCurrentPosition))),
       mergeMap(([{ latLngBoundsLiteral }, position]) => {
         // I don't understand how combineLatest could be useful in this case
