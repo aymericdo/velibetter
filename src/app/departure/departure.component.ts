@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { Store, select } from '@ngrx/store';
-import { AppState } from '../reducers';
-import { fetchingClosestStations } from '../actions/stations-list';
+import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { getCurrentPosition } from '../reducers/position';
 import { filter, take } from 'rxjs/operators';
+import { fetchingClosestStations } from '../actions/stations-list';
 import { Station } from '../interfaces';
-import { getStationsStatus, getIsLoading } from '../reducers/stations-list';
+import { AppState } from '../reducers';
+import { getCurrentPosition } from '../reducers/position';
+import { getIsLoading, getStationsStatus } from '../reducers/stations-list';
 
 @Component({
   selector: 'app-departure',
@@ -14,11 +14,25 @@ import { getStationsStatus, getIsLoading } from '../reducers/stations-list';
   styleUrls: ['./departure.component.scss']
 })
 export class DepartureComponent implements OnInit {
+  @ViewChildren('rowContent') rowContent: QueryList<ElementRef>;
+
   currentPosition$: Observable<{ lat: number; lng: number }>;
   stationsStatus$: Observable<Station[]>;
   isLoading$: Observable<boolean>;
-  data: [81, 19];
-  labels: ["score", ""]
+
+  chartWidth = 0;
+  chartHeight = 0;
+  chartShowLabels = false;
+  chartShowLegend = false;
+  chartData = [
+    {
+      name: "score",
+      value: 69
+    },
+    {
+      name: "empty",
+      value: 31
+    }];
 
   constructor(
     private store: Store<AppState>
@@ -33,6 +47,14 @@ export class DepartureComponent implements OnInit {
       .pipe(filter(Boolean), take(1))
       .subscribe((position: { lat: number; lng: number }) => {
         this.store.dispatch(fetchingClosestStations({ isDeparture: true }));
+      });
+
+    this.stationsStatus$
+      .pipe(filter(status => !!status.length), take(1))
+      .subscribe(() => {
+        setTimeout(() => {
+          this.chartHeight = this.rowContent.first.nativeElement.offsetHeight;
+        });
       });
   }
 }

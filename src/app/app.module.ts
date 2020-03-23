@@ -26,7 +26,7 @@ import { metaReducers, reducers } from './reducers';
 import { ListComponent } from './shared/list/list.component';
 import { LoadingComponent } from './shared/loading/loading.component';
 import { SpeedDialFabComponent } from './shared/speed-dial-fab/speed-dial-fab.component';
-import { StationScoreChartComponent } from './shared/station-score-chart/station-score-chart.component';
+import { DoughnutChartComponent } from './shared/doughnut-chart/doughnut-chart.component';
 import { StationDescriptionComponent } from './station-description/station-description.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
@@ -41,7 +41,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     MapComponent,
     LoadingComponent,
     StationDescriptionComponent,
-    StationScoreChartComponent,
+    DoughnutChartComponent,
   ],
   imports: [
     AppRoutingModule,

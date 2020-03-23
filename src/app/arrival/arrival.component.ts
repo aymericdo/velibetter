@@ -19,6 +19,12 @@ export class ArrivalComponent implements OnInit {
   stationsStatus$: Observable<Station[]>;
   isLoading$: Observable<boolean>;
 
+  chartWidth = 70;
+  chartHeight = 70;
+  chartShowLabels = false;
+  chartShowLegend = false;
+  chartData: [{"score": 61, "empty": 39}];
+
   constructor(
     private store: Store<AppState>
   ) {

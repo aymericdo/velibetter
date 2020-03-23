@@ -20,6 +20,10 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
   isSelectingStation$: Observable<boolean>;
   routerUrl: string;
 
+  chartShowLabels = true;
+  chartShowLegend = false;
+  chartData: any[];
+
   private destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
@@ -50,6 +54,23 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
     this.currentPosition$.pipe(filter(Boolean), take(1))
       .subscribe((position) => {
         this.selectStationFct(+this.routerUrl.split('/')[2]);
+      });
+    this.selectedStation$.pipe(filter(Boolean), take(1))
+      .subscribe((station: Station) => {
+        this.chartData = [
+          {
+            name: 'électrique',
+            value: station.ebike
+          },
+          {
+            name: 'mécanique',
+            value: station.mechanical
+          },
+          { 
+            name: 'station',
+            value: station.numDocksAvailable
+          }
+        ]
       });
   }
 

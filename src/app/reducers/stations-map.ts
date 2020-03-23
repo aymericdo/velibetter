@@ -89,13 +89,13 @@ export const stationsMapReducer = createReducer(
     return {
       ...state,
       mapCenter: { lat, lng },
-    }
+    };
   }),
   on(setZoom, (state, { zoom }) => {
     return {
       ...state,
       zoom,
-    }
+    };
   })
 );
 

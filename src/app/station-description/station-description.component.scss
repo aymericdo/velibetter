@@ -1,6 +1,11 @@
 :host {
-  display: block;
-  position: relative;
-  flex: 1;
-  padding: 40px;
+    display: block;
+    height: 100%;
+    position: relative;
+    flex: 1;
+    padding: 40px;
+    box-sizing: border-box;
+    .doughnut-chart {
+        height: 100px;
+    }
 }

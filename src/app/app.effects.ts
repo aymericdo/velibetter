@@ -5,7 +5,7 @@ import { catchError, map, mergeMap, take, withLatestFrom, filter } from 'rxjs/op
 import {
   setStationsList,
   fetchingDestination,
-  setDestination
+  setDestination,
 } from './actions/stations-list';
 import {
   setStationsMap,
@@ -16,12 +16,12 @@ import {
 } from './actions/stations-map';
 import { ApiService } from './services/api.service';
 import { fetchingClosestStations } from './actions/stations-list';
-import { Store, select } from '@ngrx/store';
+import { Store, select, createAction } from '@ngrx/store';
 import { AppState } from './reducers';
 import { getCurrentPosition } from './reducers/position';
 import { getStationsStatusById } from './reducers/stations-list';
 import { Coordinate, Station } from './interfaces';
-import { getStationsMapById } from './reducers/stations-map';
+import { getStationsMapById, getZoom } from './reducers/stations-map';
 
 @Injectable()
 export class AppEffects {
@@ -37,14 +37,22 @@ export class AppEffects {
     this.actions$.pipe(
       ofType(fetchingStationsInPolygon, initialFetchingStationsInPolygon),
       withLatestFrom(this.store.pipe(select(getCurrentPosition))),
-      mergeMap(([{ latLngBoundsLiteral }, position]) =>
-        this.apiService.fetchClosestInfo(latLngBoundsLiteral, position as Coordinate).pipe(
-          map((stations: Array<Station>) =>
-            setStationsMap({ list: stations })
-          ),
-          catchError(() => EMPTY)
-        )
-      )
+      mergeMap(([{ latLngBoundsLiteral }, position]) => {
+        // I don't understand how combineLatest could be useful in this case
+        let currentZoom = null;
+        this.store
+          .pipe(select(getZoom), take(1))
+          .subscribe(z => (currentZoom = z));
+
+        if (currentZoom > 14) {
+          return this.apiService.fetchClosestInfo(latLngBoundsLiteral, position as Coordinate).pipe(
+            map((stations: Array<Station>) => setStationsMap({ list: stations })),
+            catchError(() => EMPTY)
+          );
+        } else {
+          return of(createAction('[ZOOM TOO LARGE]')());
+        }
+      })
     )
   );
 
