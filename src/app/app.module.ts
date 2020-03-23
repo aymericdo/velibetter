@@ -28,7 +28,6 @@ import { LoadingComponent } from './shared/loading/loading.component';
 import { SpeedDialFabComponent } from './shared/speed-dial-fab/speed-dial-fab.component';
 import { DoughnutChartComponent } from './shared/doughnut-chart/doughnut-chart.component';
 import { StationDescriptionComponent } from './station-description/station-description.component';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { ChartistModule } from 'ng-chartist';
 
 
@@ -57,7 +56,6 @@ import { ChartistModule } from 'ng-chartist';
     MatCardModule,
     MatSidenavModule,
     MatToolbarModule,
-    NgxChartsModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production
     }),
