@@ -1,18 +1,20 @@
 import { Action, createReducer, on, createSelector } from '@ngrx/store';
 import { AppState } from '.';
-import { setPosition, setDegrees } from '../actions/position';
+import { setPosition, setDegrees, toggleCompassView } from '../actions/position';
 import { Coordinate } from '../interfaces';
 
 export interface PositionState {
   lat: number;
   lng: number;
   deg: number;
+  isCompassView: boolean;
 }
 
 const initialState: PositionState = {
   lat: null,
   lng: null,
   deg: 0,
+  isCompassView: false,
 };
 
 export const positionReducer = createReducer(initialState,
@@ -29,6 +31,12 @@ export const positionReducer = createReducer(initialState,
       deg,
     };
   }),
+  on(toggleCompassView, (state) => {
+    return {
+      ...state,
+      isCompassView: !state.isCompassView,
+    };
+  }),
 );
 
 export function reducer(state: PositionState | undefined, action: Action) {
@@ -43,3 +51,4 @@ export const getCurrentPosition = createSelector(selectPosition, (state: Positio
   } as Coordinate : null)
 );
 export const getDegrees = createSelector(selectPosition, (state: PositionState) => state.deg);
+export const getIsCompassView = createSelector(selectPosition, (state: PositionState) => state.isCompassView);

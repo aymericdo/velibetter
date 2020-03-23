@@ -9,3 +9,7 @@ export const setDegrees = createAction(
   '[Position] set degrees',
   props<{ deg: number }>(),
 );
+
+export const toggleCompassView = createAction(
+  '[Position] toggle compass view',
+);

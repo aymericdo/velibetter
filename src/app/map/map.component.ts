@@ -16,6 +16,7 @@ import { getCurrentPosition } from '../reducers/position';
 import { getDestination } from '../reducers/stations-list';
 import { getIsLoading, getLatLngBoundsLiteral, getMapCenter, getMarkers, getSelectedStation, getZoom } from '../reducers/stations-map';
 import { isEqual } from 'lodash';
+import { toggleCompassView } from '../actions/position';
 
 // Châtelet
 export const DEFAULT_COORD = { lat: 48.859889, lng: 2.346878 };
@@ -154,7 +155,7 @@ export class MapComponent implements OnInit, OnDestroy {
       if (this.isIOS) {
         this.requestPermissionsIOS.emit();
       } else {
-        this.compassView = true;
+        this.store.dispatch(toggleCompassView());
       }
     }
   }

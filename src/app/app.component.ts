@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, HostListener } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from './reducers';
 import { Observable } from 'rxjs';
-import { setPosition, setDegrees } from './actions/position';
+import { setPosition, setDegrees, toggleCompassView } from './actions/position';
 import { Router } from '@angular/router';
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 import { setIsMobile } from './actions/screen';
@@ -36,6 +36,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   @HostListener('window:deviceorientation', ['$event'])
   onResize(event: DeviceOrientationEvent) {
+    alert('toto');
     this.store.dispatch(setDegrees({ deg: event.alpha }));
   }
 
@@ -79,8 +80,8 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-   // for requesting permission on iOS 13 devices
-   requestPermissionsIOS() {
+  // for requesting permission on iOS 13 devices
+  requestPermissionsIOS() {
     this.requestDeviceOrientationIOS();
   }
 
@@ -90,6 +91,7 @@ export class AppComponent implements OnInit, OnDestroy {
       (DeviceOrientationEvent as any).requestPermission()
         .then((permissionState: 'granted' | 'denied' | 'default') => {
           if (permissionState === 'granted') {
+            this.store.dispatch(toggleCompassView());
             window.addEventListener('deviceorientation', (event: DeviceOrientationEvent) => {
               this.store.dispatch(setDegrees({ deg: event.alpha }));
             });
