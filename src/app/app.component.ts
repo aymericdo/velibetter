@@ -1,14 +1,16 @@
-import { Component, OnDestroy, OnInit, HostListener } from '@angular/core';
+import { Component, OnDestroy, OnInit, HostListener, Renderer2 } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from './reducers';
-import { Observable } from 'rxjs';
-import { setPosition, setDegrees, toggleCompassView } from './actions/position';
+import { Observable, Subject } from 'rxjs';
+import { setPosition, setDegrees, toggleCompassView } from './actions/galileo';
 import { Router } from '@angular/router';
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 import { setIsMobile } from './actions/screen';
 import { getIsMobile } from './reducers/screen';
-import { getDegrees } from './reducers/position';
+import { getDegrees } from './reducers/galileo';
 import { DEFAULT_COORD } from './map/map.component';
+import { getIsCompassView } from './reducers/galileo';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -20,24 +22,24 @@ export class AppComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private router: Router,
     private breakpointObserver: BreakpointObserver,
+    private renderer: Renderer2,
   ) {
     this.isMobile$ = store.pipe(select(getIsMobile));
     this.deg$ = store.pipe(select(getDegrees));
+    this.isCompassView$ = store.pipe(select(getIsCompassView));
   }
 
   title = 'Velibetter';
   isMobile$: Observable<boolean>;
   deg$: Observable<number>;
+  isCompassView$: Observable<boolean>;
 
   isNotMainRoute: boolean;
   isIOS = false;
 
+  private deviceOrientationListener: () => void = null;
   private watcher: number = null;
-
-  @HostListener('window:deviceorientation', ['$event'])
-  onResize(event: DeviceOrientationEvent) {
-    this.store.dispatch(setDegrees({ deg: event.alpha }));
-  }
+  private destroy$: Subject<boolean> = new Subject<boolean>();
 
   ngOnInit() {
     this.isIOS = ((/iPad|iPhone|iPod/.test(navigator.userAgent)) && (typeof (DeviceMotionEvent as any).requestPermission === 'function'));
@@ -58,14 +60,24 @@ export class AppComponent implements OnInit, OnDestroy {
         this.store.dispatch(setIsMobile({ isMobile: false }));
       }
     });
+
+    this.isCompassView$.pipe(takeUntil(this.destroy$))
+      .subscribe((isCompassView) => {
+        if (isCompassView) {
+          this.deviceOrientationListener =
+            this.renderer.listen('window', 'deviceorientation', (event: DeviceOrientationEvent) => {
+              this.store.dispatch(setDegrees({ deg: event.alpha }));
+            });
+        } else {
+          this.deviceOrientationListener();
+        }
+      });
   }
 
   ngOnDestroy(): void {
     navigator.geolocation.clearWatch(this.watcher);
-  }
-
-  handleOrientation = (event: DeviceOrientationEvent): void => {
-    this.store.dispatch(setDegrees({ deg: event.alpha }));
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 
   displayLocationInfo = (position: Position) => {

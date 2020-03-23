@@ -27,14 +27,26 @@
       [class.-selected]="(selectedStation$ | async)?.stationId === marker.id"
     >
     </agm-marker>
-    <agm-marker
-      *ngIf="!!(currentPosition$ | async)"
-      [latitude]="(currentPosition$ | async)?.lat"
-      [longitude]="(currentPosition$ | async)?.lng"
-      [opacity]="1"
-      [iconUrl]="'/assets/my_location.svg'"
-    >
-    </agm-marker>
+
+    <ng-container *ngIf="!!(currentPosition$ | async)">
+      <agm-marker
+        *ngIf="(isCompassView$ | async) && (currentBearing$ | async); else normalIcon"
+        [latitude]="(currentPosition$ | async)?.lat"
+        [longitude]="(currentPosition$ | async)?.lng"
+        [opacity]="1"
+        [iconUrl]="'/assets/compass_calibration.svg'"
+        [style.transform.rotate.deg]="currentBearing$ | async">
+      </agm-marker>
+      <ng-template #normalIcon>
+        <agm-marker
+          [latitude]="(currentPosition$ | async)?.lat"
+          [longitude]="(currentPosition$ | async)?.lng"
+          [opacity]="1"
+          [iconUrl]="'/assets/my_location.svg'">
+        </agm-marker>
+      </ng-template>
+    </ng-container>
+
     <agm-direction
       *ngIf="!!(currentPosition$ | async) && (destination$ | async)"
       [origin]="currentPosition$ | async"

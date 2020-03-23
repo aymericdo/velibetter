@@ -17,7 +17,7 @@ import { ApiService } from './services/api.service';
 import { fetchingClosestStations } from './actions/stations-list';
 import { Store, select, createAction } from '@ngrx/store';
 import { AppState } from './reducers';
-import { getCurrentPosition } from './reducers/position';
+import { getCurrentPosition } from './reducers/galileo';
 import { getStationsStatusById } from './reducers/stations-list';
 import { Coordinate, Station } from './interfaces';
 import { getStationsMapById, getZoom } from './reducers/stations-map';

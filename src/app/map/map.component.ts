@@ -12,11 +12,11 @@ import {
 import { Marker, Station } from '../interfaces';
 import { Coordinate } from '../interfaces/index';
 import { AppState } from '../reducers';
-import { getCurrentPosition } from '../reducers/position';
+import { getCurrentPosition, getIsCompassView, getCurrentBearing } from '../reducers/galileo';
 import { getDestination } from '../reducers/stations-list';
 import { getIsLoading, getLatLngBoundsLiteral, getMapCenter, getMarkers, getSelectedStation, getZoom } from '../reducers/stations-map';
+import { toggleCompassView } from '../actions/galileo';
 import { isEqual } from 'lodash';
-import { toggleCompassView } from '../actions/position';
 
 // Châtelet
 export const DEFAULT_COORD = { lat: 48.859889, lng: 2.346878 };
@@ -40,6 +40,8 @@ export class MapComponent implements OnInit, OnDestroy {
   selectedStation$: Observable<Station>;
   mapCenter$: Observable<Coordinate>;
   zoom$: Observable<number>;
+  isCompassView$: Observable<boolean>;
+  currentBearing$: Observable<number>;
 
   travelMode: string;
   compassView = false;
@@ -69,6 +71,8 @@ export class MapComponent implements OnInit, OnDestroy {
     this.selectedStation$ = store.pipe(select(getSelectedStation));
     this.mapCenter$ = store.pipe(select(getMapCenter));
     this.zoom$ = store.pipe(select(getZoom));
+    this.isCompassView$ = store.pipe(select(getIsCompassView));
+    this.currentBearing$ = store.pipe(select(getCurrentBearing));
 
     combineLatest([
       this.currentPosition$.pipe(filter(Boolean), take(1)),

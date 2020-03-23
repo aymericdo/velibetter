@@ -6,7 +6,7 @@ import { filter, map, take, takeUntil } from 'rxjs/operators';
 import { selectingStation } from '../actions/stations-map';
 import { Station } from '../interfaces';
 import { AppState } from '../reducers';
-import { getCurrentPosition } from '../reducers/position';
+import { getCurrentPosition } from '../reducers/galileo';
 import { getIsSelectingStation, getSelectedStation } from '../reducers/stations-map';
 
 @Component({

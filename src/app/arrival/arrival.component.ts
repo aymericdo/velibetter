@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Station } from '../interfaces';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../reducers';
-import { getCurrentPosition } from '../reducers/position';
+import { getCurrentPosition } from '../reducers/galileo';
 import { getStationsStatus } from '../reducers/stations-list';
 import { getIsLoading } from '../reducers/stations-map';
 import { filter, take } from 'rxjs/operators';

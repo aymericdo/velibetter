@@ -3,7 +3,6 @@
     <mat-toolbar color="primary">
       <mat-toolbar-row>
         <span *ngIf="isMainRoute(); else notMainRoute">{{title}}</span>
-        <span>x tata - {{ deg$ | async }}</span>
         <ng-template #notMainRoute>
           <button
             mat-icon-button
