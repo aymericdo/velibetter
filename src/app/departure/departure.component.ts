@@ -1,5 +1,7 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { select, Store } from '@ngrx/store';
+import { IChartistData, IPieChartOptions } from 'chartist';
+import { ChartEvent, ChartType } from 'ng-chartist';
 import { Observable } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 import { fetchingClosestStations } from '../actions/stations-list';
@@ -20,19 +22,22 @@ export class DepartureComponent implements OnInit {
   stationsStatus$: Observable<Station[]>;
   isLoading$: Observable<boolean>;
 
-  chartWidth = 0;
-  chartHeight = 0;
-  chartShowLabels = false;
-  chartShowLegend = false;
-  chartData = [
-    {
-      name: "score",
-      value: 69
-    },
-    {
-      name: "empty",
-      value: 31
-    }];
+  chartType: ChartType = "Pie";
+  chartData: IChartistData = {
+    labels: ["score", "empty"],
+    series: [
+      [61],
+      [39]
+    ]
+  };
+  chartOptions: IPieChartOptions = {
+    donut: true,
+    donutSolid: true,
+    donutWidth: 5,
+    showLabel: false,
+    total: 100
+  };
+  chartEvents: ChartEvent = {};
 
   constructor(
     private store: Store<AppState>
@@ -47,14 +52,6 @@ export class DepartureComponent implements OnInit {
       .pipe(filter(Boolean), take(1))
       .subscribe((position: { lat: number; lng: number }) => {
         this.store.dispatch(fetchingClosestStations({ isDeparture: true }));
-      });
-
-    this.stationsStatus$
-      .pipe(filter(status => !!status.length), take(1))
-      .subscribe(() => {
-        setTimeout(() => {
-          this.chartHeight = this.rowContent.first.nativeElement.offsetHeight;
-        });
       });
   }
 }

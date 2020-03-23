@@ -10,6 +10,7 @@
         align-items: center;
         flex: 1;
         padding: 10px 0;
+        height: 60px;
         .station-info {
             display: flex;
             flex-direction: column;
@@ -40,6 +41,9 @@
                     background-color: lightskyblue;
                 }
             }
+        }
+        .station-score {
+            height: 100%;
         }
     }
 }

@@ -29,6 +29,7 @@ import { SpeedDialFabComponent } from './shared/speed-dial-fab/speed-dial-fab.co
 import { DoughnutChartComponent } from './shared/doughnut-chart/doughnut-chart.component';
 import { StationDescriptionComponent } from './station-description/station-description.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { ChartistModule } from 'ng-chartist';
 
 
 @NgModule({ 
@@ -47,6 +48,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     AppRoutingModule,
     BrowserAnimationsModule,
     BrowserModule,
+    ChartistModule,
     HttpClientModule,
     LayoutModule,
     MatButtonModule,

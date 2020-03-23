@@ -1,6 +1,8 @@
 :host {
-     ::ng-deep svg {
-        width: 100%;
+    display: block;
+    height: 100%;
+    x-chartist {
+        display: block;
         height: 100%;
     }
 }

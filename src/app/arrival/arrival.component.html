@@ -13,10 +13,11 @@
         </div>
         <div class="station-score">
           <app-doughnut-chart
-            [showLegend]="chartShowLegend";
-            [showLabels]="chartShowLabels";
-            [data]="chartData";
-          ></app-doughnut-chart>
+          [type]="chartType"
+          [data]="chartData"
+          [options]="chartOptions"
+          [events]="chartEvents"
+        ></app-doughnut-chart>
         </div>
     </div>
   </a>

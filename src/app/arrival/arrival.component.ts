@@ -8,6 +8,8 @@ import { getStationsStatus } from '../reducers/stations-list';
 import { getIsLoading } from '../reducers/stations-map';
 import { filter, take } from 'rxjs/operators';
 import { fetchingClosestStations } from '../actions/stations-list';
+import { ChartType, ChartEvent } from 'ng-chartist';
+import { IChartistData, IPieChartOptions } from 'chartist';
 
 @Component({
   selector: 'app-arrival',
@@ -19,12 +21,22 @@ export class ArrivalComponent implements OnInit {
   stationsStatus$: Observable<Station[]>;
   isLoading$: Observable<boolean>;
 
-  chartWidth = 70;
-  chartHeight = 70;
-  chartShowLabels = false;
-  chartShowLegend = false;
-  chartData: [{"score": 61, "empty": 39}];
-
+  chartType: ChartType = "Pie";
+  chartData: IChartistData = {
+    labels: ["score", "empty"],
+    series: [
+      [61],
+      [39]
+    ]
+  };
+  chartOptions: IPieChartOptions = {
+    donut: true,
+    donutSolid: true,
+    donutWidth: 5,
+    showLabel: false,
+    total: 100
+  };
+  chartEvents: ChartEvent = {};
   constructor(
     private store: Store<AppState>
   ) {

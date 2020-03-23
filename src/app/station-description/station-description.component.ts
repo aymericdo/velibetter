@@ -8,6 +8,8 @@ import { Station } from '../interfaces';
 import { AppState } from '../reducers';
 import { getCurrentPosition } from '../reducers/position';
 import { getIsSelectingStation, getSelectedStation } from '../reducers/stations-map';
+import { ChartType, ChartEvent } from 'ng-chartist';
+import { IChartistData, IPieChartOptions } from 'chartist';
 
 @Component({
   selector: 'app-station-description',
@@ -20,9 +22,15 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
   isSelectingStation$: Observable<boolean>;
   routerUrl: string;
 
-  chartShowLabels = true;
-  chartShowLegend = false;
-  chartData: any[];
+  total: number;
+  ebike: number;
+  mechanical: number;
+  docks: number;
+
+  chartType: ChartType = 'Pie';
+  chartData: IChartistData ;
+  chartOptions: IPieChartOptions;
+  chartEvents: ChartEvent = {};
 
   private destroy$: Subject<boolean> = new Subject<boolean>();
 
@@ -57,21 +65,25 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
       });
     this.selectedStation$.pipe(filter(Boolean), take(1))
       .subscribe((station: Station) => {
-        this.chartData = [
-          {
-            name: 'électrique',
-            value: station.ebike
-          },
-          {
-            name: 'mécanique',
-            value: station.mechanical
-          },
-          { 
-            name: 'station',
-            value: station.numDocksAvailable
-          }
-        ]
-      });
+        let total = station.ebike + station.mechanical + station.numDocksAvailable;
+        this.chartData = {
+          labels: ['mécanique', 'ebike', 'station'],
+          series: [
+            [station.mechanical],
+            [station.ebike],
+            [station.numDocksAvailable]
+          ]
+        };
+        this.chartOptions = {
+          donut: true,
+          labelPosition: "inside",
+          labelOffset: -50,
+          donutSolid: true,
+          donutWidth: 30,
+          showLabel: true,
+          total
+        };
+    });
   }
 
   selectStationFct(stationId: number): void {

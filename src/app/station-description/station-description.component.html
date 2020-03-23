@@ -3,11 +3,12 @@
 </ng-container>
 <section *ngIf="(selectedStation$ | async) && !(isSelectingStation$ | async)" class="mat-typography">
   <h1 class="mat-display-1">{{(selectedStation$ | async)?.name}} - {{ (selectedStation$ | async)?.distance | number:'1.0-0' }}m</h1>
-  <div class="doughnut-chart">
-    <app-doughnut-chart
-      [showLegend]="chartShowLegend"
-      [showLabels]="chartShowLabels"
-      [data]="chartData"
-    ></app-doughnut-chart>
+  <div class="chart">
+   <app-doughnut-chart
+          [type]="chartType"
+          [data]="chartData"
+          [options]="chartOptions"
+          [events]="chartEvents"
+        ></app-doughnut-chart>
   </div>
 </section>
