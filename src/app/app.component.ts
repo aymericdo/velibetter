@@ -36,7 +36,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   @HostListener('window:deviceorientation', ['$event'])
   onResize(event: DeviceOrientationEvent) {
-    alert('toto');
     this.store.dispatch(setDegrees({ deg: event.alpha }));
   }
 
@@ -92,9 +91,6 @@ export class AppComponent implements OnInit, OnDestroy {
         .then((permissionState: 'granted' | 'denied' | 'default') => {
           if (permissionState === 'granted') {
             this.store.dispatch(toggleCompassView());
-            window.addEventListener('deviceorientation', (event: DeviceOrientationEvent) => {
-              this.store.dispatch(setDegrees({ deg: event.alpha }));
-            });
           }
         })
         .catch(console.error);
@@ -103,7 +99,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  handleLocationError = error => {
+  handleLocationError = (error) => {
     switch (error.code) {
       case 3:
         // timeout was hit, meaning nothing's in the cache
