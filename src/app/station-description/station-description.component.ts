@@ -3,7 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, Subject } from 'rxjs';
 import { filter, map, take, takeUntil } from 'rxjs/operators';
-import { selectingStation } from '../actions/stations-map';
+import { selectingStation, unselectStationMap } from '../actions/stations-map';
 import { Station } from '../interfaces';
 import { AppState } from '../reducers';
 import { getCurrentPosition } from '../reducers/galileo';
@@ -58,6 +58,7 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.store.dispatch(unselectStationMap());
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
   }

@@ -7,7 +7,7 @@ import { filter, map, take, takeUntil } from 'rxjs/operators';
 import { fetchingDestination, unsetDestination } from '../actions/stations-list';
 import {
   fetchingStationsInPolygon,
-  setMapCenter, setZoom, unselectStationMap, resetZoom,
+  setMapCenter, setZoom, resetZoom,
  } from '../actions/stations-map';
 import { Marker, Station } from '../interfaces';
 import { Coordinate } from '../interfaces/index';
@@ -148,10 +148,6 @@ export class MapComponent implements OnInit, OnDestroy {
 
   clickedMarker(stationId: number): void {
     this.router.navigate(['stations', stationId]);
-  }
-
-  unselectStation() {
-    this.store.dispatch(unselectStationMap());
   }
 
   trackByFn(index: number, marker: Marker): number {
