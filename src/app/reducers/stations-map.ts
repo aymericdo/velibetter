@@ -19,6 +19,7 @@ export interface StationState {
   zoom: number;
   selectedStation: Station;
   isSelectingStation: boolean;
+  isFirstFetchDone: boolean;
 }
 
 const initialState: StationState = {
@@ -29,6 +30,7 @@ const initialState: StationState = {
   zoom: 16,
   selectedStation: null,
   isSelectingStation: false,
+  isFirstFetchDone: false,
 };
 
 export const stationsMapReducer = createReducer(
@@ -37,7 +39,8 @@ export const stationsMapReducer = createReducer(
     return {
       ...state,
       latLngBoundsLiteral,
-      isLoading: state.list.length === 0,
+      isLoading: !state.isFirstFetchDone,
+      isFirstFetchDone: true,
     };
   }),
   on(setStationsMap, (state, { list }) => {
@@ -45,11 +48,7 @@ export const stationsMapReducer = createReducer(
       ...state,
       list: list.map(s => {
         const station = state.list.find(currentStation => currentStation.stationId === s.stationId);
-        if (station) {
-          return station;
-        } else {
-          return s;
-        }
+        return station ? station : s;
       }),
       isLoading: false
     };
