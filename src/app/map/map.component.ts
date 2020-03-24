@@ -107,7 +107,7 @@ export class MapComponent implements OnInit, OnDestroy {
     });
 
     this.currentBearing$.pipe(takeUntil(this.destroy$)).subscribe((currentBearing) => {
-      const icon = this.elRef.nativeElement.querySelector('agm-map > div.agm-map-container-inner.sebm-google-map-container-inner > div > div > div:nth-child(1) > div > div:nth-child(4) > div:nth-child(11) > img');
+      const icon = this.elRef.nativeElement.querySelector('agm-map > div.agm-map-container-inner.sebm-google-map-container-inner > div > div > div:nth-child(1) > div > div:nth-child(4) > div > img');
       if (icon) {
         icon.style.transform = `rotate(${currentBearing}deg)`;
       }
