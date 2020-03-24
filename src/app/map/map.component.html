@@ -34,8 +34,7 @@
         [latitude]="(currentPosition$ | async)?.lat"
         [longitude]="(currentPosition$ | async)?.lng"
         [opacity]="1"
-        [iconUrl]="'/assets/compass_calibration.svg'"
-        [style.transform.rotate.deg]="currentBearing$ | async">
+        [iconUrl]="'/assets/compass_calibration.svg'">
       </agm-marker>
       <ng-template #normalIcon>
         <agm-marker

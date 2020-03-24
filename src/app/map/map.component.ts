@@ -1,5 +1,5 @@
 import { LatLngBounds, LatLngBoundsLiteral } from '@agm/core/services/google-maps-types';
-import { Component, Input, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, Output, EventEmitter, ElementRef } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, Subject } from 'rxjs';
@@ -62,6 +62,7 @@ export class MapComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<AppState>,
     private router: Router,
+    private elRef: ElementRef,
   ) {
     this.markers$ = store.pipe(select(getMarkers));
     this.isLoading$ = store.pipe(select(getIsLoading));
@@ -98,6 +99,13 @@ export class MapComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.currentPosition$.pipe(takeUntil(this.destroy$)).subscribe((currentPosition) => {
       this.store.dispatch(setMapCenter(currentPosition || DEFAULT_COORD));
+    });
+
+    this.currentBearing$.pipe(takeUntil(this.destroy$)).subscribe((currentBearing) => {
+      const icon = this.elRef.nativeElement.querySelector('agm-map > div.agm-map-container-inner.sebm-google-map-container-inner > div > div > div:nth-child(1) > div > div:nth-child(4) > div:nth-child(11) > img');
+      if (icon) {
+        icon.style.transform = `rotate(${currentBearing}deg)`;
+      }
     });
   }
 
@@ -162,11 +170,11 @@ export class MapComponent implements OnInit, OnDestroy {
     }
   }
 
-  centerChange(center) {
+  centerChange(center: Coordinate): void {
     this.currentMapCenter = center;
   }
 
-  zoomChange(zoom) {
+  zoomChange(zoom: number): void {
     this.currentZoom = zoom;
   }
 
