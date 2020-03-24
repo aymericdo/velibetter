@@ -98,7 +98,9 @@ export class MapComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.currentPosition$.pipe(takeUntil(this.destroy$)).subscribe((currentPosition) => {
-      this.store.dispatch(setMapCenter(currentPosition || DEFAULT_COORD));
+      if (this.isMapCenterEqualCurrentPosition()) {
+        this.store.dispatch(setMapCenter(currentPosition || DEFAULT_COORD));
+      }
     });
 
     this.currentBearing$.pipe(takeUntil(this.destroy$)).subscribe((currentBearing) => {
