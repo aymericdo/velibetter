@@ -99,7 +99,10 @@ export class MapComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.currentPosition$.pipe(takeUntil(this.destroy$)).subscribe((currentPosition) => {
       if (this.isMapCenterEqualCurrentPosition()) {
-        this.store.dispatch(setMapCenter(currentPosition || DEFAULT_COORD));
+        this.store.dispatch(setMapCenter({
+          lat: currentPosition ? currentPosition.lat : DEFAULT_COORD.lat,
+          lng: currentPosition ? currentPosition.lng : DEFAULT_COORD.lng,
+        }));
       }
     });
 
@@ -121,7 +124,10 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   idle() {
-    this.store.dispatch(setMapCenter(this.currentMapCenter));
+    this.store.dispatch(setMapCenter({
+      lat: this.currentMapCenter ? this.currentMapCenter.lat : DEFAULT_COORD.lat,
+      lng: this.currentMapCenter ? this.currentMapCenter.lng : DEFAULT_COORD.lng,
+    }));
     this.store.dispatch(setZoom({ zoom: this.currentZoom }));
 
     if (this.currentLatLngBounds) {
@@ -191,9 +197,9 @@ export class MapComponent implements OnInit, OnDestroy {
     let position: Coordinate;
     this.currentPosition$.pipe(take(1)).subscribe((cp) => { position = cp; });
     let zoom: number;
-    let mapCenter: Coordinate;
     this.zoom$.pipe(take(1)).subscribe((z) => { zoom = z; });
+    let mapCenter: Coordinate;
     this.mapCenter$.pipe(take(1)).subscribe((mc) => { mapCenter = mc; });
-    return isEqual(mapCenter, position) && zoom === DEFAULT_ZOOM;
+    return isEqual(mapCenter, DEFAULT_COORD) || isEqual(mapCenter, position) && zoom === DEFAULT_ZOOM;
   }
 }

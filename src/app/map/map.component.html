@@ -2,10 +2,6 @@
   class="map"
   [class.-disabled]="isLoading$ | async"
 >
-  <div id="station-popup-dismiss"
-    *ngIf="(selectedStation$ | async)"
-    (click)="unselectStation()">
-  </div>
   <agm-map
     [latitude]="(mapCenter$ | async)?.lat"
     [zoom]="(zoom$ | async)"
@@ -23,8 +19,7 @@
       [longitude]="marker.lng"
       (markerClick)="clickedMarker(marker.id)"
       [opacity]="1"
-      [iconUrl]="'/assets/directions_bike.svg'"
-      [class.-selected]="(selectedStation$ | async)?.stationId === marker.id"
+      [iconUrl]="(selectedStation$ | async)?.stationId === marker.id ? '/assets/directions_bike_selected.svg' : '/assets/directions_bike.svg'"
     >
     </agm-marker>
 
