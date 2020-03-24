@@ -17,10 +17,7 @@ import { getDestination } from '../reducers/stations-list';
 import { getIsLoading, getLatLngBoundsLiteral, getMapCenter, getMarkers, getSelectedStation, getZoom } from '../reducers/stations-map';
 import { toggleCompassView } from '../actions/galileo';
 import { isEqual } from 'lodash';
-
-// Châtelet
-export const DEFAULT_COORD = { lat: 48.859889, lng: 2.346878 };
-export const DEFAULT_ZOOM = 16;
+import { DEFAULT_ZOOM, DEFAULT_COORD } from '../shared/constants';
 
 @Component({
   selector: 'app-map',

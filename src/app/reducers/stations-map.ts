@@ -11,7 +11,7 @@ import { Station, Coordinate } from '../interfaces';
 import { AppState } from '.';
 import { LatLngBoundsLiteral } from '@agm/core/services/google-maps-types';
 import { setMapCenter, setZoom } from '../actions/stations-map';
-import { DEFAULT_ZOOM } from '../map/map.component';
+import { DEFAULT_ZOOM } from '../shared/constants';
 
 export interface StationState {
   list: Station[];

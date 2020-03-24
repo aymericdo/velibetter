@@ -8,9 +8,9 @@ import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/l
 import { setIsMobile } from './actions/screen';
 import { getIsMobile } from './reducers/screen';
 import { getDegrees } from './reducers/galileo';
-import { DEFAULT_COORD } from './map/map.component';
 import { getIsCompassView } from './reducers/galileo';
 import { takeUntil } from 'rxjs/operators';
+import { DEFAULT_COORD } from './shared/constants';
 
 @Component({
   selector: 'app-root',
