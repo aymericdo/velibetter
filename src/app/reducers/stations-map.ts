@@ -5,11 +5,13 @@ import {
   selectStation,
   selectingStation,
   unselectStationMap,
+  resetZoom,
 } from '../actions/stations-map';
 import { Station, Coordinate } from '../interfaces';
 import { AppState } from '.';
 import { LatLngBoundsLiteral } from '@agm/core/services/google-maps-types';
 import { setMapCenter, setZoom } from '../actions/stations-map';
+import { DEFAULT_ZOOM } from '../map/map.component';
 
 export interface StationState {
   list: Station[];
@@ -27,7 +29,7 @@ const initialState: StationState = {
   isLoading: false,
   latLngBoundsLiteral: null,
   mapCenter: null,
-  zoom: 16,
+  zoom: DEFAULT_ZOOM,
   selectedStation: null,
   isSelectingStation: false,
   isFirstFetchDone: false,
@@ -87,7 +89,13 @@ export const stationsMapReducer = createReducer(
       ...state,
       zoom,
     };
-  })
+  }),
+  on(resetZoom, (state) => {
+    return {
+      ...state,
+      zoom: DEFAULT_ZOOM,
+    };
+  }),
 );
 
 export function reducer(state: StationState | undefined, action: Action) {

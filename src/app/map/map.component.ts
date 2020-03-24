@@ -7,7 +7,7 @@ import { filter, map, take, takeUntil } from 'rxjs/operators';
 import { fetchingDestination, unsetDestination } from '../actions/stations-list';
 import {
   fetchingStationsInPolygon,
-  setMapCenter, setZoom, unselectStationMap,
+  setMapCenter, setZoom, unselectStationMap, resetZoom,
  } from '../actions/stations-map';
 import { Marker, Station } from '../interfaces';
 import { Coordinate } from '../interfaces/index';
@@ -20,7 +20,7 @@ import { isEqual } from 'lodash';
 
 // Châtelet
 export const DEFAULT_COORD = { lat: 48.859889, lng: 2.346878 };
-const DEFAULT_ZOOM = 16;
+export const DEFAULT_ZOOM = 16;
 
 @Component({
   selector: 'app-map',
@@ -151,22 +151,17 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   recenterMap() {
-    let position: Coordinate;
-    let zoom: number;
-    let mapCenter: Coordinate;
-    this.currentPosition$.pipe(take(1)).subscribe((cp) => { position = cp; });
-    this.zoom$.pipe(take(1)).subscribe((z) => { zoom = z; });
-    this.mapCenter$.pipe(take(1)).subscribe((mc) => { mapCenter = mc; });
-
-    if (!isEqual(mapCenter, position) || zoom !== DEFAULT_ZOOM) {
-      this.store.dispatch(setMapCenter(position));
-      this.store.dispatch(setZoom({ zoom: DEFAULT_ZOOM }));
-    } else {
+    if (this.isMapCenterEqualCurrentPosition()) {
       if (this.isIOS) {
         this.requestPermissionsIOS.emit();
       } else {
         this.store.dispatch(toggleCompassView());
       }
+    } else {
+      let position: Coordinate;
+      this.currentPosition$.pipe(take(1)).subscribe((cp) => { position = cp; });
+      this.store.dispatch(setMapCenter(position));
+      this.store.dispatch(resetZoom());
     }
   }
 
@@ -188,5 +183,15 @@ export class MapComponent implements OnInit, OnDestroy {
         this.router.navigate(['arrival']); break;
       }
     }
+  }
+
+  isMapCenterEqualCurrentPosition(): boolean {
+    let position: Coordinate;
+    this.currentPosition$.pipe(take(1)).subscribe((cp) => { position = cp; });
+    let zoom: number;
+    let mapCenter: Coordinate;
+    this.zoom$.pipe(take(1)).subscribe((z) => { zoom = z; });
+    this.mapCenter$.pipe(take(1)).subscribe((mc) => { mapCenter = mc; });
+    return isEqual(mapCenter, position) && zoom === DEFAULT_ZOOM;
   }
 }
