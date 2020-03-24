@@ -111,23 +111,21 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   idle() {
-    this.store.dispatch(
-      setMapCenter(this.currentMapCenter)
-    );
-    this.store.dispatch(
-      setZoom({ zoom: this.currentZoom })
-    );
+    this.store.dispatch(setMapCenter(this.currentMapCenter));
+    this.store.dispatch(setZoom({ zoom: this.currentZoom }));
 
     if (this.currentLatLngBounds) {
-      let latLngBoundsLiteralLastSaved;
-      this.latLngBoundsLiteral$.pipe(take(1)).subscribe(latLng => latLngBoundsLiteralLastSaved = latLng);
+      let latLngBoundsLiteralLastSaved: LatLngBoundsLiteral;
+      this.latLngBoundsLiteral$.pipe(take(1)).subscribe((latLng: LatLngBoundsLiteral) => {
+        latLngBoundsLiteralLastSaved = latLng;
+      });
 
-      if (!isEqual(latLngBoundsLiteralLastSaved, this.currentLatLngBounds)) {
-          this.store.dispatch(
-            fetchingStationsInPolygon({
-              latLngBoundsLiteral: this.currentLatLngBounds.toJSON(),
-            }),
-          );
+      if (!isEqual(latLngBoundsLiteralLastSaved, this.currentLatLngBounds.toJSON())) {
+        this.store.dispatch(
+          fetchingStationsInPolygon({
+            latLngBoundsLiteral: this.currentLatLngBounds.toJSON(),
+          }),
+        );
       }
     }
   }

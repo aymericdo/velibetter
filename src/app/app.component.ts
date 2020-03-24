@@ -69,7 +69,9 @@ export class AppComponent implements OnInit, OnDestroy {
               this.store.dispatch(setDegrees({ deg: event.alpha }));
             });
         } else {
-          this.deviceOrientationListener();
+          if (this.deviceOrientationListener) {
+            this.deviceOrientationListener();
+          }
         }
       });
   }

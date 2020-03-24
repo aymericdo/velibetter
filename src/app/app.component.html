@@ -1,6 +1,6 @@
 <mat-sidenav-container fullscreen>
   <mat-sidenav-content>
-    <mat-toolbar color="primary">
+    <mat-toolbar [color]="(isCompassView$ | async) ? 'secondary' : 'primary'">
       <mat-toolbar-row>
         <span *ngIf="isMainRoute(); else notMainRoute">{{title}}</span>
         <ng-template #notMainRoute>
