@@ -20,6 +20,7 @@ export interface Station {
   mechanical: number;
   ebike: number;
   rentalMethods: string[];
+  score?: number;
 }
 
 export interface Coordinate {
