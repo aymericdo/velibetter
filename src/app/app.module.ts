@@ -1,33 +1,33 @@
-import { AgmCoreModule } from '@agm/core';
-import { LayoutModule } from '@angular/cdk/layout';
-import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatListModule } from '@angular/material/list';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { EffectsModule } from '@ngrx/effects';
-import { StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { AgmDirectionModule } from 'agm-direction';
-import { environment } from '../environments/environment';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { AppEffects } from './app.effects';
-import { ArrivalComponent } from './arrival/arrival.component';
-import { DepartureComponent } from './departure/departure.component';
-import { MapComponent } from './map/map.component';
-import { metaReducers, reducers } from './reducers';
-import { ListComponent } from './shared/list/list.component';
-import { LoadingComponent } from './shared/loading/loading.component';
-import { SpeedDialFabComponent } from './shared/speed-dial-fab/speed-dial-fab.component';
-import { StationDescriptionComponent } from './station-description/station-description.component';
-import {NglModule} from 'ng-lightning';
+import { AgmCoreModule } from "@agm/core";
+import { LayoutModule } from "@angular/cdk/layout";
+import { HttpClientModule } from "@angular/common/http";
+import { NgModule } from "@angular/core";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
+import { MatListModule } from "@angular/material/list";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MatSidenavModule } from "@angular/material/sidenav";
+import { MatToolbarModule } from "@angular/material/toolbar";
+import { BrowserModule } from "@angular/platform-browser";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { ServiceWorkerModule } from "@angular/service-worker";
+import { EffectsModule } from "@ngrx/effects";
+import { StoreModule } from "@ngrx/store";
+import { StoreDevtoolsModule } from "@ngrx/store-devtools";
+import { AgmDirectionModule } from "agm-direction";
+import { environment } from "../environments/environment";
+import { AppRoutingModule } from "./app-routing.module";
+import { AppComponent } from "./app.component";
+import { AppEffects } from "./app.effects";
+import { ArrivalComponent } from "./arrival/arrival.component";
+import { DepartureComponent } from "./departure/departure.component";
+import { MapComponent } from "./map/map.component";
+import { metaReducers, reducers } from "./reducers";
+import { ListComponent } from "./shared/list/list.component";
+import { LoadingComponent } from "./shared/loading/loading.component";
+import { SpeedDialFabComponent } from "./shared/speed-dial-fab/speed-dial-fab.component";
+import { StationDescriptionComponent } from "./station-description/station-description.component";
+
 
 @NgModule({
   declarations: [
@@ -38,7 +38,7 @@ import {NglModule} from 'ng-lightning';
     ListComponent,
     MapComponent,
     LoadingComponent,
-    StationDescriptionComponent,
+    StationDescriptionComponent
   ],
   imports: [
     AppRoutingModule,
@@ -52,8 +52,7 @@ import {NglModule} from 'ng-lightning';
     MatCardModule,
     MatSidenavModule,
     MatToolbarModule,
-    NglModule,
-    ServiceWorkerModule.register('ngsw-worker.js', {
+    ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: environment.production
     }),
     StoreModule.forRoot(reducers, {
@@ -65,7 +64,7 @@ import {NglModule} from 'ng-lightning';
     }),
     EffectsModule.forRoot([AppEffects]),
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyCcsw2lr7StRPLt0nv3KybPFtT0U4hzyks'
+      apiKey: "AIzaSyCcsw2lr7StRPLt0nv3KybPFtT0U4hzyks"
     }),
     AgmDirectionModule,
     StoreDevtoolsModule.instrument({
