@@ -72,7 +72,7 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
       });
     this.selectedStation$.pipe(filter(Boolean), take(1))
       .subscribe((station: Station) => {
-        let total = station.ebike + station.mechanical + station.numDocksAvailable;
+        const total = station.ebike + station.mechanical + station.numDocksAvailable;
         this.chartData = {
           labels: ['mécanique', 'ebike', 'station'],
           series: [
