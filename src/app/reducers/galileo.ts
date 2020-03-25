@@ -19,13 +19,27 @@ const initialState: GalileoState = {
   bearing: null,
 };
 
+function getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const R = 6371; // Radius of the earth in km
+  const dLat = toRadians(lat2 - lat1);
+  const dLon = toRadians(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2)
+    ;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const d = R * c; // Distance in km
+  return d;
+}
+
 // Converts from degrees to radians.
-function toRadians(degrees) {
+function toRadians(degrees: number): number {
   return degrees * Math.PI / 180;
 }
 
 // Converts from radians to degrees.
-function toDegrees(radians) {
+function toDegrees(radians: number): number {
   return radians * 180 / Math.PI;
 }
 
@@ -50,7 +64,7 @@ export const positionReducer = createReducer(initialState,
       precedentPos: {
         ...state.currentPos,
       },
-      bearing: state.currentPos ?
+      bearing: state.currentPos && getDistanceFromLatLonInKm(state.currentPos.lat, state.currentPos.lng, lat, lng) > 0.01 ?
         bearing(
           state.currentPos.lat,
           state.currentPos.lng,
