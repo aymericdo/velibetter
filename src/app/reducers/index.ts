@@ -5,20 +5,20 @@ import {
 import { environment } from '../../environments/environment';
 import * as fromStationsMap from './stations-map';
 import * as fromStationsList from './stations-list';
-import * as fromPosition from './position';
+import * as fromGalileo from './galileo';
 import * as fromScreen from './screen';
 
 export interface AppState {
   stationsMap: fromStationsMap.StationState;
   stationsList: fromStationsList.StationState;
-  position: fromPosition.PositionState;
+  galileo: fromGalileo.GalileoState;
   screen: fromScreen.ScreenState;
 }
 
 export const reducers: ActionReducerMap<AppState> = {
   stationsMap: fromStationsMap.reducer,
   stationsList: fromStationsList.reducer,
-  position: fromPosition.reducer,
+  galileo: fromGalileo.reducer,
   screen: fromScreen.reducer,
 };
 

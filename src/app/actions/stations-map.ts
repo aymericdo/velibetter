@@ -2,11 +2,6 @@ import { createAction, props } from '@ngrx/store';
 import { Station } from '../interfaces';
 import { LatLngBoundsLiteral } from '@agm/core/services/google-maps-types';
 
-export const initialFetchingStationsInPolygon = createAction(
-  '[Stations Map] initial fetching stations in a polygon',
-  props<{ latLngBoundsLiteral: LatLngBoundsLiteral }>()
-);
-
 export const fetchingStationsInPolygon = createAction(
   '[Stations Map] fetching stations in a polygon',
   props<{ latLngBoundsLiteral: LatLngBoundsLiteral }>()
@@ -14,7 +9,7 @@ export const fetchingStationsInPolygon = createAction(
 
 export const setStationsMap = createAction(
   '[Stations Map] set stations map',
-  props<{ list: Station[] }>()
+  props<{ list: Station[] }>(),
 );
 
 export const selectingStation = createAction(
@@ -28,7 +23,7 @@ export const unselectStationMap = createAction(
 
 export const selectStation = createAction(
   '[Stations Map] set station map',
-  props<{ station: Station }>()
+  props<{ station: Station }>(),
 );
 
 export const setMapCenter = createAction(
@@ -39,4 +34,8 @@ export const setMapCenter = createAction(
 export const setZoom = createAction(
   '[Stations Map] set zoom',
   props<{ zoom: number }>(),
+);
+
+export const resetZoom = createAction(
+  '[Stations Map] reset zoom',
 );

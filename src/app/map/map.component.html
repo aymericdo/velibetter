@@ -2,10 +2,6 @@
   class="map"
   [class.-disabled]="isLoading$ | async"
 >
-  <div id="station-popup-dismiss"
-    *ngIf="(selectedStation$ | async)"
-    (click)="unselectStation()">
-  </div>
   <agm-map
     [latitude]="(mapCenter$ | async)?.lat"
     [zoom]="(zoom$ | async)"
@@ -23,18 +19,28 @@
       [longitude]="marker.lng"
       (markerClick)="clickedMarker(marker.id)"
       [opacity]="1"
-      [iconUrl]="'/assets/directions_bike.svg'"
-      [class.-selected]="(selectedStation$ | async)?.stationId === marker.id"
+      [iconUrl]="(selectedStation$ | async)?.stationId === marker.id ? '/assets/directions_bike_selected.svg' : '/assets/directions_bike.svg'"
     >
     </agm-marker>
-    <agm-marker
-      *ngIf="!!(currentPosition$ | async)"
-      [latitude]="(currentPosition$ | async)?.lat"
-      [longitude]="(currentPosition$ | async)?.lng"
-      [opacity]="1"
-      [iconUrl]="'/assets/my_location.svg'"
-    >
-    </agm-marker>
+
+    <ng-container *ngIf="!!(currentPosition$ | async)">
+      <agm-marker
+        *ngIf="(isCompassView$ | async) && (currentBearing$ | async); else normalIcon"
+        [latitude]="(currentPosition$ | async)?.lat"
+        [longitude]="(currentPosition$ | async)?.lng"
+        [opacity]="1"
+        [iconUrl]="'/assets/compass_calibration.svg'">
+      </agm-marker>
+      <ng-template #normalIcon>
+        <agm-marker
+          [latitude]="(currentPosition$ | async)?.lat"
+          [longitude]="(currentPosition$ | async)?.lng"
+          [opacity]="1"
+          [iconUrl]="'/assets/my_location.svg'">
+        </agm-marker>
+      </ng-template>
+    </ng-container>
+
     <agm-direction
       *ngIf="!!(currentPosition$ | async) && (destination$ | async)"
       [origin]="currentPosition$ | async"
@@ -43,7 +49,9 @@
     >
     </agm-direction>
   </agm-map>
-  <button mat-mini-fab class="my-location-button"
+  <button
+    *ngIf="!!(currentPosition$ | async)"
+    mat-mini-fab class="my-location-button"
     (click)="recenterMap()">
     <i class="material-icons">my_location</i>
   </button>

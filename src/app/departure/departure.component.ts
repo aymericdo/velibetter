@@ -3,7 +3,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../reducers';
 import { fetchingClosestStations } from '../actions/stations-list';
 import { Observable } from 'rxjs';
-import { getCurrentPosition } from '../reducers/position';
+import { getCurrentPosition } from '../reducers/galileo';
 import { filter, take } from 'rxjs/operators';
 import { Station } from '../interfaces';
 import { getStationsStatus, getIsLoading } from '../reducers/stations-list';
@@ -17,8 +17,6 @@ export class DepartureComponent implements OnInit {
   currentPosition$: Observable<{ lat: number; lng: number }>;
   stationsStatus$: Observable<Station[]>;
   isLoading$: Observable<boolean>;
-  data: [81, 19];
-  labels: ["score", ""]
 
   constructor(
     private store: Store<AppState>
