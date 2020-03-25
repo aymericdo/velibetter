@@ -82,12 +82,6 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
           ]
         };
         this.chartOptions = {
-          donut: true,
-          chartPadding: 15,
-          labelOffset: 40,
-          donutSolid: true,
-          donutWidth: 30,
-          showLabel: true,
           total
         };
     });

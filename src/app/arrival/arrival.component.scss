@@ -44,8 +44,11 @@
         }
         .station-score {
             height: 80%;
-            .ct-series-b .ct-slice-donut-solid {
-                fill: green;
+             ::ng-deep .ct-series-a .ct-slice-donut-solid {
+                fill: #1976D2;
+            }
+             ::ng-deep .ct-series-b .ct-slice-donut-solid {
+                fill: #90CAF9;
             }
         }
     }
