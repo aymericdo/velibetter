@@ -58,6 +58,7 @@ export const stationsMapReducer = createReducer(
   on(selectingStation, (state, { stationId }) => {
     return {
       ...state,
+      selectedStation: state.list.find(s => s.stationId === stationId),
       isSelectingStation: true,
     };
   }),

@@ -3,8 +3,8 @@ import { NavigationEnd, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, Subject } from 'rxjs';
 import { filter, map, take, takeUntil } from 'rxjs/operators';
-import { selectingStation, unselectStationMap } from '../actions/stations-map';
-import { Station } from '../interfaces';
+import { selectingStation, unselectStationMap, setMapCenter } from '../actions/stations-map';
+import { Station, Coordinate } from '../interfaces';
 import { AppState } from '../reducers';
 import { getCurrentPosition } from '../reducers/galileo';
 import { getIsSelectingStation, getSelectedStation } from '../reducers/stations-map';
@@ -34,9 +34,7 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
     combineLatest([
       this.currentPosition$.pipe(filter(Boolean), take(1)),
       router.events.pipe(
-        filter(event =>
-          event instanceof NavigationEnd
-        ),
+        filter(event => event instanceof NavigationEnd),
       ),
     ]).pipe(
       map(([position, val]) => val),
@@ -44,6 +42,15 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
     ).subscribe((val: NavigationEnd) => {
       this.selectStationFct(+val.url.split('/')[2]);
     });
+
+    this.selectedStation$
+      .pipe(filter(Boolean), takeUntil(this.destroy$))
+      .subscribe((selectedStation: Coordinate) => {
+        this.store.dispatch(setMapCenter({
+          lat: selectedStation.lat,
+          lng: selectedStation.lng,
+        }));
+      });
   }
 
   ngOnInit(): void {
@@ -58,7 +65,11 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    let position: Coordinate;
+    this.currentPosition$.pipe(take(1)).subscribe((cp) => { position = cp; });
+    this.store.dispatch(setMapCenter(position));
     this.store.dispatch(unselectStationMap());
+
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
   }

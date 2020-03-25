@@ -162,7 +162,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   recenterMap() {
-    if (this.isViewSyncWithCurrentPosition)  {
+    if (this.isViewSyncWithCurrentPosition) {
       if (this.isIOS) {
         this.requestPermissionsIOS.emit();
       } else {
