@@ -87,7 +87,7 @@ export const getPrecedentPosition = createSelector(selectPosition, (state: Galil
 export const getDegrees = createSelector(selectPosition, (state: GalileoState) => state.deg);
 export const getIsCompassView = createSelector(selectPosition, (state: GalileoState) => state.isCompassView);
 export const getCurrentBearing = createSelector(selectPosition, (state: GalileoState) =>
-  state.isCompassView && state.bearing && state.deg ?
+  state.isCompassView && state.bearing !== null && state.deg !== null ?
     (state.bearing + state.deg) % 360
   :
     null
