@@ -8,6 +8,8 @@ import { Station, Coordinate } from '../interfaces';
 import { AppState } from '../reducers';
 import { getCurrentPosition } from '../reducers/galileo';
 import { getIsSelectingStation, getSelectedStation } from '../reducers/stations-map';
+import { ChartType, ChartEvent } from 'ng-chartist';
+import { IChartistData, IPieChartOptions } from 'chartist';
 
 @Component({
   selector: 'app-station-description',
@@ -19,6 +21,16 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
   selectedStation$: Observable<Station>;
   isSelectingStation$: Observable<boolean>;
   routerUrl: string;
+
+  total: number;
+  ebike: number;
+  mechanical: number;
+  docks: number;
+
+  chartType: ChartType = 'Pie';
+  chartData: IChartistData ;
+  chartOptions: IPieChartOptions;
+  chartEvents: ChartEvent = {};
 
   private destroy$: Subject<boolean> = new Subject<boolean>();
 
@@ -58,6 +70,21 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
       .subscribe((position) => {
         this.selectStationFct(+this.routerUrl.split('/')[2]);
       });
+    this.selectedStation$.pipe(filter(Boolean), take(1))
+      .subscribe((station: Station) => {
+        const total = station.ebike + station.mechanical + station.numDocksAvailable;
+        this.chartData = {
+          labels: ['mécanique', 'ebike', 'station'],
+          series: [
+            [station.mechanical],
+            [station.ebike],
+            [station.numDocksAvailable]
+          ]
+        };
+        this.chartOptions = {
+          total
+        };
+    });
   }
 
   selectStationFct(stationId: number): void {
