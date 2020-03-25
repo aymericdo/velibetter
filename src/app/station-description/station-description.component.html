@@ -5,10 +5,10 @@
   <h1 class="mat-display-1">{{(selectedStation$ | async)?.name}} - {{ (selectedStation$ | async)?.distance | number:'1.0-0' }}m</h1>
   <div class="chart">
    <app-doughnut-chart
-          [type]="chartType"
-          [data]="chartData"
-          [options]="chartOptions"
-          [events]="chartEvents"
-        ></app-doughnut-chart>
+      [type]="chartType"
+      [data]="chartData"
+      [options]="chartOptions"
+      [events]="chartEvents"
+    ></app-doughnut-chart>
   </div>
 </section>

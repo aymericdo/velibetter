@@ -57,11 +57,24 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
 
     this.selectedStation$
       .pipe(filter(Boolean), takeUntil(this.destroy$))
-      .subscribe((selectedStation: Coordinate) => {
+      .subscribe((selectedStation: Station) => {
         this.store.dispatch(setMapCenter({
           lat: selectedStation.lat,
           lng: selectedStation.lng,
         }));
+
+        this.chartData = {
+          labels: ['mécanique', 'ebike', 'station'],
+          series: [
+            [selectedStation.mechanical],
+            [selectedStation.ebike],
+            [selectedStation.numDocksAvailable]
+          ],
+        };
+
+        this.chartOptions = {
+          total: selectedStation.ebike + selectedStation.mechanical + selectedStation.numDocksAvailable,
+        };
       });
   }
 
@@ -70,21 +83,6 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
       .subscribe((position) => {
         this.selectStationFct(+this.routerUrl.split('/')[2]);
       });
-    this.selectedStation$.pipe(filter(Boolean), take(1))
-      .subscribe((station: Station) => {
-        const total = station.ebike + station.mechanical + station.numDocksAvailable;
-        this.chartData = {
-          labels: ['mécanique', 'ebike', 'station'],
-          series: [
-            [station.mechanical],
-            [station.ebike],
-            [station.numDocksAvailable]
-          ]
-        };
-        this.chartOptions = {
-          total
-        };
-    });
   }
 
   selectStationFct(stationId: number): void {
