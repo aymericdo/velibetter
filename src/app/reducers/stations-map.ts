@@ -5,12 +5,13 @@ import {
   selectStation,
   selectingStation,
   unselectStationMap,
-  initialFetchingStationsInPolygon,
+  resetZoom,
 } from '../actions/stations-map';
 import { Station, Coordinate } from '../interfaces';
 import { AppState } from '.';
 import { LatLngBoundsLiteral } from '@agm/core/services/google-maps-types';
 import { setMapCenter, setZoom } from '../actions/stations-map';
+import { DEFAULT_ZOOM } from '../shared/constants';
 
 export interface StationState {
   list: Station[];
@@ -20,6 +21,7 @@ export interface StationState {
   zoom: number;
   selectedStation: Station;
   isSelectingStation: boolean;
+  isFirstFetchDone: boolean;
 }
 
 const initialState: StationState = {
@@ -27,25 +29,20 @@ const initialState: StationState = {
   isLoading: false,
   latLngBoundsLiteral: null,
   mapCenter: null,
-  zoom: 16,
+  zoom: DEFAULT_ZOOM,
   selectedStation: null,
   isSelectingStation: false,
+  isFirstFetchDone: false,
 };
 
 export const stationsMapReducer = createReducer(
   initialState,
-  on(initialFetchingStationsInPolygon, (state, { latLngBoundsLiteral }) => {
-    return {
-      ...state,
-      latLngBoundsLiteral,
-      isLoading: true,
-    };
-  }),
   on(fetchingStationsInPolygon, (state, { latLngBoundsLiteral }) => {
     return {
       ...state,
       latLngBoundsLiteral,
-      isLoading: false,
+      isLoading: !state.isFirstFetchDone,
+      isFirstFetchDone: true,
     };
   }),
   on(setStationsMap, (state, { list }) => {
@@ -53,11 +50,7 @@ export const stationsMapReducer = createReducer(
       ...state,
       list: list.map(s => {
         const station = state.list.find(currentStation => currentStation.stationId === s.stationId);
-        if (station) {
-          return station;
-        } else {
-          return s;
-        }
+        return station ? station : s;
       }),
       isLoading: false
     };
@@ -65,6 +58,7 @@ export const stationsMapReducer = createReducer(
   on(selectingStation, (state, { stationId }) => {
     return {
       ...state,
+      selectedStation: state.list.find(s => s.stationId === stationId),
       isSelectingStation: true,
     };
   }),
@@ -88,7 +82,10 @@ export const stationsMapReducer = createReducer(
   on(setMapCenter, (state, { lat, lng }) => {
     return {
       ...state,
-      mapCenter: { lat, lng },
+      mapCenter: {
+        lat,
+        lng,
+      },
     };
   }),
   on(setZoom, (state, { zoom }) => {
@@ -96,7 +93,13 @@ export const stationsMapReducer = createReducer(
       ...state,
       zoom,
     };
-  })
+  }),
+  on(resetZoom, (state) => {
+    return {
+      ...state,
+      zoom: DEFAULT_ZOOM,
+    };
+  }),
 );
 
 export function reducer(state: StationState | undefined, action: Action) {

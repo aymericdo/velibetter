@@ -1,20 +1,23 @@
 import { LatLngBounds, LatLngBoundsLiteral } from '@agm/core/services/google-maps-types';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, Output, EventEmitter, ElementRef } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, Subject } from 'rxjs';
 import { filter, map, take, takeUntil } from 'rxjs/operators';
 import { fetchingDestination, unsetDestination } from '../actions/stations-list';
 import {
-  fetchingStationsInPolygon, initialFetchingStationsInPolygon,
-  setMapCenter, setZoom, unselectStationMap,
+  fetchingStationsInPolygon,
+  setMapCenter, setZoom, resetZoom,
  } from '../actions/stations-map';
 import { Marker, Station } from '../interfaces';
 import { Coordinate } from '../interfaces/index';
 import { AppState } from '../reducers';
-import { getCurrentPosition } from '../reducers/position';
+import { getCurrentPosition, getIsCompassView, getCurrentBearing } from '../reducers/galileo';
 import { getDestination } from '../reducers/stations-list';
 import { getIsLoading, getLatLngBoundsLiteral, getMapCenter, getMarkers, getSelectedStation, getZoom } from '../reducers/stations-map';
+import { toggleCompassView } from '../actions/galileo';
+import { isEqual } from 'lodash';
+import { DEFAULT_ZOOM, DEFAULT_COORD } from '../shared/constants';
 
 @Component({
   selector: 'app-map',
@@ -23,7 +26,8 @@ import { getIsLoading, getLatLngBoundsLiteral, getMapCenter, getMarkers, getSele
 })
 export class MapComponent implements OnInit, OnDestroy {
   @Input() isDisplayingListPages: boolean;
-  @Input() defaultCoord: Coordinate;
+  @Input() isIOS: boolean;
+  @Output() requestPermissionsIOS = new EventEmitter<any>();
 
   markers$: Observable<Marker[]>;
   isLoading$: Observable<boolean>;
@@ -33,13 +37,11 @@ export class MapComponent implements OnInit, OnDestroy {
   selectedStation$: Observable<Station>;
   mapCenter$: Observable<Coordinate>;
   zoom$: Observable<number>;
+  isCompassView$: Observable<boolean>;
+  currentBearing$: Observable<number>;
 
-  private destroy$: Subject<boolean> = new Subject<boolean>();
-
-  currentMapCenter: Coordinate;
-  currentZoom = 16;
-  currentLatLngBounds: LatLngBounds;
   travelMode: string;
+  compassView = false;
 
   fabButtons = [{
     id: 0,
@@ -49,11 +51,16 @@ export class MapComponent implements OnInit, OnDestroy {
     icon: 'lock',
   }];
 
-  firstLoadDone = false;
+  private currentMapCenter: Coordinate;
+  private currentLatLngBounds: LatLngBounds;
+  private currentZoom = DEFAULT_ZOOM;
+  private isViewSyncWithCurrentPosition = true;
+  private destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private store: Store<AppState>,
     private router: Router,
+    private elRef: ElementRef,
   ) {
     this.markers$ = store.pipe(select(getMarkers));
     this.isLoading$ = store.pipe(select(getIsLoading));
@@ -63,6 +70,8 @@ export class MapComponent implements OnInit, OnDestroy {
     this.selectedStation$ = store.pipe(select(getSelectedStation));
     this.mapCenter$ = store.pipe(select(getMapCenter));
     this.zoom$ = store.pipe(select(getZoom));
+    this.isCompassView$ = store.pipe(select(getIsCompassView));
+    this.currentBearing$ = store.pipe(select(getCurrentBearing));
 
     combineLatest([
       this.currentPosition$.pipe(filter(Boolean), take(1)),
@@ -87,7 +96,26 @@ export class MapComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.currentPosition$.pipe(takeUntil(this.destroy$)).subscribe((currentPosition) => {
-      this.store.dispatch(setMapCenter(currentPosition || this.defaultCoord));
+      if (this.isViewSyncWithCurrentPosition) {
+        this.store.dispatch(setMapCenter({
+          lat: currentPosition ? currentPosition.lat : DEFAULT_COORD.lat,
+          lng: currentPosition ? currentPosition.lng : DEFAULT_COORD.lng,
+        }));
+      }
+    });
+
+    this.currentBearing$.pipe(takeUntil(this.destroy$)).subscribe((currentBearing) => {
+      const icons = [...this.elRef.nativeElement.querySelectorAll('agm-map > div.agm-map-container-inner.sebm-google-map-container-inner > div > div > div:nth-child(1) > div > div:nth-child(4) > div > img')];
+      if (icons && icons.length) {
+        const icon = icons.find(ic => {
+          const array = ic.src.split('/');
+          return array[array.length - 1] === 'compass_calibration.svg';
+        });
+
+        if (icon) {
+          icon.style.transform = `rotate(-${currentBearing}deg)`;
+        }
+      }
     });
   }
 
@@ -101,32 +129,26 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   idle() {
-    this.store.dispatch(
-      setMapCenter(this.currentMapCenter)
-    );
-    this.store.dispatch(
-      setZoom({ zoom: this.currentZoom })
-    );
+    this.store.dispatch(setMapCenter({
+      lat: this.currentMapCenter ? this.currentMapCenter.lat : DEFAULT_COORD.lat,
+      lng: this.currentMapCenter ? this.currentMapCenter.lng : DEFAULT_COORD.lng,
+    }));
+    this.store.dispatch(setZoom({ zoom: this.currentZoom }));
+
+    this.isViewSyncWithCurrentPosition = this.isMapCenterEqualCurrentPosition();
 
     if (this.currentLatLngBounds) {
-      let latLngBoundsLiteralLastSaved;
-      this.latLngBoundsLiteral$.pipe(take(1)).subscribe(latLng => latLngBoundsLiteralLastSaved = latLng);
+      let latLngBoundsLiteralLastSaved: LatLngBoundsLiteral;
+      this.latLngBoundsLiteral$.pipe(take(1)).subscribe((latLng: LatLngBoundsLiteral) => {
+        latLngBoundsLiteralLastSaved = latLng;
+      });
 
-      if (JSON.stringify(latLngBoundsLiteralLastSaved) !== JSON.stringify(this.currentLatLngBounds.toJSON())) {
-        if (this.firstLoadDone) {
-          this.store.dispatch(
-            fetchingStationsInPolygon({
-              latLngBoundsLiteral: this.currentLatLngBounds.toJSON(),
-            }),
-          );
-        } else {
-          this.firstLoadDone = true;
-          this.store.dispatch(
-            initialFetchingStationsInPolygon({
-              latLngBoundsLiteral: this.currentLatLngBounds.toJSON(),
-            }),
-          );
-        }
+      if (!isEqual(latLngBoundsLiteralLastSaved, this.currentLatLngBounds.toJSON())) {
+        this.store.dispatch(
+          fetchingStationsInPolygon({
+            latLngBoundsLiteral: this.currentLatLngBounds.toJSON(),
+          }),
+        );
       }
     }
   }
@@ -135,28 +157,30 @@ export class MapComponent implements OnInit, OnDestroy {
     this.router.navigate(['stations', stationId]);
   }
 
-  unselectStation() {
-    this.store.dispatch(unselectStationMap());
-  }
-
   trackByFn(index: number, marker: Marker): number {
     return marker.id;
   }
 
   recenterMap() {
-    let currentPosition: Coordinate;
-    this.currentPosition$.pipe(take(1)).subscribe((cp) => {
-      currentPosition = cp;
-    });
-    this.store.dispatch(setMapCenter(currentPosition));
-    this.store.dispatch(setZoom({ zoom: 16 }));
+    if (this.isViewSyncWithCurrentPosition) {
+      if (this.isIOS) {
+        this.requestPermissionsIOS.emit();
+      } else {
+        this.store.dispatch(toggleCompassView());
+      }
+    } else {
+      let position: Coordinate;
+      this.currentPosition$.pipe(take(1)).subscribe((cp) => { position = cp; });
+      this.store.dispatch(setMapCenter(position));
+      this.store.dispatch(resetZoom());
+    }
   }
 
-  centerChange(center) {
+  centerChange(center: Coordinate): void {
     this.currentMapCenter = center;
   }
 
-  zoomChange(zoom) {
+  zoomChange(zoom: number): void {
     this.currentZoom = zoom;
   }
 
@@ -170,5 +194,15 @@ export class MapComponent implements OnInit, OnDestroy {
         this.router.navigate(['arrival']); break;
       }
     }
+  }
+
+  isMapCenterEqualCurrentPosition(): boolean {
+    let position: Coordinate;
+    this.currentPosition$.pipe(take(1)).subscribe((cp) => { position = cp; });
+    let zoom: number;
+    this.zoom$.pipe(take(1)).subscribe((z) => { zoom = z; });
+    let mapCenter: Coordinate;
+    this.mapCenter$.pipe(take(1)).subscribe((mc) => { mapCenter = mc; });
+    return isEqual(mapCenter, DEFAULT_COORD) || isEqual(mapCenter, position) && zoom === DEFAULT_ZOOM;
   }
 }

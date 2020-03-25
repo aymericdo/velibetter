@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Station } from '../interfaces';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../reducers';
-import { getCurrentPosition } from '../reducers/position';
+import { getCurrentPosition } from '../reducers/galileo';
 import { getStationsStatus } from '../reducers/stations-list';
 import { getIsLoading } from '../reducers/stations-map';
 import { filter, take } from 'rxjs/operators';
@@ -22,13 +22,6 @@ export class ArrivalComponent implements OnInit {
   isLoading$: Observable<boolean>;
 
   chartType: ChartType = "Pie";
-  chartData: IChartistData = {
-    labels: ["score", "empty"],
-    series: [
-      [61],
-      [39]
-    ]
-  };
   chartOptions: IPieChartOptions = {
     donut: true,
     donutSolid: true,
@@ -51,6 +44,13 @@ export class ArrivalComponent implements OnInit {
       .subscribe((position: { lat: number; lng: number }) => {
         this.store.dispatch(fetchingClosestStations({ isDeparture: false }));
       });
+  }
+
+  getChartData(score: number) {
+    return {
+        labels: ["score", "empty"],
+        series: [[score], [100 - score]]
+      };
   }
 
 }

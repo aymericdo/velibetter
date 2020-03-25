@@ -41,7 +41,7 @@ import { ChartistModule } from 'ng-chartist';
     MapComponent,
     LoadingComponent,
     StationDescriptionComponent,
-    DoughnutChartComponent,
+    DoughnutChartComponent
   ],
   imports: [
     AppRoutingModule,
@@ -68,7 +68,7 @@ import { ChartistModule } from 'ng-chartist';
     }),
     EffectsModule.forRoot([AppEffects]),
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyCcsw2lr7StRPLt0nv3KybPFtT0U4hzyks'
+      apiKey: "AIzaSyCcsw2lr7StRPLt0nv3KybPFtT0U4hzyks"
     }),
     AgmDirectionModule,
     StoreDevtoolsModule.instrument({

@@ -1,12 +1,16 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, HostListener, Renderer2 } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from './reducers';
-import { Observable } from 'rxjs';
-import { setPosition } from './actions/position';
+import { Observable, Subject } from 'rxjs';
+import { setPosition, setDegrees, toggleCompassView } from './actions/galileo';
 import { Router } from '@angular/router';
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 import { setIsMobile } from './actions/screen';
 import { getIsMobile } from './reducers/screen';
+import { getDegrees } from './reducers/galileo';
+import { getIsCompassView } from './reducers/galileo';
+import { takeUntil } from 'rxjs/operators';
+import { DEFAULT_COORD } from './shared/constants';
 
 @Component({
   selector: 'app-root',
@@ -14,28 +18,36 @@ import { getIsMobile } from './reducers/screen';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  title = 'Velibetter';
-  isMobile$: Observable<boolean>;
-
-  watcher: number = null;
-  isNotMainRoute: boolean;
-
-  // Châtelet
-  defaultCoord = { lat: 48.859889, lng: 2.346878 };
-
   constructor(
     private store: Store<AppState>,
     private router: Router,
     private breakpointObserver: BreakpointObserver,
+    private renderer: Renderer2,
   ) {
     this.isMobile$ = store.pipe(select(getIsMobile));
+    this.deg$ = store.pipe(select(getDegrees));
+    this.isCompassView$ = store.pipe(select(getIsCompassView));
   }
 
+  title = 'Velibetter';
+  isMobile$: Observable<boolean>;
+  deg$: Observable<number>;
+  isCompassView$: Observable<boolean>;
+
+  isNotMainRoute: boolean;
+  isIOS = false;
+
+  private deviceOrientationListener: () => void = null;
+  private watcher: number = null;
+  private destroy$: Subject<boolean> = new Subject<boolean>();
+
   ngOnInit() {
+    this.isIOS = ((/iPad|iPhone|iPod/.test(navigator.userAgent)) && (typeof (DeviceMotionEvent as any).requestPermission === 'function'));
+
     this.watcher = navigator.geolocation.watchPosition(
       this.displayLocationInfo,
       this.handleLocationError,
-      { timeout: 0 }
+      { enableHighAccuracy: true, timeout: 0 }
     );
 
     this.breakpointObserver.observe([
@@ -48,10 +60,26 @@ export class AppComponent implements OnInit, OnDestroy {
         this.store.dispatch(setIsMobile({ isMobile: false }));
       }
     });
+
+    this.isCompassView$.pipe(takeUntil(this.destroy$))
+      .subscribe((isCompassView) => {
+        if (isCompassView) {
+          this.deviceOrientationListener =
+            this.renderer.listen('window', 'deviceorientation', (event: DeviceOrientationEvent) => {
+              this.store.dispatch(setDegrees({ deg: event.alpha }));
+            });
+        } else {
+          if (this.deviceOrientationListener) {
+            this.deviceOrientationListener();
+          }
+        }
+      });
   }
 
   ngOnDestroy(): void {
     navigator.geolocation.clearWatch(this.watcher);
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 
   displayLocationInfo = (position: Position) => {
@@ -65,7 +93,27 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  handleLocationError = error => {
+  // for requesting permission on iOS 13 devices
+  requestPermissionsIOS() {
+    this.requestDeviceOrientationIOS();
+  }
+
+  // requesting device orientation permission
+  requestDeviceOrientationIOS() {
+    if (typeof (DeviceOrientationEvent as any).requestPermission === 'function') {
+      (DeviceOrientationEvent as any).requestPermission()
+        .then((permissionState: 'granted' | 'denied' | 'default') => {
+          if (permissionState === 'granted') {
+            this.store.dispatch(toggleCompassView());
+          }
+        })
+        .catch(console.error);
+    } else {
+      // handle regular non iOS 13+ devices
+    }
+  }
+
+  handleLocationError = (error) => {
     switch (error.code) {
       case 3:
         // timeout was hit, meaning nothing's in the cache
@@ -73,8 +121,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
         this.displayLocationInfo({
           coords: {
-            longitude: this.defaultCoord.lng,
-            latitude: this.defaultCoord.lat
+            longitude: DEFAULT_COORD.lng,
+            latitude: DEFAULT_COORD.lat
           },
         } as Position);
 

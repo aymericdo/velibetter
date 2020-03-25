@@ -15,7 +15,7 @@
       <div class="station-score">
         <app-doughnut-chart
           [type]="chartType"
-          [data]="chartData"
+          [data]="getChartData(station.score)"
           [options]="chartOptions"
           [events]="chartEvents"
         ></app-doughnut-chart>

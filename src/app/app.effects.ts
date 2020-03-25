@@ -12,13 +12,12 @@ import {
   fetchingStationsInPolygon,
   selectingStation,
   selectStation,
-  initialFetchingStationsInPolygon,
 } from './actions/stations-map';
 import { ApiService } from './services/api.service';
 import { fetchingClosestStations } from './actions/stations-list';
 import { Store, select, createAction } from '@ngrx/store';
 import { AppState } from './reducers';
-import { getCurrentPosition } from './reducers/position';
+import { getCurrentPosition } from './reducers/galileo';
 import { getStationsStatusById } from './reducers/stations-list';
 import { Coordinate, Station } from './interfaces';
 import { getStationsMapById, getZoom } from './reducers/stations-map';
@@ -35,7 +34,7 @@ export class AppEffects {
 
   fetchingStationsInPolygon$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fetchingStationsInPolygon, initialFetchingStationsInPolygon),
+      ofType(fetchingStationsInPolygon),
       withLatestFrom(this.store.pipe(select(getCurrentPosition))),
       mergeMap(([{ latLngBoundsLiteral }, position]) => {
         // I don't understand how combineLatest could be useful in this case
