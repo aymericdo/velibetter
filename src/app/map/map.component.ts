@@ -113,7 +113,7 @@ export class MapComponent implements OnInit, OnDestroy {
         });
 
         if (icon) {
-          icon.style.transform = `rotate(${currentBearing}deg)`;
+          icon.style.transform = `rotate(-${currentBearing}deg)`;
         }
       }
     });
