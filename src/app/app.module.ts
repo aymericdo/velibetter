@@ -26,9 +26,12 @@ import { metaReducers, reducers } from './reducers';
 import { ListComponent } from './shared/list/list.component';
 import { LoadingComponent } from './shared/loading/loading.component';
 import { SpeedDialFabComponent } from './shared/speed-dial-fab/speed-dial-fab.component';
+import { DoughnutChartComponent } from './shared/doughnut-chart/doughnut-chart.component';
 import { StationDescriptionComponent } from './station-description/station-description.component';
+import { ChartistModule } from 'ng-chartist';
 
-@NgModule({
+
+@NgModule({ 
   declarations: [
     AppComponent,
     SpeedDialFabComponent,
@@ -37,12 +40,14 @@ import { StationDescriptionComponent } from './station-description/station-descr
     ListComponent,
     MapComponent,
     LoadingComponent,
-    StationDescriptionComponent
+    StationDescriptionComponent,
+    DoughnutChartComponent
   ],
   imports: [
     AppRoutingModule,
     BrowserAnimationsModule,
     BrowserModule,
+    ChartistModule,
     HttpClientModule,
     LayoutModule,
     MatButtonModule,

@@ -7,8 +7,10 @@
     .row-content {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         flex: 1;
         padding: 10px 0;
+        height: 60px;
         .station-info {
             display: flex;
             flex-direction: column;
@@ -38,6 +40,15 @@
                 .dock {
                     background-color: lightskyblue;
                 }
+            }
+        }
+        .station-score {
+            height: 80%;
+             ::ng-deep .ct-series-a .ct-slice-donut-solid {
+                fill: #1976D2;
+            }
+             ::ng-deep .ct-series-b .ct-slice-donut-solid {
+                fill: #90CAF9;
             }
         }
     }

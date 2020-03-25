@@ -12,7 +12,12 @@
           </div>
         </div>
         <div class="station-score">
-          
+          <app-doughnut-chart
+          [type]="chartType"
+          [data]="getChartData(station.score)"
+          [options]="chartOptions"
+          [events]="chartEvents"
+        ></app-doughnut-chart>
         </div>
     </div>
   </a>
