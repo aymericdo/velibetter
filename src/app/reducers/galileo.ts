@@ -47,10 +47,6 @@ export const positionReducer = createReducer(initialState,
   on(setPosition, (state, { lat, lng }) => {
     return {
       ...state,
-      currentPos: {
-        lat,
-        lng,
-      },
       precedentPos: {
         ...state.currentPos,
       },
@@ -61,6 +57,10 @@ export const positionReducer = createReducer(initialState,
           lat,
           lng,
         ) : null,
+      currentPos: {
+        lat,
+        lng,
+      },
     };
   }),
   on(setDegrees, (state, { deg }) => {

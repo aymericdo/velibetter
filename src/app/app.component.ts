@@ -47,7 +47,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.watcher = navigator.geolocation.watchPosition(
       this.displayLocationInfo,
       this.handleLocationError,
-      { timeout: 0 }
+      { enableHighAccuracy: true, timeout: 0 }
     );
 
     this.breakpointObserver.observe([

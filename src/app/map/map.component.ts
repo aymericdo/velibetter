@@ -54,6 +54,7 @@ export class MapComponent implements OnInit, OnDestroy {
   private currentMapCenter: Coordinate;
   private currentLatLngBounds: LatLngBounds;
   private currentZoom = DEFAULT_ZOOM;
+  private isViewSyncWithCurrentPosition = true;
   private destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
@@ -95,7 +96,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.currentPosition$.pipe(takeUntil(this.destroy$)).subscribe((currentPosition) => {
-      if (this.isMapCenterEqualCurrentPosition()) {
+      if (this.isViewSyncWithCurrentPosition) {
         this.store.dispatch(setMapCenter({
           lat: currentPosition ? currentPosition.lat : DEFAULT_COORD.lat,
           lng: currentPosition ? currentPosition.lng : DEFAULT_COORD.lng,
@@ -104,9 +105,16 @@ export class MapComponent implements OnInit, OnDestroy {
     });
 
     this.currentBearing$.pipe(takeUntil(this.destroy$)).subscribe((currentBearing) => {
-      const icon = this.elRef.nativeElement.querySelector('agm-map > div.agm-map-container-inner.sebm-google-map-container-inner > div > div > div:nth-child(1) > div > div:nth-child(4) > div > img');
-      if (icon) {
-        icon.style.transform = `rotate(${currentBearing}deg)`;
+      const icons = [...this.elRef.nativeElement.querySelectorAll('agm-map > div.agm-map-container-inner.sebm-google-map-container-inner > div > div > div:nth-child(1) > div > div:nth-child(4) > div > img')];
+      if (icons && icons.length) {
+        const icon = icons.find(ic => {
+          const array = ic.src.split('/');
+          return array[array.length - 1] === 'compass_calibration.svg';
+        });
+
+        if (icon) {
+          icon.style.transform = `rotate(${currentBearing}deg)`;
+        }
       }
     });
   }
@@ -126,6 +134,8 @@ export class MapComponent implements OnInit, OnDestroy {
       lng: this.currentMapCenter ? this.currentMapCenter.lng : DEFAULT_COORD.lng,
     }));
     this.store.dispatch(setZoom({ zoom: this.currentZoom }));
+
+    this.isViewSyncWithCurrentPosition = this.isMapCenterEqualCurrentPosition();
 
     if (this.currentLatLngBounds) {
       let latLngBoundsLiteralLastSaved: LatLngBoundsLiteral;
@@ -152,7 +162,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   recenterMap() {
-    if (this.isMapCenterEqualCurrentPosition()) {
+    if (this.isViewSyncWithCurrentPosition)  {
       if (this.isIOS) {
         this.requestPermissionsIOS.emit();
       } else {
