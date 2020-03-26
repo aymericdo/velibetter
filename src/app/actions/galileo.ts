@@ -1,15 +1,20 @@
 import { createAction, props } from '@ngrx/store';
 
 export const setPosition = createAction(
-  '[Position] set position',
+  '[galileo] set position',
   props<{ lat: number, lng: number }>(),
 );
 
 export const setDegrees = createAction(
-  '[Position] set degrees',
+  '[galileo] set degrees',
   props<{ deg: number }>(),
 );
 
 export const toggleCompassView = createAction(
-  '[Position] toggle compass view',
+  '[galileo] toggle compass view',
+);
+
+export const setBearing = createAction(
+  '[galileo] set bearing',
+  props<{ bearing: number }>(),
 );

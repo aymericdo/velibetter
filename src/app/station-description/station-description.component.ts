@@ -22,11 +22,6 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
   isSelectingStation$: Observable<boolean>;
   routerUrl: string;
 
-  total: number;
-  ebike: number;
-  mechanical: number;
-  docks: number;
-
   chartType: ChartType = 'Pie';
   chartData: IChartistData ;
   chartOptions: IPieChartOptions;

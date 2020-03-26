@@ -143,7 +143,8 @@ export class MapComponent implements OnInit, OnDestroy {
         latLngBoundsLiteralLastSaved = latLng;
       });
 
-      if (!isEqual(latLngBoundsLiteralLastSaved, this.currentLatLngBounds.toJSON())) {
+      if (!isEqual(latLngBoundsLiteralLastSaved, this.currentLatLngBounds.toJSON())
+        && !this.isFlatMap(this.currentLatLngBounds.toJSON())) {
         this.store.dispatch(
           fetchingStationsInPolygon({
             latLngBoundsLiteral: this.currentLatLngBounds.toJSON(),
@@ -194,6 +195,10 @@ export class MapComponent implements OnInit, OnDestroy {
         this.router.navigate(['arrival']); break;
       }
     }
+  }
+
+  isFlatMap(latLng: LatLngBoundsLiteral): boolean {
+    return latLng.north === latLng.south && latLng.east === latLng.west;
   }
 
   isMapCenterEqualCurrentPosition(): boolean {

@@ -17,10 +17,12 @@ import { ApiService } from './services/api.service';
 import { fetchingClosestStations } from './actions/stations-list';
 import { Store, select, createAction } from '@ngrx/store';
 import { AppState } from './reducers';
-import { getCurrentPosition } from './reducers/galileo';
+import { getCurrentPosition, getPrecedentPosition } from './reducers/galileo';
 import { getStationsStatusById } from './reducers/stations-list';
 import { Coordinate, Station } from './interfaces';
 import { getStationsMapById, getZoom } from './reducers/stations-map';
+import { setPosition, setBearing } from './actions/galileo';
+import { getDistanceFromLatLonInKm, bearing } from './shared/helper';
 
 @Injectable()
 export class AppEffects {
@@ -101,7 +103,7 @@ export class AppEffects {
         }
       })
     )
- );
+  );
 
   fetchingDestination$ = createEffect(() =>
     this.actions$.pipe(
@@ -125,6 +127,24 @@ export class AppEffects {
           );
         }
       })
+    )
+  );
+
+  setPosition$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(setPosition),
+      withLatestFrom(this.store.pipe(select(getPrecedentPosition))),
+      mergeMap(([{ lat, lng }, precedentPosition]) => {
+        if (!precedentPosition) {
+          return of(setBearing({ bearing: null }));
+        } else if (getDistanceFromLatLonInKm(lat, lng, precedentPosition.lat, precedentPosition.lng) > 0.01) {
+          return of(setBearing({
+            bearing: bearing(lat, lng, precedentPosition.lat, precedentPosition.lng),
+          }));
+        } else {
+          return of(createAction('[TOO CLOSE TO CHANGE THE BEARING]')());
+        }
+      }),
     )
   );
 }
