@@ -21,7 +21,7 @@ export class ArrivalComponent implements OnInit {
   stationsStatus$: Observable<Station[]>;
   isLoading$: Observable<boolean>;
 
-  chartType: ChartType = "Pie";
+  chartType: ChartType = 'Pie';
   chartOptions: IPieChartOptions = {
     donut: true,
     donutSolid: true,
@@ -48,7 +48,7 @@ export class ArrivalComponent implements OnInit {
 
   getChartData(score: number) {
     return {
-        labels: ["score", "empty"],
+        labels: ['score', 'empty'],
         series: [[score], [100 - score]]
       };
   }

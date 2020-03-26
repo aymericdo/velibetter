@@ -23,6 +23,18 @@
         app-doughnut-chart {
           height: 80%;
           flex: 1;
+
+          ::ng-deep .ct-series-a .ct-slice-donut-solid {
+            fill: lightgreen;
+          }
+
+          ::ng-deep .ct-series-b .ct-slice-donut-solid {
+            fill: lightblue;
+          }
+
+          ::ng-deep .ct-series-c .ct-slice-donut-solid {
+            fill: lightgrey;
+          }
         }
       }
     }

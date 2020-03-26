@@ -23,8 +23,11 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
   routerUrl: string;
 
   chartType: ChartType = 'Pie';
-  chartData: IChartistData ;
-  chartOptions: IPieChartOptions;
+  chartData: IChartistData;
+  chartOptions: IPieChartOptions = {
+    donut: true,
+    donutSolid: true,
+  };
   chartEvents: ChartEvent = {};
 
   private destroy$: Subject<boolean> = new Subject<boolean>();
@@ -68,6 +71,7 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
         };
 
         this.chartOptions = {
+          ...this.chartOptions,
           total: selectedStation.ebike + selectedStation.mechanical + selectedStation.numDocksAvailable,
         };
       });
