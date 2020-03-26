@@ -49,7 +49,8 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
             to:  '0px',
             easing: Chartist.Svg.Easing.easeOutQuint,
             // We need to use `fill: 'freeze'` otherwise our animation will fall back to initial (not visible)
-            fill: 'freeze'
+            fill: 'freeze',
+            begin: ''
           }
         };
 
