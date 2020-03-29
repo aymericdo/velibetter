@@ -43,13 +43,15 @@
             }
         }
         .station-score {
-            height: 80%;
-             ::ng-deep .ct-series-a .ct-slice-donut {
-              stroke: #1976D2;
-            }
-             ::ng-deep .ct-series-b .ct-slice-donut {
-              stroke: #90CAF9;
-            }
+          flex: 1;
+          height: 80%;
+          ::ng-deep .ct-series-a .ct-slice-donut {
+            stroke: #1976D2;
+          }
+
+          ::ng-deep .ct-series-b .ct-slice-donut {
+            stroke: #90CAF9;
+          }
         }
     }
 }

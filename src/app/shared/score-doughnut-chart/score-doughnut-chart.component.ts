@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ChartType } from 'ng-chartist';
 import { IPieChartOptions, IChartistData } from 'chartist';
 
@@ -6,7 +6,6 @@ import { IPieChartOptions, IChartistData } from 'chartist';
   selector: 'app-score-doughnut-chart',
   templateUrl: './score-doughnut-chart.component.html',
   styleUrls: ['./score-doughnut-chart.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ScoreDoughnutChartComponent implements OnInit {
   @Input() score: number;
@@ -19,19 +18,20 @@ export class ScoreDoughnutChartComponent implements OnInit {
     total: 100,
   };
   chartData: IChartistData;
-  isScoreDisplayed = false;
 
-  constructor(private ref: ChangeDetectorRef) {}
+  constructor() {}
 
   ngOnInit() {
-    setTimeout(() => {
+    if (this.score > 0) {
       this.chartData = {
         labels: ['score', 'empty'],
         series: [[this.score], [100 - this.score]],
       };
-      this.ref.markForCheck();
-      this.isScoreDisplayed = true;
-    }, 1000);
-    // Never under 500 sadly ^
+    } else {
+      this.chartData = {
+        labels: ['empty'],
+        series: [[100]],
+      };
+    }
   }
 }

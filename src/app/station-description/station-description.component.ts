@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, Subject } from 'rxjs';
@@ -22,7 +22,10 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
   isSelectingStation$: Observable<boolean>;
 
   chartType: ChartType = 'Pie';
-  chartData: IChartistData;
+  chartData: IChartistData = {
+    labels: [],
+    series: [],
+  };
   chartOptions: IPieChartOptions = {
     donut: true,
   };
@@ -58,13 +61,24 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
         }));
 
         this.chartData = {
-          labels: ['mécanique', 'ebike', 'station'],
-          series: [
-            [selectedStation.mechanical],
-            [selectedStation.ebike],
-            [selectedStation.numDocksAvailable],
-          ],
+          labels: [],
+          series: [],
         };
+
+        if (!!selectedStation.mechanical) {
+          this.chartData.labels.push('mécanique' as never);
+          this.chartData.series.push([selectedStation.mechanical] as never);
+        }
+
+        if (!!selectedStation.ebike) {
+          this.chartData.labels.push('ebike' as never);
+          this.chartData.series.push([selectedStation.ebike] as never);
+        }
+
+        if (!!selectedStation.numDocksAvailable) {
+          this.chartData.labels.push('station' as never);
+          this.chartData.series.push([selectedStation.numDocksAvailable] as never);
+        }
 
         this.chartOptions = {
           ...this.chartOptions,
