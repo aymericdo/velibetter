@@ -1,11 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { IBarChartOptions, IChartistData, IChartistEasingDefinition, IChartistAnimations } from 'chartist';
+import { IBarChartOptions, IChartistData, IChartistEasingDefinition, IChartistAnimations, Svg } from 'chartist';
 import { ChartEvent, ChartType } from 'ng-chartist';
 
 @Component({
   selector: 'app-doughnut-chart',
   templateUrl: './doughnut-chart.component.html',
-  styleUrls: ['./doughnut-chart.component.scss']
+  styleUrls: ['./doughnut-chart.component.scss'],
 })
 export class DoughnutChartComponent implements OnInit {
   @Input() type: ChartType;
@@ -15,7 +15,6 @@ export class DoughnutChartComponent implements OnInit {
 
   ngOnInit() {
     this.events = {
-      ...this.events,
       draw: (data): void => {
         if (data.type === 'slice') {
           // Get the total path length in order to use for dash array animation
@@ -28,9 +27,9 @@ export class DoughnutChartComponent implements OnInit {
 
           let easing: IChartistEasingDefinition = null;
           if (data.index === 0) {
-            easing =  [1, 0.75, 0.5, 0.5];
+            easing = [1, 0.75, 0.5, 0.5];
           } else if (data.index === this.data.labels.length - 1) {
-            easing = [0.5, 0.5, 0.75, 1];
+            easing = Svg.Easing.easeOutQuint;
           } else {
             easing = [0.5, 0.5, 0.5, 0.5];
           }
@@ -62,7 +61,8 @@ export class DoughnutChartComponent implements OnInit {
           // See http://gionkunz.github.io/chartist-js/api-documentation.html#chartistsvg-function-animate
           data.element.animate(animationDefinition, false);
         }
-      }
+      },
+      ...this.events,
     };
   }
 }

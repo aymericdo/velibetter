@@ -29,9 +29,10 @@ import { SpeedDialFabComponent } from './shared/speed-dial-fab/speed-dial-fab.co
 import { DoughnutChartComponent } from './shared/doughnut-chart/doughnut-chart.component';
 import { StationDescriptionComponent } from './station-description/station-description.component';
 import { ChartistModule } from 'ng-chartist';
+import { ScoreDoughnutChartComponent } from './shared/score-doughnut-chart/score-doughnut-chart.component';
 
 
-@NgModule({ 
+@NgModule({
   declarations: [
     AppComponent,
     SpeedDialFabComponent,
@@ -41,7 +42,8 @@ import { ChartistModule } from 'ng-chartist';
     MapComponent,
     LoadingComponent,
     StationDescriptionComponent,
-    DoughnutChartComponent
+    DoughnutChartComponent,
+    ScoreDoughnutChartComponent
   ],
   imports: [
     AppRoutingModule,
@@ -68,7 +70,7 @@ import { ChartistModule } from 'ng-chartist';
     }),
     EffectsModule.forRoot([AppEffects]),
     AgmCoreModule.forRoot({
-      apiKey: "AIzaSyCcsw2lr7StRPLt0nv3KybPFtT0U4hzyks"
+      apiKey: 'AIzaSyCcsw2lr7StRPLt0nv3KybPFtT0U4hzyks'
     }),
     AgmDirectionModule,
     StoreDevtoolsModule.instrument({

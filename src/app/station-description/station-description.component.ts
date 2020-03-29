@@ -20,7 +20,6 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
   currentPosition$: Observable<{ lat: number; lng: number }>;
   selectedStation$: Observable<Station>;
   isSelectingStation$: Observable<boolean>;
-  routerUrl: string;
 
   chartType: ChartType = 'Pie';
   chartData: IChartistData;
@@ -37,7 +36,6 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
     this.selectedStation$ = store.pipe(select(getSelectedStation));
     this.currentPosition$ = store.pipe(select(getCurrentPosition));
     this.isSelectingStation$ = store.pipe(select(getIsSelectingStation));
-    this.routerUrl = router.url;
 
     combineLatest([
       this.currentPosition$.pipe(filter(Boolean), take(1)),
@@ -78,7 +76,7 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.currentPosition$.pipe(filter(Boolean), take(1))
       .subscribe((position) => {
-        this.selectStationFct(+this.routerUrl.split('/')[2]);
+        this.selectStationFct(+this.router.url.split('/')[2]);
       });
   }
 
