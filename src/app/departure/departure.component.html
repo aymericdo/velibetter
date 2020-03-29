@@ -2,8 +2,8 @@
   <a
     class="mat-list-item-override"
     mat-list-item [routerLink]="['/departure', station.stationId]"
-    *ngFor="let station of stationsStatus$ | async">
-    <div #rowContent class="row-content">
+    *ngFor="let station of stationsStatus$ | async; trackBy: trackByFn">
+    <div class="row-content">
       <div class="station-info">
         <div class="station-name">{{ station.name }}</div>
         <div class="station-details">
@@ -17,7 +17,6 @@
           [type]="chartType"
           [data]="getChartData(station.score)"
           [options]="chartOptions"
-          [events]="chartEvents"
         ></app-doughnut-chart>
       </div>
     </div>

@@ -1,29 +1,22 @@
-import {
-  Component,
-  ElementRef,
-  OnInit,
-  QueryList,
-  ViewChildren
-} from '@angular/core';
-import { select, Store } from '@ngrx/store';
-import { IPieChartOptions } from 'chartist';
-import { ChartEvent, ChartType } from 'ng-chartist';
-import { Observable } from 'rxjs';
-import { getCurrentPosition } from '../reducers/galileo';
-import { filter, take } from 'rxjs/operators';
-import { fetchingClosestStations } from '../actions/stations-list';
-import { Station } from '../interfaces';
 import { AppState } from '../reducers';
+import { ChartType } from 'ng-chartist';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { fetchingClosestStations } from '../actions/stations-list';
+import { filter, take } from 'rxjs/operators';
+import { getCurrentPosition } from '../reducers/galileo';
 import { getIsLoading, getStationsStatus } from '../reducers/stations-list';
+import { IPieChartOptions } from 'chartist';
+import { Observable } from 'rxjs';
+import { select, Store } from '@ngrx/store';
+import { Station } from '../interfaces';
 
 @Component({
   selector: 'app-departure',
   templateUrl: './departure.component.html',
-  styleUrls: ['./departure.component.scss']
+  styleUrls: ['./departure.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DepartureComponent implements OnInit {
-  @ViewChildren('rowContent') rowContent: QueryList<ElementRef>;
-
   currentPosition$: Observable<{ lat: number; lng: number }>;
   stationsStatus$: Observable<Station[]>;
   isLoading$: Observable<boolean>;
@@ -31,12 +24,10 @@ export class DepartureComponent implements OnInit {
   chartType: ChartType = 'Pie';
   chartOptions: IPieChartOptions = {
     donut: true,
-    donutSolid: true,
     donutWidth: 5,
     showLabel: false,
     total: 100
   };
-  chartEvents: ChartEvent = {};
 
   constructor(private store: Store<AppState>) {
     this.currentPosition$ = store.pipe(select(getCurrentPosition));
@@ -54,8 +45,12 @@ export class DepartureComponent implements OnInit {
 
   getChartData(score: number) {
     return {
-        labels: ['score', 'empty'],
-        series: [[score], [100 - score]]
-      };
+      labels: ['score', 'empty'],
+      series: [[score], [100 - score]]
+    };
+  }
+
+  trackByFn(index: number, station: Station): number {
+    return station.stationId;
   }
 }

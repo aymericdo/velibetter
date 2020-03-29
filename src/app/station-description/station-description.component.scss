@@ -25,16 +25,16 @@
           height: 80%;
           flex: 1;
 
-          ::ng-deep .ct-series-a .ct-slice-donut-solid {
-            fill: lightgreen;
+          ::ng-deep .ct-series-a .ct-slice-donut {
+            stroke: lightgreen;
           }
 
-          ::ng-deep .ct-series-b .ct-slice-donut-solid {
-            fill: lightblue;
+          ::ng-deep .ct-series-b .ct-slice-donut {
+            stroke: lightblue;
           }
 
-          ::ng-deep .ct-series-c .ct-slice-donut-solid {
-            fill: lightgrey;
+          ::ng-deep .ct-series-c .ct-slice-donut {
+            stroke: lightgrey;
           }
         }
       }

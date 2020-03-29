@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, Subject } from 'rxjs';
@@ -8,14 +8,13 @@ import { Station, Coordinate } from '../interfaces';
 import { AppState } from '../reducers';
 import { getCurrentPosition } from '../reducers/galileo';
 import { getIsSelectingStation, getSelectedStation } from '../reducers/stations-map';
-import { ChartType, ChartEvent } from 'ng-chartist';
-import { IChartistData, IPieChartOptions, IChartistAnimationOptions } from 'chartist';
-import * as Chartist from 'chartist';
+import { ChartType } from 'ng-chartist';
+import { IChartistData, IPieChartOptions } from 'chartist';
 
 @Component({
   selector: 'app-station-description',
   templateUrl: './station-description.component.html',
-  styleUrls: ['./station-description.component.scss']
+  styleUrls: ['./station-description.component.scss'],
 })
 export class StationDescriptionComponent implements OnInit, OnDestroy {
   currentPosition$: Observable<{ lat: number; lng: number }>;
@@ -27,48 +26,6 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
   chartData: IChartistData;
   chartOptions: IPieChartOptions = {
     donut: true,
-    donutSolid: true,
-  };
-  chartEvents: ChartEvent = {
-    draw(data): void {
-      if (data.type === 'slice') {
-        // Get the total path length in order to use for dash array animation
-        const pathLength = data.element._node.getTotalLength();
-
-        // Set a dasharray that matches the path length as prerequisite to animate dashoffset
-        data.element.attr({
-          'stroke-dasharray': pathLength + 'px ' + pathLength + 'px'
-        });
-
-        // Create animation definition while also assigning an ID to the animation for later sync usage
-        const animationDefinition = {
-          'stroke-dashoffset': {
-            id: 'anim' + data.index,
-            dur: 1000,
-            from: -pathLength + 'px',
-            to:  '0px',
-            easing: Chartist.Svg.Easing.easeOutQuint,
-            // We need to use `fill: 'freeze'` otherwise our animation will fall back to initial (not visible)
-            fill: 'freeze',
-            begin: ''
-          }
-        };
-
-        // If this was not the first slice, we need to time the animation so that it uses the end sync event of the previous animation
-        if (data.index !== 0) {
-          animationDefinition['stroke-dashoffset'].begin = 'anim' + (data.index - 1) + '.end';
-        }
-
-        // We need to set an initial value before the animation starts as we are not in guided mode which would do that for us
-        data.element.attr({
-          'stroke-dashoffset': -pathLength + 'px'
-        });
-
-        // We can't use guided mode as the animations need to rely on setting begin manually
-        // See http://gionkunz.github.io/chartist-js/api-documentation.html#chartistsvg-function-animate
-        data.element.animate(animationDefinition, false);
-      }
-    }
   };
 
   private destroy$: Subject <boolean> = new Subject<boolean>();
@@ -107,7 +64,7 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
           series: [
             [selectedStation.mechanical],
             [selectedStation.ebike],
-            [selectedStation.numDocksAvailable]
+            [selectedStation.numDocksAvailable],
           ],
         };
 
