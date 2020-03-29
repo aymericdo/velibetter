@@ -2,7 +2,13 @@
   <app-loading></app-loading>
 </ng-container>
 <section *ngIf="(selectedStation$ | async) && !(isSelectingStation$ | async)" class="mat-typography">
-  <h1 class="mat-display-1">{{(selectedStation$ | async)?.name}} - {{ (selectedStation$ | async)?.distance | number:'1.0-0' }}m</h1>
+  <div class="station-name">
+      <span class="mat-display-1 name">{{(selectedStation$ | async)?.name}}</span>
+  </div>
+  <div class="station-details">
+    <span class="mat-display-1 info"><i class="material-icons">directions</i>{{(selectedStation$ | async)?.distance | number:'1.0-0'}}m</span>
+    <span class="mat-display-1 info"><i class="material-icons">credit_card</i>{{(selectedStation$ | async)?.rentalMethods === "CREDITCARD" ? "oui": "non"}}</span>
+  </div>
   <div class="chart">
    <app-doughnut-chart
       [type]="chartType"
