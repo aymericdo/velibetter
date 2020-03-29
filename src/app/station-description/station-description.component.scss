@@ -27,6 +27,8 @@
                 vertical-align: middle;
             }
             .info {
+                display: flex;
+                align-items: center;
                 font-weight: 400;
                 color: hsl(201, 23%, 34%);
                 font-size: 20px;

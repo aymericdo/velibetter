@@ -7,7 +7,7 @@
   </div>
   <div class="station-details">
     <span class="mat-display-1 info"><i class="material-icons">directions</i>{{(selectedStation$ | async)?.distance | number:'1.0-0'}}m</span>
-    <span class="mat-display-1 info"><i class="material-icons">credit_card</i>{{(selectedStation$ | async)?.rentalMethods === "CREDITCARD" ? "oui": "non"}}</span>
+    <span class="mat-display-1 info"><i class="material-icons">credit_card</i>{{(selectedStation$ | async)?.rentalMethods === "CREDITCARD" ? "Oui": "Non"}}</span>
   </div>
   <div class="chart">
    <app-doughnut-chart
