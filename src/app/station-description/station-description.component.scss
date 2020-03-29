@@ -5,38 +5,56 @@
     flex: 1;
     padding: 50px;
     box-sizing: border-box;
-
     section {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-
-      h1 {
-        margin-bottom: 24px;
-      }
-
-      .chart {
         display: flex;
-        flex: 1;
-        align-items: center;
+        flex-direction: column;
         height: 100%;
-
-        app-doughnut-chart {
-          height: 80%;
-          flex: 1;
-
-          ::ng-deep .ct-series-a .ct-slice-donut {
-            stroke: lightgreen;
-          }
-
-          ::ng-deep .ct-series-b .ct-slice-donut {
-            stroke: lightblue;
-          }
-
-          ::ng-deep .ct-series-c .ct-slice-donut {
-            stroke: lightgrey;
-          }
+        .station-name {
+            margin: 0px 0px 12px 0px;
+            .name {
+                font-weight: 600;
+                color: hsl(202, 57%, 15%);
+                margin: 12px 0;
+            }
         }
-      }
+        .station-details {
+            border-top: 2px solid hsl(210, 23%, 95%);
+            margin-bottom: 16px;
+            display: flex;
+            .material-icons {
+                margin-right: 6px;
+                font-size: 16px;
+                vertical-align: middle;
+            }
+            .info {
+                font-weight: 400;
+                color: hsl(201, 23%, 34%);
+                font-size: 20px;
+                line-height: initial;
+                margin: 4px 32px 4px 0px;
+            }
+        }
+        .chart {
+            display: flex;
+            flex: 1;
+            align-items: center;
+            height: 100%;
+            app-doughnut-chart {
+                height: 80%;
+                flex: 1;
+                 ::ng-deep .ct-series-a .ct-slice-donut {
+                    stroke: hsl(123.05, 46.46%, 50.2%);
+                }
+                 ::ng-deep .ct-series-b .ct-slice-donut {
+                    stroke: hsl(123.08, 45.88%, 66.67%);
+                }
+                 ::ng-deep .ct-series-c .ct-slice-donut {
+                    stroke: hsl(123.08, 45.88%, 83.33%);
+                }
+                 ::ng-deep .ct-label {
+                    color: hsl(203, 15%, 47%);
+                }
+            }
+        }
     }
 }
