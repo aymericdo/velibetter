@@ -22,16 +22,9 @@ export class ScoreDoughnutChartComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    if (this.score > 0) {
-      this.chartData = {
-        labels: ['score', 'empty'],
-        series: [[this.score], [100 - this.score]],
-      };
-    } else {
-      this.chartData = {
-        labels: ['empty'],
-        series: [[100]],
-      };
-    }
+    this.chartData = {
+      labels: ['score', 'empty'],
+      series: [[this.score], [100 - this.score]],
+    };
   }
 }

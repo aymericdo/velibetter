@@ -10,7 +10,7 @@
     <span class="mat-display-1 info"><i class="material-icons">credit_card</i>{{(selectedStation$ | async)?.rentalMethods === "CREDITCARD" ? "Oui": "Non"}}</span>
   </div>
   <div class="chart">
-   <app-doughnut-chart
+    <app-doughnut-chart
       [type]="chartType"
       [data]="chartData"
       [options]="chartOptions"

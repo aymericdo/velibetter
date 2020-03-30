@@ -24,7 +24,6 @@
             .material-icons {
                 margin-right: 6px;
                 font-size: 16px;
-                vertical-align: middle;
             }
             .info {
                 display: flex;
@@ -44,17 +43,21 @@
             app-doughnut-chart {
                 height: 80%;
                 flex: 1;
-                 ::ng-deep .ct-series-a .ct-slice-donut {
-                    stroke: hsl(123.05, 46.46%, 50.2%);
+
+                ::ng-deep .ct-series-a .ct-slice-donut {
+                  stroke: hsl(123.05, 46.46%, 50.2%);
                 }
-                 ::ng-deep .ct-series-b .ct-slice-donut {
-                    stroke: hsl(123.08, 45.88%, 66.67%);
+
+                ::ng-deep .ct-series-b .ct-slice-donut {
+                  stroke: hsl(123.08, 45.88%, 66.67%);
                 }
-                 ::ng-deep .ct-series-c .ct-slice-donut {
-                    stroke: hsl(123.08, 45.88%, 83.33%);
+
+                ::ng-deep .ct-series-c .ct-slice-donut {
+                  stroke: hsl(123.08, 45.88%, 83.33%);
                 }
-                 ::ng-deep .ct-label {
-                    color: hsl(203, 15%, 47%);
+
+                ::ng-deep .ct-label {
+                  color: hsl(203, 15%, 47%);
                 }
             }
         }

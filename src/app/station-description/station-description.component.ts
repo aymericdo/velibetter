@@ -22,12 +22,16 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
   isSelectingStation$: Observable<boolean>;
 
   chartType: ChartType = 'Pie';
-  chartData: IChartistData = {
-    labels: [],
-    series: [],
-  };
+  chartData: IChartistData;
   chartOptions: IPieChartOptions = {
     donut: true,
+    labelInterpolationFnc: (value: string, idx: number) => {
+      if (this.chartData.series[idx] > 0) {
+        return value;
+      } else {
+        return '';
+      }
+    },
   };
 
   private destroy$: Subject <boolean> = new Subject<boolean>();
@@ -39,10 +43,12 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
     this.selectedStation$ = store.pipe(select(getSelectedStation));
     this.currentPosition$ = store.pipe(select(getCurrentPosition));
     this.isSelectingStation$ = store.pipe(select(getIsSelectingStation));
+  }
 
+  ngOnInit(): void {
     combineLatest([
       this.currentPosition$.pipe(filter(Boolean), take(1)),
-      router.events.pipe(
+      this.router.events.pipe(
         filter(event => event instanceof NavigationEnd),
       ),
     ]).pipe(
@@ -51,6 +57,11 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
     ).subscribe((val: NavigationEnd) => {
       this.selectStationFct(+val.url.split('/')[2]);
     });
+
+    this.currentPosition$.pipe(filter(Boolean), take(1))
+      .subscribe((position) => {
+        this.selectStationFct(+this.router.url.split('/')[2]);
+      });
 
     this.selectedStation$
       .pipe(filter(Boolean), takeUntil(this.destroy$))
@@ -61,36 +72,14 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
         }));
 
         this.chartData = {
-          labels: [],
-          series: [],
+          labels: ['mécanique', 'ebike', 'station'],
+          series: [[selectedStation.mechanical], [selectedStation.ebike], [selectedStation.numDocksAvailable]],
         };
-
-        if (!!selectedStation.mechanical) {
-          this.chartData.labels.push('mécanique' as never);
-          this.chartData.series.push([selectedStation.mechanical] as never);
-        }
-
-        if (!!selectedStation.ebike) {
-          this.chartData.labels.push('ebike' as never);
-          this.chartData.series.push([selectedStation.ebike] as never);
-        }
-
-        if (!!selectedStation.numDocksAvailable) {
-          this.chartData.labels.push('station' as never);
-          this.chartData.series.push([selectedStation.numDocksAvailable] as never);
-        }
 
         this.chartOptions = {
           ...this.chartOptions,
-          total: selectedStation.ebike + selectedStation.mechanical + selectedStation.numDocksAvailable,
+          total: selectedStation.mechanical + selectedStation.ebike + selectedStation.numDocksAvailable,
         };
-      });
-  }
-
-  ngOnInit(): void {
-    this.currentPosition$.pipe(filter(Boolean), take(1))
-      .subscribe((position) => {
-        this.selectStationFct(+this.router.url.split('/')[2]);
       });
   }
 
