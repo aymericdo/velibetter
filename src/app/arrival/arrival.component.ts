@@ -17,7 +17,6 @@ export class ArrivalComponent implements OnInit {
   currentPosition$: Observable<{ lat: number; lng: number }>;
   stationsStatus$: Observable<Station[]>;
   isLoading$: Observable<boolean>;
-  isScoreDisplayed = false;
 
   constructor(private store: Store<AppState>) {
     this.currentPosition$ = store.pipe(select(getCurrentPosition));
@@ -30,15 +29,6 @@ export class ArrivalComponent implements OnInit {
       .pipe(filter(Boolean), take(1))
       .subscribe((position: { lat: number; lng: number }) => {
         this.store.dispatch(fetchingClosestStations({ isDeparture: false }));
-      });
-
-    this.stationsStatus$
-      .pipe(take(1))
-      .subscribe((stations: Station[]) => {
-        setTimeout(() => {
-          this.isScoreDisplayed = true;
-        }, 1000);
-        // Never under 500 sadly ^
       });
   }
 
