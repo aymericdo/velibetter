@@ -8,6 +8,7 @@ import { IPieChartOptions, IChartistData } from 'chartist';
   styleUrls: ['./score-doughnut-chart.component.scss'],
 })
 export class ScoreDoughnutChartComponent implements OnInit {
+  @Input() id: number;
   @Input() score: number;
 
   chartType: ChartType = 'Pie';

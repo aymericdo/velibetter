@@ -12,6 +12,7 @@ export class DoughnutChartComponent implements OnInit {
   @Input() data: IChartistData;
   @Input() options: IBarChartOptions;
   @Input() events: ChartEvent;
+  @Input() id?: number;
 
   ngOnInit() {
     this.events = {
@@ -37,7 +38,7 @@ export class DoughnutChartComponent implements OnInit {
           // Create animation definition while also assigning an ID to the animation for later sync usage
           const animationDefinition: IChartistAnimations = {
             'stroke-dashoffset': {
-              id: 'anim' + data.index,
+              id: 'anim' + data.index + (this.id ? this.id.toString() : ''),
               dur: 1000 * data.value[0] / data.totalDataSum || 1,
               from: -pathLength + 'px',
               to: '0px',
@@ -49,7 +50,7 @@ export class DoughnutChartComponent implements OnInit {
 
           // If this was not the first slice, we need to time the animation so that it uses the end sync event of the previous animation
           if (data.index !== 0) {
-            animationDefinition['stroke-dashoffset'].begin = 'anim' + (data.index - 1) + '.end';
+            animationDefinition['stroke-dashoffset'].begin = 'anim' + (data.index - 1) + (this.id ? this.id.toString() : '') + '.end';
           }
 
           // We need to set an initial value before the animation starts as we are not in guided mode which would do that for us
