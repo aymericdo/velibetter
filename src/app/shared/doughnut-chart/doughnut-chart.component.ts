@@ -38,7 +38,7 @@ export class DoughnutChartComponent implements OnInit {
           const animationDefinition: IChartistAnimations = {
             'stroke-dashoffset': {
               id: 'anim' + data.index,
-              dur: 1000,
+              dur: 1000 * data.value[0] / data.totalDataSum || 1,
               from: -pathLength + 'px',
               to: '0px',
               easing,
