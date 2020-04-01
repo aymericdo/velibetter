@@ -1,24 +1,15 @@
-<app-list [isLoading]="isLoading$ | async">
+<app-list [isLoading]="isLoading$ | async" [isEmpty]="!(stationsStatus$ | async).length">
   <ng-container *ngIf="!(isLoading$ | async)">
     <a
+      *ngFor="let station of stationsStatus$ | async; trackBy: trackByFn"
       class="mat-list-item-override"
-      mat-list-item [routerLink]="['/arrival', station.stationId]"
-      *ngFor="let station of stationsStatus$ | async; trackBy: trackByFn">
-      <div class="row-content">
-        <div class="station-info">
-          <div class="station-name">{{ station.name }}</div>
-          <div class="station-details">
-            <span>{{ station.distance | number:'1.0-0' }}m</span>
-            <span>{{ station.numDocksAvailable }}<i class="material-icons dock">ev_station</i></span>
-          </div>
-        </div>
-        <div class="station-score">
-          <app-score-doughnut-chart
-          [id]="station.stationId"
-          [score]="station.score"
-          ></app-score-doughnut-chart>
-        </div>
-      </div>
+      mat-list-item
+      [routerLink]="['/arrival', station.stationId]"
+    >
+      <app-row-station [station]="station">
+        <span>{{ station.distance | number:'1.0-0' }}m</span>
+        <span>{{ station.numDocksAvailable }}<i class="material-icons dock">ev_station</i></span>
+      </app-row-station>
     </a>
   </ng-container>
 </app-list>

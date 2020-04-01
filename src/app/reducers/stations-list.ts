@@ -16,7 +16,7 @@ export interface StationState {
 
 const initialState: StationState = {
   list: [],
-  isLoading: false,
+  isLoading: true,
   destination: null,
 };
 

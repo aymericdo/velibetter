@@ -20,7 +20,7 @@ export class DepartureComponent implements OnInit {
 
   constructor(private store: Store<AppState>) {
     this.currentPosition$ = store.pipe(select(getCurrentPosition));
-    this.stationsStatus$ = store.pipe(select(getStationsStatus), filter(s => !!s.length));
+    this.stationsStatus$ = store.pipe(select(getStationsStatus));
     this.isLoading$ = store.pipe(select(getIsLoading));
   }
 

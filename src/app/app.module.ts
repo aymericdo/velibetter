@@ -30,6 +30,7 @@ import { DoughnutChartComponent } from './shared/doughnut-chart/doughnut-chart.c
 import { StationDescriptionComponent } from './station-description/station-description.component';
 import { ChartistModule } from 'ng-chartist';
 import { ScoreDoughnutChartComponent } from './shared/score-doughnut-chart/score-doughnut-chart.component';
+import { RowStationComponent } from './shared/row-station/row-station.component';
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import { ScoreDoughnutChartComponent } from './shared/score-doughnut-chart/score
     LoadingComponent,
     StationDescriptionComponent,
     DoughnutChartComponent,
-    ScoreDoughnutChartComponent
+    ScoreDoughnutChartComponent,
+    RowStationComponent
   ],
   imports: [
     AppRoutingModule,

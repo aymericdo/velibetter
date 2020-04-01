@@ -7,4 +7,5 @@ import { Component, Input } from '@angular/core';
 })
 export class ListComponent {
   @Input() isLoading: boolean;
+  @Input() isEmpty: boolean;
 }

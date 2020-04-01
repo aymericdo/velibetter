@@ -1,69 +1,34 @@
 :host {
     height: 100%;
     flex: 1;
+
     .mat-list-item-override {
-        height: inherit;
+      height: inherit;
     }
-    .row-content {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex: 1;
-        padding: 12px 0;
-        height: 60px;
-        border-bottom: 2px solid hsl(210, 23%, 95%);
-        .station-info {
-            display: flex;
-            flex-direction: column;
-            width: 80%;
-            .station-name {
-                font-weight: 600;
-                color: hsl(202, 57%, 15%);
-            }
-            .station-details {
-                display: flex;
-                align-items: center;
-                font-weight: 400;
-                color: hsl(201, 23%, 34%);
-                &>span {
-                    display: flex;
-                    align-items: center;
-                    margin-right: 24px;
-                }
-                .material-icons {
-                    font-size: 16px;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    width: 25px;
-                    height: 25px;
-                    border-radius: 50%;
-                    margin: 4px;
-                }
-                .mechanical {
-                    background-color: lightgreen;
-                }
-                .ebike {
-                    background-color: lightblue;
-                }
-            }
-        }
-        .station-score {
-          flex: 1;
-          height: 80%;
-          width: 20%;
 
-          ::ng-deep .ct-series-a .ct-slice-donut {
-            stroke: hsl(208, 100%, 38.24%);
-          }
+    .mechanical {
+      background-color: lightgreen;
+    }
 
-          ::ng-deep .ct-series-b .ct-slice-donut {
-            stroke: hsl(208, 100%, 79.41%);
-          }
+    .ebike {
+        background-color: lightblue;
+    }
 
-          ::ng-deep span.score {
-            color: hsl(203, 15%, 47%);
-          }
-        }
+    ::ng-deep .station-score {
+      flex: 1;
+      height: 80%;
+      width: 20%;
+
+      .ct-series-a .ct-slice-donut {
+        stroke: hsl(208, 100%, 38.24%);
+      }
+
+      .ct-series-b .ct-slice-donut {
+        stroke: hsl(208, 100%, 79.41%);
+      }
+
+      span.score {
+        color: hsl(203, 15%, 47%);
+      }
     }
 }

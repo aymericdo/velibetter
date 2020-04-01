@@ -1,6 +1,13 @@
 <app-loading *ngIf="isLoading; else loaded"></app-loading>
 <ng-template #loaded>
   <mat-nav-list>
-    <ng-content></ng-content>
+    <div *ngIf="isEmpty; else hasResult">
+      <a class="mat-list-item-override" mat-list-item>
+        Pas de station à proximité...
+      </a>
+    </div>
+    <ng-template #hasResult>
+      <ng-content></ng-content>
+    </ng-template>
   </mat-nav-list>
 </ng-template>

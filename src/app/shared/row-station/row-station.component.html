@@ -1,0 +1,12 @@
+<div class="station-info">
+  <div class="station-name">{{ station.name }}</div>
+  <div class="station-details">
+    <ng-content></ng-content>
+  </div>
+</div>
+<div class="station-score">
+  <app-score-doughnut-chart
+  [id]="station.stationId"
+  [score]="station.score"
+  ></app-score-doughnut-chart>
+</div>
