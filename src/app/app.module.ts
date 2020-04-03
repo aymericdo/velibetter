@@ -1,3 +1,4 @@
+import { TimePickerComponent } from './shared/time-picker/time-picker.component';
 import { AgmCoreModule } from '@agm/core';
 import { LayoutModule } from '@angular/cdk/layout';
 import { HttpClientModule } from '@angular/common/http';
@@ -31,7 +32,12 @@ import { StationDescriptionComponent } from './station-description/station-descr
 import { ChartistModule } from 'ng-chartist';
 import { ScoreDoughnutChartComponent } from './shared/score-doughnut-chart/score-doughnut-chart.component';
 import { RowStationComponent } from './shared/row-station/row-station.component';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
+
+
+import { MatDialogModule } from '@angular/material/dialog';
+import { ButtonBarComponent } from './button-bar/button-bar.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +51,9 @@ import { RowStationComponent } from './shared/row-station/row-station.component'
     StationDescriptionComponent,
     DoughnutChartComponent,
     ScoreDoughnutChartComponent,
-    RowStationComponent
+    RowStationComponent,
+    TimePickerComponent,
+    ButtonBarComponent
   ],
   imports: [
     AppRoutingModule,
@@ -55,11 +63,13 @@ import { RowStationComponent } from './shared/row-station/row-station.component'
     HttpClientModule,
     LayoutModule,
     MatButtonModule,
+    MatDialogModule,
     MatListModule,
     MatProgressSpinnerModule,
     MatCardModule,
     MatSidenavModule,
     MatToolbarModule,
+    NgxMaterialTimepickerModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production
     }),
@@ -84,4 +94,4 @@ import { RowStationComponent } from './shared/row-station/row-station.component'
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

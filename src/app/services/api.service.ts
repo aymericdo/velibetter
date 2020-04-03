@@ -8,8 +8,8 @@ import { Coordinate, Station } from '../interfaces';
   providedIn: 'root'
 })
 export class ApiService {
-  private baseURL = 'https://velibetter.herokuapp.com';
-  constructor(private httpClient: HttpClient) {}
+  private baseURL = 'http://localhost:8000';
+  constructor(private httpClient: HttpClient) { }
 
   fetchClosestInfo(
     latLngBoundsLiteral: LatLngBoundsLiteral,
@@ -49,6 +49,21 @@ export class ApiService {
     return this.httpClient.post(
       `${this.baseURL}/stations/${stationId}`,
       currentPosition,
+    ) as Observable<Station>;
+  }
+
+  getForecast(
+    stationId: number,
+    bikeType: string,
+    deltaHours: number,
+  ): Observable<Station> {
+    return this.httpClient.post(
+      `${this.baseURL}/stations/${stationId}`,
+      {
+        stationId,
+        bikeType,
+        deltaHours
+      }
     ) as Observable<Station>;
   }
 }

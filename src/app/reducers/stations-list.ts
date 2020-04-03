@@ -1,6 +1,7 @@
 import { Action, createReducer, on, createSelector } from '@ngrx/store';
 import { Station } from '../interfaces';
 import { AppState } from '.';
+import { getForecast } from '../actions/stations-list';
 import {
   fetchingClosestStations,
   setStationsList,
@@ -15,7 +16,7 @@ export interface StationState {
 }
 
 const initialState: StationState = {
-  list: [],
+  list: [], 
   isLoading: true,
   destination: null,
 };
@@ -42,6 +43,12 @@ export const stationsListReducer = createReducer(
     };
   }),
   on(unsetDestination, state => {
+    return {
+      ...state,
+      destination: null,
+    };
+  }),
+  on(getForecast, state => {
     return {
       ...state,
       destination: null,

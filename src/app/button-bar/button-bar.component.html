@@ -1,0 +1,20 @@
+<div class="buttons">
+  <div class="list-buttons" *ngIf="isDisplayingListPages">
+    <button
+    mat-icon-button
+    class="back-btn fab-secondary mat-elevation-z0 refresh-button"
+    color="secondary"
+    (click)="listRefresh()"
+    >
+    <i class="material-icons">refresh</i>
+  </button>
+  <button
+    mat-icon-button
+    class="back-btn fab-secondary mat-elevation-z0 query-builder-button"
+    color="secondary"
+    (click)="openDialog()"
+    >
+    <i class="material-icons">query_builder</i>
+  </button>
+  </div>
+</div>

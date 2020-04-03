@@ -1,24 +1,29 @@
-import { AppState } from '../reducers';
-import { Component, OnInit } from '@angular/core';
-import { fetchingClosestStations } from '../actions/stations-list';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { select, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
+import { fetchingClosestStations } from '../actions/stations-list';
+import { Station } from '../interfaces';
+import { AppState } from '../reducers';
 import { getCurrentPosition } from '../reducers/galileo';
 import { getIsLoading, getStationsStatus } from '../reducers/stations-list';
-import { Observable } from 'rxjs';
-import { select, Store } from '@ngrx/store';
-import { Station } from '../interfaces';
+
 
 @Component({
   selector: 'app-departure',
   templateUrl: './departure.component.html',
-  styleUrls: ['./departure.component.scss'],
+  styleUrls: ['./departure.component.scss']
 })
 export class DepartureComponent implements OnInit {
-  currentPosition$: Observable<{ lat: number; lng: number }>;
+  currentPosition$: Observable<{
+    lat: number;
+    lng: number;
+  }>;
   stationsStatus$: Observable<Station[]>;
   isLoading$: Observable<boolean>;
 
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, private cdr: ChangeDetectorRef) {
     this.currentPosition$ = store.pipe(select(getCurrentPosition));
     this.stationsStatus$ = store.pipe(select(getStationsStatus));
     this.isLoading$ = store.pipe(select(getIsLoading));
@@ -28,7 +33,11 @@ export class DepartureComponent implements OnInit {
     this.currentPosition$
       .pipe(filter(Boolean), take(1))
       .subscribe((position: { lat: number; lng: number }) => {
-        this.store.dispatch(fetchingClosestStations({ isDeparture: true }));
+        this.store.dispatch(
+          fetchingClosestStations({
+            isDeparture: true
+          })
+        );
       });
   }
 

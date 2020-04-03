@@ -1,34 +1,27 @@
 :host {
     height: 100%;
     flex: 1;
-
     .mat-list-item-override {
-      height: inherit;
+        height: inherit;
     }
-
     .mechanical {
-      background-color: lightgreen;
+        background-color: lightgreen;
     }
-
     .ebike {
         background-color: lightblue;
     }
-
-    ::ng-deep .station-score {
-      flex: 1;
-      height: 80%;
-      width: 20%;
-
-      .ct-series-a .ct-slice-donut {
-        stroke: hsl(208, 100%, 38.24%);
-      }
-
-      .ct-series-b .ct-slice-donut {
-        stroke: hsl(208, 100%, 79.41%);
-      }
-
-      span.score {
-        color: hsl(203, 15%, 47%);
-      }
+     ::ng-deep .station-score {
+        flex: 1;
+        height: 80%;
+        width: 20%;
+        .ct-series-a .ct-slice-donut {
+            stroke: hsl(208, 100%, 38.24%);
+        }
+        .ct-series-b .ct-slice-donut {
+            stroke: hsl(208, 100%, 79.41%);
+        }
+        span.score {
+            color: hsl(203, 15%, 47%);
+        }
     }
 }

@@ -24,3 +24,8 @@ export const setDestination = createAction(
   '[Stations List] set destination',
   props<{ destination: Station }>(),
 );
+
+export const getForecast = createAction(
+  '[Stations List] get station forecast',
+  props<{ stationId: number, bikeType: string, deltaHours: number }>()
+);
