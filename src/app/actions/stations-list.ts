@@ -3,7 +3,7 @@ import { Station } from '../interfaces';
 
 export const fetchingClosestStations = createAction(
   '[Stations List] fetching closest stations status',
-  props<{ isDeparture: boolean }>()
+  props<{ isDeparture: boolean, delta?: number }>()
 );
 
 export const setStationsList = createAction(
@@ -23,9 +23,4 @@ export const unsetDestination = createAction(
 export const setDestination = createAction(
   '[Stations List] set destination',
   props<{ destination: Station }>(),
-);
-
-export const getForecast = createAction(
-  '[Stations List] get station forecast',
-  props<{ stationId: number, bikeType: string, deltaHours: number }>()
 );

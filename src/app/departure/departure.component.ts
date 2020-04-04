@@ -52,4 +52,16 @@ export class DepartureComponent implements OnInit {
       })
     );
   }
+
+  selectedTime(time: Date) {
+    const currentDate = new Date();
+    const timeDifference = time.getTime() - currentDate.getTime();
+    const timeDifferenceInHours = Math.floor(timeDifference / (1000 * 3600));
+    this.store.dispatch(
+      fetchingClosestStations({
+        isDeparture: false,
+        delta: timeDifferenceInHours
+      })
+    );
+  }
 }
