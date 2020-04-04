@@ -1,23 +1,5 @@
 <mat-sidenav-container fullscreen>
   <mat-sidenav-content>
-    <mat-toolbar [color]="(isCompassView$ | async) ? 'accent' : 'primary'">
-      <mat-toolbar-row>
-        <span *ngIf="isMainRoute(); else notMainRoute">{{title}}</span>
-        <ng-template #notMainRoute>
-          <button
-            mat-icon-button
-            class="back-btn fab-secondary"
-            color="secondary"
-            (click)="back()"
-            >
-            <i class="material-icons">arrow_back</i>
-          </button>
-          <app-button-bar
-            [isDisplayingListPages]="isDisplayingListPages()">
-          </app-button-bar>
-        </ng-template>
-      </mat-toolbar-row>
-    </mat-toolbar>
     <main [class.-is-splitted]="!(isMobile$ | async) && isDisplayingListPages()">
       <app-map
         [class.-hide]="(isMobile$ | async) && isDisplayingListPages()"

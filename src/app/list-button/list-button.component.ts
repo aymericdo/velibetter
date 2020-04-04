@@ -1,21 +1,25 @@
-import { Component, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TimePickerComponent } from '../shared/time-picker/time-picker.component';
 
 @Component({
-  selector: 'app-button-bar',
-  templateUrl: './button-bar.component.html',
-  styleUrls: ['./button-bar.component.scss']
+  selector: 'app-list-button',
+  templateUrl: './list-button.component.html',
+  styleUrls: ['./list-button.component.scss']
 })
-export class ButtonBarComponent implements OnInit {
-  @Input() isDisplayingListPages: boolean;
-  @Output() selectedTime: Date;
+export class ListButtonComponent implements OnInit {
+  @Output() refresh = new EventEmitter<any>();
+  @Output() selectedTime = new EventEmitter<Date>();
+
+  modalTime = new Date();
 
   constructor(private dialog: MatDialog) {}
 
   ngOnInit() {}
 
-  listRefresh(): void {}
+  listRefresh(): void {
+    this.refresh.emit();
+  }
 
   openDialog() {
     const dialogRef = this.dialog.open(TimePickerComponent);
@@ -23,8 +27,9 @@ export class ButtonBarComponent implements OnInit {
     const sub = dialogRef.componentInstance.timeChanged.subscribe((time: string) => {
       const hours = +time.split(':')[0];
       const minutes = +time.split(':')[1];
-      this.selectedTime.setHours(hours);
-      this.selectedTime.setMinutes(minutes);
+      this.modalTime.setHours(hours);
+      this.modalTime.setMinutes(minutes);
+      this.selectedTime.emit(this.modalTime);
     });
     dialogRef.afterClosed().subscribe(() => {
       sub.unsubscribe();

@@ -37,7 +37,8 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 
 import { MatDialogModule } from '@angular/material/dialog';
-import { ButtonBarComponent } from './button-bar/button-bar.component';
+import { TopBarComponent } from './top-bar/top-bar.component';
+import { ListButtonComponent } from './list-button/list-button.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { ButtonBarComponent } from './button-bar/button-bar.component';
     ScoreDoughnutChartComponent,
     RowStationComponent,
     TimePickerComponent,
-    ButtonBarComponent
+    ListButtonComponent,
+    TopBarComponent
   ],
   imports: [
     AppRoutingModule,

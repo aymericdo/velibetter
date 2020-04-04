@@ -44,4 +44,12 @@ export class DepartureComponent implements OnInit {
   trackByFn(index: number, station: Station): number {
     return station.stationId;
   }
+
+  refresh() {
+    this.store.dispatch(
+      fetchingClosestStations({
+        isDeparture: true
+      })
+    );
+  }
 }

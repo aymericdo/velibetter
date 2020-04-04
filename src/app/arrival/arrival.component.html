@@ -1,11 +1,11 @@
+<app-top-bar>
+  <app-list-button>
+  </app-list-button>
+</app-top-bar>
 <app-list [isLoading]="isLoading$ | async" [isEmpty]="!(stationsStatus$ | async).length">
   <ng-container *ngIf="!(isLoading$ | async)">
-    <a
-      *ngFor="let station of stationsStatus$ | async; trackBy: trackByFn"
-      class="mat-list-item-override"
-      mat-list-item
-      [routerLink]="['/arrival', station.stationId]"
-    >
+    <a *ngFor="let station of stationsStatus$ | async; trackBy: trackByFn" class="mat-list-item-override" mat-list-item
+      [routerLink]="['/arrival', station.stationId]">
       <app-row-station [station]="station">
         <span>{{ station.distance | number:'1.0-0' }}m</span>
         <span>{{ station.numDocksAvailable }}<i class="material-icons dock">ev_station</i></span>

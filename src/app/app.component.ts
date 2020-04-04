@@ -140,20 +140,6 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  back(): void {
-    if (['departure', 'arrival'].includes(this.router.url.split('/')[1]) && this.router.url.split('/').length > 2) {
-      this.router.navigate([this.router.url.split('/')[1]]);
-    } else if (['departure', 'arrival'].includes(this.router.url.split('/')[1])) {
-      this.router.navigate(['/']);
-    } else if (['stations'].includes(this.router.url.split('/')[1]) && this.router.url.split('/').length > 2) {
-      this.router.navigate(['/']);
-    }
-  }
-
-  isMainRoute(): boolean {
-    return this.router.url === '/';
-  }
-
   isDisplayingListPages(): boolean {
     return this.router.url === '/arrival'
       || this.router.url === '/departure'
