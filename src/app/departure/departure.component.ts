@@ -59,7 +59,7 @@ export class DepartureComponent implements OnInit {
     const timeDifferenceInHours = Math.floor(timeDifference / (1000 * 3600));
     this.store.dispatch(
       fetchingClosestStations({
-        isDeparture: false,
+        isDeparture: true,
         delta: timeDifferenceInHours
       })
     );
