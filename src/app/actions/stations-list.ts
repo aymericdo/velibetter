@@ -3,7 +3,7 @@ import { Station } from '../interfaces';
 
 export const fetchingClosestStations = createAction(
   '[Stations List] fetching closest stations status',
-  props<{ isDeparture: boolean }>()
+  props<{ isDeparture: boolean, delta?: number }>()
 );
 
 export const setStationsList = createAction(

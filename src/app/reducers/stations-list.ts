@@ -12,20 +12,23 @@ export interface StationState {
   list: Station[];
   isLoading: boolean;
   destination: Station;
+  currentDelta: number;
 }
 
 const initialState: StationState = {
-  list: [],
+  list: [], 
   isLoading: true,
   destination: null,
+  currentDelta: null,
 };
 
 export const stationsListReducer = createReducer(
   initialState,
-  on(fetchingClosestStations, state => {
+  on(fetchingClosestStations, (state, { delta }) => {
     return {
       ...state,
       isLoading: true,
+      currentDelta: delta
     };
   }),
   on(setStationsList, (state, { list }) => {

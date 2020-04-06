@@ -35,4 +35,24 @@ export class ArrivalComponent implements OnInit {
   trackByFn(index: number, station: Station): number {
     return station.stationId;
   }
+
+  refresh() {
+    this.store.dispatch(
+      fetchingClosestStations({
+        isDeparture: false
+      })
+    );
+  }
+
+  selectedTime(time: Date) {
+    const currentDate = new Date();
+    const timeDifference = time.getTime() - currentDate.getTime();
+    const timeDifferenceInHours = Math.floor(timeDifference / (1000 * 3600));
+    this.store.dispatch(
+      fetchingClosestStations({
+        isDeparture: false,
+        delta: timeDifferenceInHours
+      })
+    );
+  }
 }

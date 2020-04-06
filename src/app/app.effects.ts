@@ -61,16 +61,16 @@ export class AppEffects {
     this.actions$.pipe(
       ofType(fetchingClosestStations),
       withLatestFrom(this.store.pipe(select(getCurrentPosition), filter(Boolean))),
-      mergeMap(([{ isDeparture }, position]) =>
+      mergeMap(([{ isDeparture, delta }, position]) =>
         isDeparture ?
-          this.apiService.fetchClosestStatusForDeparture(position as Coordinate).pipe(
+          this.apiService.fetchClosestStatusForDeparture(position as Coordinate, delta).pipe(
             map((stations: Array<Station>) =>
               setStationsList({ list: stations })
             ),
             catchError(() => EMPTY)
           )
         :
-          this.apiService.fetchClosestStatusForArrival(position as Coordinate).pipe(
+          this.apiService.fetchClosestStatusForArrival(position as Coordinate, delta).pipe(
             map((stations: Array<Station>) =>
               setStationsList({ list: stations })
             ),
