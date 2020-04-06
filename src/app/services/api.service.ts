@@ -37,11 +37,11 @@ export class ApiService {
   fetchClosestStatusForDeparture(
     currentPosition: Coordinate,
     delta?: number,
-  ): Observable < Station[] > {
+  ): Observable<Station[]> {
     return this.httpClient.post(
       `${this.baseURL}/departure/`, {
         currentPosition,
-        delta: delta || null,
+        options: { delta },
       },
     ) as Observable < Station[] > ;
   }
@@ -49,24 +49,23 @@ export class ApiService {
   fetchClosestStatusForArrival(
     currentPosition: Coordinate,
     delta ?: number,
-  ): Observable < Station[] > {
-    const payload = {
-      ...currentPosition,
-      delta: delta !== undefined ? delta : 0
-    } ;
+  ): Observable<Station[]> {
     return this.httpClient.post(
-      `${this.baseURL}/arrival/`, payload,
-    ) as Observable < Station[] > ;
+      `${this.baseURL}/arrival/`, {
+        currentPosition,
+        options: { delta },
+      },
+    ) as Observable<Station[]>;
   }
 
   fetchStation(
     stationId: number,
     currentPosition: Coordinate,
-  ): Observable < Station > {
+  ): Observable <Station> {
     return this.httpClient.post(
       `${this.baseURL}/stations/${stationId}`,
       currentPosition,
-    ) as Observable < Station > ;
+    ) as Observable<Station>;
   }
 
 }
