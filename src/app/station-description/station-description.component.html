@@ -1,5 +1,5 @@
 <mat-sidenav-content>
-  <app-top-bar></app-top-bar>
+  <app-top-bar (back)="onBack()"></app-top-bar>
   <ng-container *ngIf="isSelectingStation$ | async">
     <app-loading></app-loading>
   </ng-container>

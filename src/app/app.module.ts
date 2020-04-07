@@ -34,11 +34,10 @@ import { ScoreDoughnutChartComponent } from './shared/score-doughnut-chart/score
 import { RowStationComponent } from './shared/row-station/row-station.component';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
-
-
 import { MatDialogModule } from '@angular/material/dialog';
 import { TopBarComponent } from './top-bar/top-bar.component';
-import { ListButtonComponent } from './list-button/list-button.component';
+import { ListButtonComponent } from './shared/list-button/list-button.component';
+import { MapButtonComponent } from './shared/map-button/map-button.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +54,7 @@ import { ListButtonComponent } from './list-button/list-button.component';
     RowStationComponent,
     TimePickerComponent,
     ListButtonComponent,
+    MapButtonComponent,
     TopBarComponent
   ],
   imports: [

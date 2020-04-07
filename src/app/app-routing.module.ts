@@ -5,11 +5,21 @@ import { DepartureComponent } from './departure/departure.component';
 import { StationDescriptionComponent } from './station-description/station-description.component';
 
 const routes: Routes = [
-  { path: 'stations/:stationId', component: StationDescriptionComponent },
-  { path: 'departure', component: DepartureComponent },
-  { path: 'departure/:stationId', component: DepartureComponent },
-  { path: 'arrival', component: ArrivalComponent },
-  { path: 'arrival/:stationId', component: ArrivalComponent },
+  { path: 'stations/:stationId', component: StationDescriptionComponent, data: { routeName: 'StationDescription' } },
+  { path: 'departure', component: DepartureComponent, data: { routeName: 'Departure' } },
+  { path: 'departure/:stationId', component: DepartureComponent, data: { routeName: 'DepartureItinerary' } },
+  {
+    path: 'departure/:stationId/description',
+    component: StationDescriptionComponent,
+    data: { routeName: 'DepartureItineraryDescription' },
+  },
+  { path: 'arrival', component: ArrivalComponent, data: { routeName: 'Arrival' } },
+  { path: 'arrival/:stationId', component: ArrivalComponent, data: { routeName: 'ArrivalItinerary'} },
+  {
+    path: 'arrival/:stationId/description',
+    component: StationDescriptionComponent,
+    data: { routeName: 'ArrivalItineraryDescription' },
+  },
 ];
 
 @NgModule({
