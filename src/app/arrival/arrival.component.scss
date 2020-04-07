@@ -1,6 +1,9 @@
 :host {
-  height: 100%;
-  flex: 1;
+  mat-sidenav-content {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+  }
 
   .mat-list-item-override {
     height: inherit;

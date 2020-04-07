@@ -1,65 +1,66 @@
 :host {
-    display: block;
-    height: 100%;
-    position: relative;
-    flex: 1;
-    padding: 50px;
+  mat-sidenav-content {
+    display: flex;
+    flex-direction: column;
     box-sizing: border-box;
-    section {
+  }
+
+  section {
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    .station-name {
+        margin: 0px 0px 12px 0px;
+        .name {
+            font-weight: 600;
+            color: hsl(202, 57%, 15%);
+            margin: 12px 0;
+        }
+    }
+    .station-details {
+        border-top: 2px solid hsl(210, 23%, 95%);
+        margin-bottom: 16px;
         display: flex;
-        flex-direction: column;
-        height: 100%;
-        .station-name {
-            margin: 0px 0px 12px 0px;
-            .name {
-                font-weight: 600;
-                color: hsl(202, 57%, 15%);
-                margin: 12px 0;
-            }
+        .material-icons {
+            margin-right: 6px;
+            font-size: 16px;
         }
-        .station-details {
-            border-top: 2px solid hsl(210, 23%, 95%);
-            margin-bottom: 16px;
+        .info {
             display: flex;
-            .material-icons {
-                margin-right: 6px;
-                font-size: 16px;
-            }
-            .info {
-                display: flex;
-                align-items: center;
-                font-weight: 400;
-                color: hsl(201, 23%, 34%);
-                font-size: 20px;
-                line-height: initial;
-                margin: 4px 32px 4px 0px;
-            }
-        }
-        .chart {
-            display: flex;
-            flex: 1;
             align-items: center;
-            height: 100%;
-            app-doughnut-chart {
-                height: 80%;
-                flex: 1;
+            font-weight: 400;
+            color: hsl(201, 23%, 34%);
+            font-size: 20px;
+            line-height: initial;
+            margin: 4px 32px 4px 0px;
+        }
+    }
+    .chart {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        height: 100%;
+        app-doughnut-chart {
+            height: 80%;
+            flex: 1;
 
-                ::ng-deep .ct-series-a .ct-slice-donut {
-                  stroke: hsl(123.05, 46.46%, 50.2%);
-                }
+            ::ng-deep .ct-series-a .ct-slice-donut {
+              stroke: hsl(123.05, 46.46%, 50.2%);
+            }
 
-                ::ng-deep .ct-series-b .ct-slice-donut {
-                  stroke: hsl(123.08, 45.88%, 66.67%);
-                }
+            ::ng-deep .ct-series-b .ct-slice-donut {
+              stroke: hsl(123.08, 45.88%, 66.67%);
+            }
 
-                ::ng-deep .ct-series-c .ct-slice-donut {
-                  stroke: hsl(123.08, 45.88%, 83.33%);
-                }
+            ::ng-deep .ct-series-c .ct-slice-donut {
+              stroke: hsl(123.08, 45.88%, 83.33%);
+            }
 
-                ::ng-deep .ct-label {
-                  color: hsl(203, 15%, 47%);
-                }
+            ::ng-deep .ct-label {
+              color: hsl(203, 15%, 47%);
             }
         }
     }
+  }
 }

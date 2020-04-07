@@ -1,27 +1,34 @@
 :host {
-    height: 100%;
+  mat-sidenav-content {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+  }
+
+  .mat-list-item-override {
+    height: inherit;
+  }
+
+  .mechanical {
+    background-color: lightgreen;
+  }
+
+  .ebike {
+    background-color: lightblue;
+  }
+
+  ::ng-deep .station-score {
     flex: 1;
-    .mat-list-item-override {
-        height: inherit;
+    height: 80%;
+    width: 20%;
+    .ct-series-a .ct-slice-donut {
+        stroke: hsl(208, 100%, 38.24%);
     }
-    .mechanical {
-        background-color: lightgreen;
+    .ct-series-b .ct-slice-donut {
+        stroke: hsl(208, 100%, 79.41%);
     }
-    .ebike {
-        background-color: lightblue;
+    span.score {
+        color: hsl(203, 15%, 47%);
     }
-     ::ng-deep .station-score {
-        flex: 1;
-        height: 80%;
-        width: 20%;
-        .ct-series-a .ct-slice-donut {
-            stroke: hsl(208, 100%, 38.24%);
-        }
-        .ct-series-b .ct-slice-donut {
-            stroke: hsl(208, 100%, 79.41%);
-        }
-        span.score {
-            color: hsl(203, 15%, 47%);
-        }
-    }
+  }
 }
