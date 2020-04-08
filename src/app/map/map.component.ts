@@ -13,7 +13,7 @@ import { Marker, Station } from '../interfaces';
 import { Coordinate } from '../interfaces/index';
 import { AppState } from '../reducers';
 import { getCurrentPosition, getIsCompassView, getCurrentBearing } from '../reducers/galileo';
-import { getDestination } from '../reducers/stations-list';
+import { getDestination, getTravelMode } from '../reducers/stations-list';
 import { getIsLoading, getLatLngBoundsLiteral, getMapCenter, getMarkers, getSelectedStation, getZoom } from '../reducers/stations-map';
 import { toggleCompassView } from '../actions/galileo';
 import { isEqual } from 'lodash';
@@ -41,8 +41,8 @@ export class MapComponent implements OnInit, OnDestroy {
   isCompassView$: Observable<boolean>;
   currentBearing$: Observable<number>;
   routeName$: Observable<string>;
+  travelMode$: Observable<string>;
 
-  travelMode: string;
   compassView = false;
 
   fabButtons = [{
@@ -75,6 +75,18 @@ export class MapComponent implements OnInit, OnDestroy {
     this.isCompassView$ = store.pipe(select(getIsCompassView));
     this.currentBearing$ = store.pipe(select(getCurrentBearing));
     this.routeName$ = store.pipe(select(getRouteName));
+    this.travelMode$ = store.pipe(select(getTravelMode));
+
+    const isItineraryRoute = (route: string) => [
+      'StationDescription',
+      'StationDescriptionFeedback',
+      'DepartureItinerary',
+      'DepartureItineraryDescription',
+      'DepartureItineraryDescriptionFeedback',
+      'ArrivalItinerary',
+      'ArrivalItineraryDescription',
+      'ArrivalItineraryDescriptionFeedback',
+    ].includes(route);
 
     combineLatest([
       this.currentPosition$.pipe(filter(Boolean), take(1)),
@@ -88,12 +100,17 @@ export class MapComponent implements OnInit, OnDestroy {
     ]).pipe(
       map(([position, val]) => val),
     ).subscribe((val: NavigationEnd) => {
-      if (val.url.split('/').length > 2) {
-        this.travelMode = val.url.split('/')[1] === 'departure' ? 'WALKING' : 'BICYCLING';
-        this.store.dispatch(fetchingDestination({ travelMode: val.url.split('/')[1], stationId: +val.url.split('/')[2] }));
-      } else {
-        this.store.dispatch(unsetDestination());
-      }
+      this.store.dispatch(fetchingDestination({ travelMode: val.url.split('/')[1], stationId: +val.url.split('/')[2] }));
+    });
+
+    combineLatest([
+      this.currentPosition$.pipe(filter(Boolean), take(1)),
+      this.routeName$,
+    ]).pipe(
+      filter(([position, name]) => !!name && !isItineraryRoute(name)),
+      takeUntil(this.destroy$),
+    ).subscribe(() => {
+      this.store.dispatch(unsetDestination());
     });
   }
 
@@ -209,6 +226,18 @@ export class MapComponent implements OnInit, OnDestroy {
       'DepartureItinerary',
       'ArrivalItinerary',
     ].includes(routeName));
+  }
+
+  onBack(): void {
+    let travelMode: string;
+    this.travelMode$.pipe(take(1))
+      .subscribe((mode) => {
+        travelMode = mode;
+      });
+
+    if (travelMode) {
+      this.router.navigate([travelMode]);
+    }
   }
 
   goToDescription(): void {

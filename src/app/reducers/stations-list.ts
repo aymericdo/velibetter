@@ -51,6 +51,7 @@ export const stationsListReducer = createReducer(
     return {
       ...state,
       destination: null,
+      travelMode: null,
     };
   }),
   on(fetchingDestination, (state, { travelMode }) => {

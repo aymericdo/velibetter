@@ -1,4 +1,4 @@
-<app-top-bar *ngIf="showTopBar(routeName$ | async)">
+<app-top-bar *ngIf="showTopBar(routeName$ | async)" (back)="onBack()">
   <button mat-icon-button class="fab-secondary mat-elevation-z0 description-button" color="secondary"
     (click)="goToDescription()">
     <i class="material-icons">description</i>
@@ -51,7 +51,7 @@
       *ngIf="!!(currentPosition$ | async) && (destination$ | async)"
       [origin]="currentPosition$ | async"
       [destination]="destination$ | async"
-      [travelMode]="travelMode"
+      [travelMode]="(travelMode$ | async) === 'departure' ? 'WALKING' : 'BICYCLING'"
     >
     </agm-direction>
   </agm-map>

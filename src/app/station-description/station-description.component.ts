@@ -107,6 +107,7 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
       destination = dest;
       travelMode = mode;
     });
+
     if (destination && travelMode) {
       this.router.navigate([travelMode, destination.stationId]);
     } else {
