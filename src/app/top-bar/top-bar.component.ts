@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
@@ -10,7 +10,8 @@ import { getIsCompassView } from '../reducers/galileo';
   templateUrl: './top-bar.component.html',
   styleUrls: ['./top-bar.component.scss']
 })
-export class TopBarComponent implements OnInit {
+export class TopBarComponent {
+  @Output() back = new EventEmitter<any>();
   isCompassView$: Observable<boolean>;
 
   constructor(
@@ -20,15 +21,10 @@ export class TopBarComponent implements OnInit {
     this.isCompassView$ = store.pipe(select(getIsCompassView));
   }
 
-  ngOnInit() {
-  }
-
-  back(): void {
-    if (['departure', 'arrival'].includes(this.router.url.split('/')[1]) && this.router.url.split('/').length > 2) {
-      this.router.navigate([this.router.url.split('/')[1]]);
-    } else if (['departure', 'arrival'].includes(this.router.url.split('/')[1])) {
-      this.router.navigate(['/']);
-    } else if (['stations'].includes(this.router.url.split('/')[1]) && this.router.url.split('/').length > 2) {
+  onBack(): void {
+    if (this.back.observers.length > 0) {
+      this.back.emit();
+    } else {
       this.router.navigate(['/']);
     }
   }

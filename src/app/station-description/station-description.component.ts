@@ -10,6 +10,7 @@ import { getCurrentPosition } from '../reducers/galileo';
 import { getIsSelectingStation, getSelectedStation } from '../reducers/stations-map';
 import { ChartType } from 'ng-chartist';
 import { IChartistData, IPieChartOptions } from 'chartist';
+import { getRouteName } from '../reducers/route';
 
 @Component({
   selector: 'app-station-description',
@@ -20,6 +21,7 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
   currentPosition$: Observable<{ lat: number; lng: number }>;
   selectedStation$: Observable<Station>;
   isSelectingStation$: Observable<boolean>;
+  routeName$: Observable<string>;
 
   chartType: ChartType = 'Pie';
   chartData: IChartistData;
@@ -43,6 +45,7 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
     this.selectedStation$ = store.pipe(select(getSelectedStation));
     this.currentPosition$ = store.pipe(select(getCurrentPosition));
     this.isSelectingStation$ = store.pipe(select(getIsSelectingStation));
+    this.routeName$ = store.pipe(select(getRouteName));
   }
 
   ngOnInit(): void {
@@ -72,7 +75,7 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
         }));
 
         this.chartData = {
-          labels: ['mécanique', 'ebike', 'station'],
+          labels: ['mécanique', 'ebike', 'place vide'],
           series: [[selectedStation.mechanical], [selectedStation.ebike], [selectedStation.numDocksAvailable]],
         };
 
@@ -85,6 +88,19 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
 
   selectStationFct(stationId: number): void {
     this.store.dispatch(selectingStation({ stationId }));
+  }
+
+  onBack(): void {
+    let route: string;
+    this.routeName$.pipe(take(1)).subscribe(routeName => route = routeName);
+    if ([
+      'DepartureItineraryDescription',
+      'ArrivalItineraryDescription',
+    ].includes(route)) {
+      this.router.navigate([this.router.url.split('/')[1], this.router.url.split('/')[2]]);
+    } else {
+      this.router.navigate(['/']);
+    }
   }
 
   ngOnDestroy() {

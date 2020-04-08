@@ -3,14 +3,16 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from './reducers';
 import { Observable, Subject } from 'rxjs';
 import { setPosition, setDegrees, toggleCompassView } from './actions/galileo';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 import { setIsMobile } from './actions/screen';
 import { getIsMobile } from './reducers/screen';
 import { getDegrees } from './reducers/galileo';
 import { getIsCompassView } from './reducers/galileo';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, filter, map } from 'rxjs/operators';
 import { DEFAULT_COORD } from './shared/constants';
+import { setRouteName } from './actions/route';
+import { getRouteName } from './reducers/route';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +22,7 @@ import { DEFAULT_COORD } from './shared/constants';
 export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<AppState>,
+    private activatedRoute: ActivatedRoute,
     private router: Router,
     private breakpointObserver: BreakpointObserver,
     private renderer: Renderer2,
@@ -27,14 +30,15 @@ export class AppComponent implements OnInit, OnDestroy {
     this.isMobile$ = store.pipe(select(getIsMobile));
     this.deg$ = store.pipe(select(getDegrees));
     this.isCompassView$ = store.pipe(select(getIsCompassView));
+    this.routeName$ = store.pipe(select(getRouteName));
   }
 
   title = 'Velibetter';
   isMobile$: Observable<boolean>;
   deg$: Observable<number>;
   isCompassView$: Observable<boolean>;
+  routeName$: Observable<string>;
 
-  isNotMainRoute: boolean;
   isIOS = false;
 
   private deviceOrientationListener: () => void = null;
@@ -74,6 +78,27 @@ export class AppComponent implements OnInit, OnDestroy {
           }
         }
       });
+
+    this.router.events.pipe(
+      filter(event =>
+        event instanceof NavigationEnd
+      ),
+      map(() => {
+        let child = this.activatedRoute.firstChild;
+        while (child) {
+          if (child.firstChild) {
+            child = child.firstChild;
+          } else if (child.snapshot.data && child.snapshot.data.routeName) {
+            return child.snapshot.data.routeName;
+          } else {
+            return null;
+          }
+        }
+        return null;
+      })
+    ).subscribe((routeName: string) => {
+      this.store.dispatch(setRouteName({ routeName }));
+    });
   }
 
   ngOnDestroy(): void {
@@ -140,9 +165,13 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  isDisplayingListPages(): boolean {
-    return this.router.url === '/arrival'
-      || this.router.url === '/departure'
-      || (this.router.url.split('/').length > 1 && this.router.url.split('/')[1] === 'stations');
+  isDisplayingListPages(routeName: string): boolean {
+    return ([
+      'StationDescription',
+      'Departure',
+      'Arrival',
+      'DepartureItineraryDescription',
+      'ArrivalItineraryDescription',
+    ].includes(routeName));
   }
 }

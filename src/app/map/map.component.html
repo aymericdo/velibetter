@@ -1,3 +1,8 @@
+<app-top-bar *ngIf="showTopBar(routeName$ | async)" (back)="onBack()">
+  <app-map-button
+    (goToDescription)="goToDescription()">
+  </app-map-button>
+</app-top-bar>
 <div
   class="map"
   [class.-disabled]="isLoading$ | async"

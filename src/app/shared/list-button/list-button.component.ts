@@ -1,7 +1,7 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { TimePickerComponent } from '../shared/time-picker/time-picker.component';
 import * as moment from 'moment';
+import { TimePickerComponent } from '../time-picker/time-picker.component';
 
 
 @Component({
@@ -9,13 +9,11 @@ import * as moment from 'moment';
   templateUrl: './list-button.component.html',
   styleUrls: ['./list-button.component.scss']
 })
-export class ListButtonComponent implements OnInit {
+export class ListButtonComponent {
   @Output() refresh = new EventEmitter<any>();
   @Output() selectedDateTime = new EventEmitter<moment.Moment>();
 
   constructor(private dialog: MatDialog) {}
-
-  ngOnInit() {}
 
   listRefresh(): void {
     this.refresh.emit();

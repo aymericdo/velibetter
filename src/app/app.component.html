@@ -1,11 +1,11 @@
 <mat-sidenav-container fullscreen>
-  <main [class.-is-splitted]="!(isMobile$ | async) && isDisplayingListPages()">
+  <main [class.-is-splitted]="!(isMobile$ | async) && isDisplayingListPages(routeName$ | async)">
     <app-map
-      [class.-hide]="(isMobile$ | async) && isDisplayingListPages()"
-      [isDisplayingListPages]="isDisplayingListPages()"
+      [class.-hide]="(isMobile$ | async) && isDisplayingListPages(routeName$ | async)"
+      [isDisplayingListPages]="isDisplayingListPages(routeName$ | async)"
       [isIOS]="isIOS"
       (requestPermissionsIOS)="requestPermissionsIOS()"
     ></app-map>
-    <router-outlet *ngIf="isDisplayingListPages()"></router-outlet>
+    <router-outlet *ngIf="isDisplayingListPages(routeName$ | async)"></router-outlet>
   </main>
 </mat-sidenav-container>

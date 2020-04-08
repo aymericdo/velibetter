@@ -18,6 +18,7 @@ import { getIsLoading, getLatLngBoundsLiteral, getMapCenter, getMarkers, getSele
 import { toggleCompassView } from '../actions/galileo';
 import { isEqual } from 'lodash';
 import { DEFAULT_ZOOM, DEFAULT_COORD } from '../shared/constants';
+import { getRouteName } from '../reducers/route';
 
 @Component({
   selector: 'app-map',
@@ -39,6 +40,7 @@ export class MapComponent implements OnInit, OnDestroy {
   zoom$: Observable<number>;
   isCompassView$: Observable<boolean>;
   currentBearing$: Observable<number>;
+  routeName$: Observable<string>;
 
   travelMode: string;
   compassView = false;
@@ -72,6 +74,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.zoom$ = store.pipe(select(getZoom));
     this.isCompassView$ = store.pipe(select(getIsCompassView));
     this.currentBearing$ = store.pipe(select(getCurrentBearing));
+    this.routeName$ = store.pipe(select(getRouteName));
 
     combineLatest([
       this.currentPosition$.pipe(filter(Boolean), take(1)),
@@ -199,6 +202,21 @@ export class MapComponent implements OnInit, OnDestroy {
 
   isFlatMap(latLng: LatLngBoundsLiteral): boolean {
     return latLng.north === latLng.south && latLng.east === latLng.west;
+  }
+
+  showTopBar(routeName: string): boolean {
+    return ([
+      'DepartureItinerary',
+      'ArrivalItinerary',
+    ].includes(routeName));
+  }
+
+  onBack(): void {
+    this.router.navigate([this.router.url.split('/')[1]]);
+  }
+
+  goToDescription(): void {
+    this.router.navigate([this.router.url.split('/')[1], this.router.url.split('/')[2], 'description']);
   }
 
   isMapCenterEqualCurrentPosition(): boolean {
