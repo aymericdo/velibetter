@@ -1,0 +1,28 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  ::ng-deep input.ng-untouched {
+    display: none;
+  }
+
+  ::ng-deep h2 {
+    font-weight: 600;
+    color: hsl(202, 57%, 15%);
+  }
+
+
+  ::ng-deep button {
+    margin: 0px 12px
+  }
+
+  .datetimepicker-field {
+    display: flex;
+
+    .mat-dialog-container {
+      padding: 10px;
+
+    }
+  }
+}

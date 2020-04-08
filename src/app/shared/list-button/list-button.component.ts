@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import * as moment from 'moment';
 import { TimePickerComponent } from '../time-picker/time-picker.component';
+
 
 @Component({
   selector: 'app-list-button',
@@ -9,9 +11,7 @@ import { TimePickerComponent } from '../time-picker/time-picker.component';
 })
 export class ListButtonComponent {
   @Output() refresh = new EventEmitter<any>();
-  @Output() selectedTime = new EventEmitter<Date>();
-
-  modalTime = new Date();
+  @Output() selectedDateTime = new EventEmitter<moment.Moment>();
 
   constructor(private dialog: MatDialog) {}
 
@@ -22,12 +22,8 @@ export class ListButtonComponent {
   openDialog() {
     const dialogRef = this.dialog.open(TimePickerComponent);
 
-    const sub = dialogRef.componentInstance.timeChanged.subscribe((time: string) => {
-      const hours = +time.split(':')[0];
-      const minutes = +time.split(':')[1];
-      this.modalTime.setHours(hours);
-      this.modalTime.setMinutes(minutes);
-      this.selectedTime.emit(this.modalTime);
+    const sub = dialogRef.componentInstance.datetimeChanged.subscribe((dt: moment.Moment) => {
+      this.selectedDateTime.emit(dt);
     });
     dialogRef.afterClosed().subscribe(() => {
       sub.unsubscribe();

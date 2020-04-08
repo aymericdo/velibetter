@@ -1,10 +1,13 @@
-import { TimePickerComponent } from './shared/time-picker/time-picker.component';
 import { AgmCoreModule } from '@agm/core';
 import { LayoutModule } from '@angular/cdk/layout';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -16,6 +19,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AgmDirectionModule } from 'agm-direction';
+import { FlatpickrModule } from 'angularx-flatpickr';
+import { ChartistModule } from 'ng-chartist';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -24,20 +29,19 @@ import { ArrivalComponent } from './arrival/arrival.component';
 import { DepartureComponent } from './departure/departure.component';
 import { MapComponent } from './map/map.component';
 import { metaReducers, reducers } from './reducers';
+import { DoughnutChartComponent } from './shared/doughnut-chart/doughnut-chart.component';
 import { ListComponent } from './shared/list/list.component';
 import { LoadingComponent } from './shared/loading/loading.component';
-import { SpeedDialFabComponent } from './shared/speed-dial-fab/speed-dial-fab.component';
-import { DoughnutChartComponent } from './shared/doughnut-chart/doughnut-chart.component';
-import { StationDescriptionComponent } from './station-description/station-description.component';
-import { ChartistModule } from 'ng-chartist';
-import { ScoreDoughnutChartComponent } from './shared/score-doughnut-chart/score-doughnut-chart.component';
+import { MapButtonComponent } from './shared/map-button/map-button.component';
 import { RowStationComponent } from './shared/row-station/row-station.component';
-import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-
-import { MatDialogModule } from '@angular/material/dialog';
+import { ScoreDoughnutChartComponent } from './shared/score-doughnut-chart/score-doughnut-chart.component';
+import { SpeedDialFabComponent } from './shared/speed-dial-fab/speed-dial-fab.component';
+import { TimePickerComponent } from './shared/time-picker/time-picker.component';
+import { StationDescriptionComponent } from './station-description/station-description.component';
 import { TopBarComponent } from './top-bar/top-bar.component';
 import { ListButtonComponent } from './shared/list-button/list-button.component';
-import { MapButtonComponent } from './shared/map-button/map-button.component';
+
+
 
 @NgModule({
   declarations: [
@@ -65,13 +69,16 @@ import { MapButtonComponent } from './shared/map-button/map-button.component';
     HttpClientModule,
     LayoutModule,
     MatButtonModule,
+    MatDatepickerModule,
     MatDialogModule,
     MatListModule,
+    MatMomentDateModule,
     MatProgressSpinnerModule,
     MatCardModule,
     MatSidenavModule,
     MatToolbarModule,
-    NgxMaterialTimepickerModule,
+    FormsModule,
+    FlatpickrModule.forRoot(),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production
     }),
@@ -96,4 +103,4 @@ import { MapButtonComponent } from './shared/map-button/map-button.component';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
