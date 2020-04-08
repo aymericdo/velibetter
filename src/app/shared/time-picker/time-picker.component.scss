@@ -1,12 +1,17 @@
 :host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  ::ng-deep input.ng-untouched {
+    display: none;
+  }
+
   .datetimepicker-field {
     display: flex;
 
-    input {
-      border: 0px;
-      border-bottom: 1px solid rgba(0, 0, 0, .12);
-      font-size: 1rem;
-      padding: 5px 0;
+    .mat-dialog-container {
+      padding: 10px;
     }
   }
 }

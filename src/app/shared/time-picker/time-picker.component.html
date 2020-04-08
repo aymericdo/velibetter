@@ -1,10 +1,16 @@
 <h2 mat-dialog-title>Heure de départ</h2>
 <div class="timepicker-field">
-  <ng-template #icon>
-    <i class="material-icons">query_builder</i>
-  </ng-template>
-  <ngx-timepicker-field [format]="24" [toggleIcon]="icon" (timeChanged)="setTime($event)">
-  </ngx-timepicker-field>
+ <input 
+      type="text" 
+      mwlFlatpickr 
+      [(ngModel)]="datetime" 
+      (flatpickrValueUpdate)="flatpickrValueUpdate($event)"
+      [altInput]="true" 
+      [enableTime]="true"
+      [inline]="true"
+      [minDate]="minDate"
+      time24hr="true"
+      altFormat="j F Y">
 </div>
 <mat-dialog-actions>
   <button class="mat-raised-button" (click)="close()">Close</button>

@@ -2,8 +2,11 @@ import { AgmCoreModule } from '@agm/core';
 import { LayoutModule } from '@angular/cdk/layout';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatListModule } from '@angular/material/list';
@@ -17,6 +20,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AgmDirectionModule } from 'agm-direction';
+import { FlatpickrModule } from 'angularx-flatpickr';
 import { ChartistModule } from 'ng-chartist';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { environment } from '../environments/environment';
@@ -37,8 +41,8 @@ import { SpeedDialFabComponent } from './shared/speed-dial-fab/speed-dial-fab.co
 import { TimePickerComponent } from './shared/time-picker/time-picker.component';
 import { StationDescriptionComponent } from './station-description/station-description.component';
 import { TopBarComponent } from './top-bar/top-bar.component';
-import { MatMomentDateModule } from '@angular/material-moment-adapter';
-import { MAT_DATE_LOCALE } from '@angular/material/core';
+
+
 
 
 
@@ -77,6 +81,8 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
     MatCardModule,
     MatSidenavModule,
     MatToolbarModule,
+    FormsModule,
+    FlatpickrModule.forRoot(),
     NgxMaterialTimepickerModule.setLocale('fr-FR'),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production
@@ -100,6 +106,7 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
     EffectsModule.forRoot([AppEffects])
   ],
   providers: [
+    FormsModule,
     MatDatepickerModule,
      {provide: MAT_DATE_LOCALE, useValue: 'fr-FR'},
   ],
