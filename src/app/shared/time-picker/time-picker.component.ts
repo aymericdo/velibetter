@@ -1,5 +1,10 @@
 import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import * as moment from 'moment';
+import flatpickr from "flatpickr"
+import { French } from "flatpickr/dist/l10n/fr.js"
+import { FlatPickrOutputOptions } from 'angularx-flatpickr/flatpickr.directive';
+
 
 
 @Component({
@@ -8,16 +13,18 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./time-picker.component.scss']
 })
 export class TimePickerComponent implements OnInit {
-  @Output() timeChanged = new EventEmitter<string>();
-  time: string;
+  @Output() datetimeChanged = new EventEmitter<moment.Moment>();
+  datetime: Date;
+  minDate = new Date();
 
   constructor(private dialogRef: MatDialogRef<TimePickerComponent>, @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
+    flatpickr.localize(French);
   }
 
   save() {
-    this.timeChanged.emit(this.time);
+    this.datetimeChanged.emit(moment(this.datetime));
     this.dialogRef.close();
   }
 
@@ -25,8 +32,8 @@ export class TimePickerComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  setTime(time) {
-    this.time = time;
+  flatpickrValueUpdate(pickedValue: FlatPickrOutputOptions) {
+    this.datetime = pickedValue.selectedDates[0];
   }
 
 }
