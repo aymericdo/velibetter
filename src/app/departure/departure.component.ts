@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
+import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 import { fetchingClosestStations } from '../actions/stations-list';
@@ -8,6 +8,7 @@ import { Station } from '../interfaces';
 import { AppState } from '../reducers';
 import { getCurrentPosition } from '../reducers/galileo';
 import { getIsLoading, getStationsStatus } from '../reducers/stations-list';
+
 
 
 @Component({
@@ -53,10 +54,8 @@ export class DepartureComponent implements OnInit {
     );
   }
 
-  selectedTime(time: Date) {
-    const currentDate = new Date();
-    const timeDifference = time.getTime() - currentDate.getTime();
-    const timeDifferenceInHours = Math.floor(timeDifference / (1000 * 3600));
+  selectedDateTime(dt: moment.Moment) {
+    const timeDifferenceInHours = dt.diff(moment(), 'hours');
     this.store.dispatch(
       fetchingClosestStations({
         isDeparture: true,

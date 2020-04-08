@@ -2,7 +2,7 @@
     <app-top-bar>
       <app-list-button
       (refresh)="refresh()"
-      (selectedTime)="selectedTime($event)">
+      (selectedDateTime)="selectedDateTime($event)">
     </app-list-button>
   </app-top-bar>
   <app-list [isLoading]="isLoading$ | async" [isEmpty]="!(stationsStatus$ | async).length">
