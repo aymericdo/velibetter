@@ -1,47 +1,130 @@
-import { AgmCoreModule } from '@agm/core';
-import { LayoutModule } from '@angular/cdk/layout';
-import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { MatMomentDateModule } from '@angular/material-moment-adapter';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MAT_DATE_LOCALE } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatListModule } from '@angular/material/list';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { EffectsModule } from '@ngrx/effects';
-import { StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { AgmDirectionModule } from 'agm-direction';
-import { FlatpickrModule } from 'angularx-flatpickr';
-import { ChartistModule } from 'ng-chartist';
-import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { environment } from '../environments/environment';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { AppEffects } from './app.effects';
-import { ArrivalComponent } from './arrival/arrival.component';
-import { DepartureComponent } from './departure/departure.component';
-import { ListButtonComponent } from './list-button/list-button.component';
-import { MapComponent } from './map/map.component';
-import { metaReducers, reducers } from './reducers';
-import { DoughnutChartComponent } from './shared/doughnut-chart/doughnut-chart.component';
-import { ListComponent } from './shared/list/list.component';
-import { LoadingComponent } from './shared/loading/loading.component';
-import { RowStationComponent } from './shared/row-station/row-station.component';
-import { ScoreDoughnutChartComponent } from './shared/score-doughnut-chart/score-doughnut-chart.component';
-import { SpeedDialFabComponent } from './shared/speed-dial-fab/speed-dial-fab.component';
-import { TimePickerComponent } from './shared/time-picker/time-picker.component';
-import { StationDescriptionComponent } from './station-description/station-description.component';
-import { TopBarComponent } from './top-bar/top-bar.component';
-
+import {
+  AgmCoreModule
+} from '@agm/core';
+import {
+  LayoutModule
+} from '@angular/cdk/layout';
+import {
+  HttpClientModule
+} from '@angular/common/http';
+import {
+  NgModule
+} from '@angular/core';
+import {
+  FormsModule
+} from '@angular/forms';
+import {
+  MatMomentDateModule
+} from '@angular/material-moment-adapter';
+import {
+  MatButtonModule
+} from '@angular/material/button';
+import {
+  MatCardModule
+} from '@angular/material/card';
+import {
+  MAT_DATE_LOCALE
+} from '@angular/material/core';
+import {
+  MatDatepickerModule
+} from '@angular/material/datepicker';
+import {
+  MatDialogModule
+} from '@angular/material/dialog';
+import {
+  MatListModule
+} from '@angular/material/list';
+import {
+  MatProgressSpinnerModule
+} from '@angular/material/progress-spinner';
+import {
+  MatSidenavModule
+} from '@angular/material/sidenav';
+import {
+  MatToolbarModule
+} from '@angular/material/toolbar';
+import {
+  BrowserModule
+} from '@angular/platform-browser';
+import {
+  BrowserAnimationsModule
+} from '@angular/platform-browser/animations';
+import {
+  ServiceWorkerModule
+} from '@angular/service-worker';
+import {
+  EffectsModule
+} from '@ngrx/effects';
+import {
+  StoreModule
+} from '@ngrx/store';
+import {
+  StoreDevtoolsModule
+} from '@ngrx/store-devtools';
+import {
+  AgmDirectionModule
+} from 'agm-direction';
+import {
+  FlatpickrModule
+} from 'angularx-flatpickr';
+import {
+  ChartistModule
+} from 'ng-chartist';
+import {
+  environment
+} from '../environments/environment';
+import {
+  AppRoutingModule
+} from './app-routing.module';
+import {
+  AppComponent
+} from './app.component';
+import {
+  AppEffects
+} from './app.effects';
+import {
+  ArrivalComponent
+} from './arrival/arrival.component';
+import {
+  DepartureComponent
+} from './departure/departure.component';
+import {
+  ListButtonComponent
+} from './list-button/list-button.component';
+import {
+  MapComponent
+} from './map/map.component';
+import {
+  metaReducers,
+  reducers
+} from './reducers';
+import {
+  DoughnutChartComponent
+} from './shared/doughnut-chart/doughnut-chart.component';
+import {
+  ListComponent
+} from './shared/list/list.component';
+import {
+  LoadingComponent
+} from './shared/loading/loading.component';
+import {
+  RowStationComponent
+} from './shared/row-station/row-station.component';
+import {
+  ScoreDoughnutChartComponent
+} from './shared/score-doughnut-chart/score-doughnut-chart.component';
+import {
+  SpeedDialFabComponent
+} from './shared/speed-dial-fab/speed-dial-fab.component';
+import {
+  TimePickerComponent
+} from './shared/time-picker/time-picker.component';
+import {
+  StationDescriptionComponent
+} from './station-description/station-description.component';
+import {
+  TopBarComponent
+} from './top-bar/top-bar.component';
 
 
 
@@ -83,7 +166,6 @@ import { TopBarComponent } from './top-bar/top-bar.component';
     MatToolbarModule,
     FormsModule,
     FlatpickrModule.forRoot(),
-    NgxMaterialTimepickerModule.setLocale('fr-FR'),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production
     }),
@@ -105,11 +187,7 @@ import { TopBarComponent } from './top-bar/top-bar.component';
     }),
     EffectsModule.forRoot([AppEffects])
   ],
-  providers: [
-    FormsModule,
-    MatDatepickerModule,
-     {provide: MAT_DATE_LOCALE, useValue: 'fr-FR'},
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

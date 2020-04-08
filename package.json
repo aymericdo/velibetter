@@ -32,7 +32,6 @@
         "@salesforce-ux/design-system": "^2.11.6",
         "@types/lodash": "^4.14.149",
         "agm-direction": "^0.7.9",
-        "angular-bootstrap-datetimepicker": "^4.0.2",
         "angularx-flatpickr": "^6.3.1",
         "bootstrap": "^4.4.1",
         "chartist": "^0.11.4",
@@ -40,8 +39,6 @@
         "lodash": "^4.17.15",
         "moment": "^2.24.0",
         "ng-chartist": "^4.1.0",
-        "ngx-material-timepicker": "^5.5.1",
-        "open-iconic": "^1.1.1",
         "rxjs": "~6.5.4",
         "tslib": "^1.10.0",
         "zone.js": "~0.10.2"
