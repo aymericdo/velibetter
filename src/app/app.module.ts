@@ -37,7 +37,7 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { MatDialogModule } from '@angular/material/dialog';
 import { TopBarComponent } from './top-bar/top-bar.component';
 import { ListButtonComponent } from './shared/list-button/list-button.component';
-import { MapButtonComponent } from './shared/map-button/map-button.component';
+import { StationFeedbackComponent } from './station-feedback/station-feedback.component';
 
 @NgModule({
   declarations: [
@@ -54,8 +54,8 @@ import { MapButtonComponent } from './shared/map-button/map-button.component';
     RowStationComponent,
     TimePickerComponent,
     ListButtonComponent,
-    MapButtonComponent,
-    TopBarComponent
+    TopBarComponent,
+    StationFeedbackComponent
   ],
   imports: [
     AppRoutingModule,

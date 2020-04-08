@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../reducers';
@@ -17,6 +17,7 @@ export class TopBarComponent {
   constructor(
     private store: Store<AppState>,
     private router: Router,
+    private activatedRoute: ActivatedRoute,
   ) {
     this.isCompassView$ = store.pipe(select(getIsCompassView));
   }
@@ -25,7 +26,7 @@ export class TopBarComponent {
     if (this.back.observers.length > 0) {
       this.back.emit();
     } else {
-      this.router.navigate(['/']);
+      this.router.navigate(['../'], { relativeTo: this.activatedRoute });
     }
   }
 }

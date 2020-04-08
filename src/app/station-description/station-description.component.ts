@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router, ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, Subject } from 'rxjs';
 import { filter, map, take, takeUntil } from 'rxjs/operators';
@@ -10,7 +10,7 @@ import { getCurrentPosition } from '../reducers/galileo';
 import { getIsSelectingStation, getSelectedStation } from '../reducers/stations-map';
 import { ChartType } from 'ng-chartist';
 import { IChartistData, IPieChartOptions } from 'chartist';
-import { getRouteName } from '../reducers/route';
+import { getDestination, getTravelMode } from '../reducers/stations-list';
 
 @Component({
   selector: 'app-station-description',
@@ -21,7 +21,8 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
   currentPosition$: Observable<{ lat: number; lng: number }>;
   selectedStation$: Observable<Station>;
   isSelectingStation$: Observable<boolean>;
-  routeName$: Observable<string>;
+  destination$: Observable<Station>;
+  travelMode$: Observable<string>;
 
   chartType: ChartType = 'Pie';
   chartData: IChartistData;
@@ -41,11 +42,13 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<AppState>,
     private router: Router,
+    private route: ActivatedRoute,
   ) {
     this.selectedStation$ = store.pipe(select(getSelectedStation));
     this.currentPosition$ = store.pipe(select(getCurrentPosition));
     this.isSelectingStation$ = store.pipe(select(getIsSelectingStation));
-    this.routeName$ = store.pipe(select(getRouteName));
+    this.destination$ = store.pipe(select(getDestination));
+    this.travelMode$ = store.pipe(select(getTravelMode));
   }
 
   ngOnInit(): void {
@@ -90,14 +93,22 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
     this.store.dispatch(selectingStation({ stationId }));
   }
 
+  goToFeedback(): void {
+    this.router.navigate(['feedback'], { relativeTo: this.route });
+  }
+
   onBack(): void {
-    let route: string;
-    this.routeName$.pipe(take(1)).subscribe(routeName => route = routeName);
-    if ([
-      'DepartureItineraryDescription',
-      'ArrivalItineraryDescription',
-    ].includes(route)) {
-      this.router.navigate([this.router.url.split('/')[1], this.router.url.split('/')[2]]);
+    let destination: Station;
+    let travelMode: string;
+    combineLatest([
+      this.destination$,
+      this.travelMode$,
+    ]).pipe(take(1)).subscribe(([dest, mode]) => {
+      destination = dest;
+      travelMode = mode;
+    });
+    if (destination && travelMode) {
+      this.router.navigate([travelMode, destination.stationId]);
     } else {
       this.router.navigate(['/']);
     }

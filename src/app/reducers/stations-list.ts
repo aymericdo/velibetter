@@ -5,7 +5,8 @@ import {
   fetchingClosestStations,
   setStationsList,
   setDestination,
-  unsetDestination
+  unsetDestination,
+  fetchingDestination
 } from '../actions/stations-list';
 
 export interface StationState {
@@ -13,13 +14,15 @@ export interface StationState {
   isLoading: boolean;
   destination: Station;
   currentDelta: number;
+  travelMode: string;
 }
 
 const initialState: StationState = {
-  list: [], 
+  list: [],
   isLoading: true,
   destination: null,
   currentDelta: null,
+  travelMode: null,
 };
 
 export const stationsListReducer = createReducer(
@@ -50,6 +53,12 @@ export const stationsListReducer = createReducer(
       destination: null,
     };
   }),
+  on(fetchingDestination, (state, { travelMode }) => {
+    return {
+      ...state,
+      travelMode,
+    };
+  }),
 );
 
 export function reducer(state: StationState | undefined, action: Action) {
@@ -72,4 +81,8 @@ export const getStationsStatusById = (id: number) => createSelector(
 export const getDestination = createSelector(
   selectStationsListState,
   (state: StationState) => state.destination,
+);
+export const getTravelMode = createSelector(
+  selectStationsListState,
+  (state: StationState) => state.travelMode,
 );

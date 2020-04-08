@@ -13,7 +13,7 @@ export const setStationsList = createAction(
 
 export const fetchingDestination = createAction(
   '[Stations List] fetching destination',
-  props<{ stationId: number }>(),
+  props<{ travelMode: string, stationId: number }>(),
 );
 
 export const unsetDestination = createAction(

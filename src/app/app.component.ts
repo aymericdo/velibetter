@@ -9,9 +9,9 @@ import { setIsMobile } from './actions/screen';
 import { getIsMobile } from './reducers/screen';
 import { getDegrees } from './reducers/galileo';
 import { getIsCompassView } from './reducers/galileo';
-import { takeUntil, filter, map } from 'rxjs/operators';
+import { takeUntil, filter } from 'rxjs/operators';
 import { DEFAULT_COORD } from './shared/constants';
-import { setRouteName } from './actions/route';
+import { setRouteName, setUrl } from './actions/route';
 import { getRouteName } from './reducers/route';
 
 @Component({
@@ -33,7 +33,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.routeName$ = store.pipe(select(getRouteName));
   }
 
-  title = 'Velibetter';
   isMobile$: Observable<boolean>;
   deg$: Observable<number>;
   isCompassView$: Observable<boolean>;
@@ -83,20 +82,9 @@ export class AppComponent implements OnInit, OnDestroy {
       filter(event =>
         event instanceof NavigationEnd
       ),
-      map(() => {
-        let child = this.activatedRoute.firstChild;
-        while (child) {
-          if (child.firstChild) {
-            child = child.firstChild;
-          } else if (child.snapshot.data && child.snapshot.data.routeName) {
-            return child.snapshot.data.routeName;
-          } else {
-            return null;
-          }
-        }
-        return null;
-      })
-    ).subscribe((routeName: string) => {
+    ).subscribe((event: NavigationEnd) => {
+      const routeName = this.getRouteName();
+      this.store.dispatch(setUrl({ url: event.url }));
       this.store.dispatch(setRouteName({ routeName }));
     });
   }
@@ -105,6 +93,20 @@ export class AppComponent implements OnInit, OnDestroy {
     navigator.geolocation.clearWatch(this.watcher);
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
+  }
+
+  getRouteName(): string {
+    let child = this.activatedRoute.firstChild;
+    while (child) {
+      if (child.firstChild) {
+        child = child.firstChild;
+      } else if (child.snapshot.data && child.snapshot.data.routeName) {
+        return child.snapshot.data.routeName;
+      } else {
+        return null;
+      }
+    }
+    return null;
   }
 
   displayLocationInfo = (position: Position) => {
@@ -168,10 +170,13 @@ export class AppComponent implements OnInit, OnDestroy {
   isDisplayingListPages(routeName: string): boolean {
     return ([
       'StationDescription',
+      'StationDescriptionFeedback',
       'Departure',
       'Arrival',
       'DepartureItineraryDescription',
       'ArrivalItineraryDescription',
+      'DepartureItineraryDescriptionFeedback',
+      'ArrivalItineraryDescriptionFeedback',
     ].includes(routeName));
   }
 }

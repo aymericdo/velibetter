@@ -1,7 +1,8 @@
-<app-top-bar *ngIf="showTopBar(routeName$ | async)" (back)="onBack()">
-  <app-map-button
-    (goToDescription)="goToDescription()">
-  </app-map-button>
+<app-top-bar *ngIf="showTopBar(routeName$ | async)">
+  <button mat-icon-button class="fab-secondary mat-elevation-z0 description-button" color="secondary"
+    (click)="goToDescription()">
+    <i class="material-icons">description</i>
+  </button>
 </app-top-bar>
 <div
   class="map"

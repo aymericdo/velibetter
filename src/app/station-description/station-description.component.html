@@ -1,5 +1,10 @@
 <mat-sidenav-content>
-  <app-top-bar (back)="onBack()"></app-top-bar>
+  <app-top-bar (back)="onBack()">
+    <button mat-icon-button class="fab-secondary mat-elevation-z0 description-button" color="secondary"
+      (click)="goToFeedback()">
+      <i class="material-icons">feedback</i>
+    </button>
+  </app-top-bar>
   <ng-container *ngIf="isSelectingStation$ | async">
     <app-loading></app-loading>
   </ng-container>

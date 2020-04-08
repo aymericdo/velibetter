@@ -90,7 +90,7 @@ export class MapComponent implements OnInit, OnDestroy {
     ).subscribe((val: NavigationEnd) => {
       if (val.url.split('/').length > 2) {
         this.travelMode = val.url.split('/')[1] === 'departure' ? 'WALKING' : 'BICYCLING';
-        this.store.dispatch(fetchingDestination({ stationId: +val.url.split('/')[2] }));
+        this.store.dispatch(fetchingDestination({ travelMode: val.url.split('/')[1], stationId: +val.url.split('/')[2] }));
       } else {
         this.store.dispatch(unsetDestination());
       }
@@ -209,10 +209,6 @@ export class MapComponent implements OnInit, OnDestroy {
       'DepartureItinerary',
       'ArrivalItinerary',
     ].includes(routeName));
-  }
-
-  onBack(): void {
-    this.router.navigate([this.router.url.split('/')[1]]);
   }
 
   goToDescription(): void {
