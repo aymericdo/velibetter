@@ -93,7 +93,7 @@ export class MapComponent implements OnInit, OnDestroy {
       router.events.pipe(
         filter(event =>
           event instanceof NavigationEnd
-          && event.url.split('/').length > 1
+          && event.url.split('/').length > 2
           && ['departure', 'arrival'].includes(event.url.split('/')[1]),
         )
       ),
