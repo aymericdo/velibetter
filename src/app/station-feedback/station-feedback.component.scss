@@ -1,3 +1,124 @@
+@import '~@angular/material/theming';
+
 :host {
   flex: 1;
+
+  .title {
+    display: flex;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: rgb(16, 44, 60);
+    margin: 24px 0;
+  }
+
+  .select-action {
+    display: flex;
+    justify-content: center;
+    margin: 24px 0px;
+
+    .clickable {
+      cursor: pointer;
+
+      &:hover {
+        @include mat-elevation(8);
+      }
+    }
+
+    .mat-card {
+      margin: 10px;
+      padding: 10px;
+      min-width: 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      i {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: hsl(203, 15%, 47%);
+      }
+
+      p {
+        color: hsl(201, 23%, 34%);
+      }
+    }
+
+    .confirmed {
+      border-top: 6px solid lightgreen;
+    }
+
+    .reported {
+      border-top: 6px solid lightcoral;
+    }
+
+    .material-icons {
+      font-size: 30px;
+    }
+  }
+
+  .selector {
+
+    .selector-details {
+      display: flex;
+      align-items: baseline;
+      margin: 2px 16px;
+
+      .subtitle {
+        font-size: 18px;
+        font-weight: 400;
+        color: hsl(201, 23%, 34%);
+      }
+
+      .material-icons {
+        font-size: 16px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        margin: 6px;
+      }
+
+      .mechanical {
+        background-color: lightgreen;
+      }
+
+      .ebike {
+        background-color: lightblue;
+      }
+
+      .dock {
+        background-color: lightskyblue;
+      }
+    }
+
+    .numbers {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+
+      button {
+        min-width: 12px;
+        padding: 10px;
+        line-height: 18px;
+        margin: 2px;
+      }
+
+    }
+
+  }
+
+  .submission-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 48px;
+
+    button {
+      margin: 0px 12px;
+    }
+  }
 }
