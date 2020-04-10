@@ -6,16 +6,20 @@
   <section class="mat-typography">
     <p class="title">Feedback</p>
     <div class="select-action">
-      <mat-card role="form" class="clickable confirmed">
+      <mat-card role="form" class="clickable confirmed"
+        [class.-selected]="selectedCard === 'confirmed'" 
+        (click)="clickCard('confirmed')">
         <i mat-card-avatar class="material-icons dock">visibility</i>
         <mat-card-actions>
           <p>Disponible</p>
         </mat-card-actions>
       </mat-card>
-      <mat-card role="form" class="clickable reported">
+      <mat-card role="form" class="clickable reported" 
+        [class.-selected]="selectedCard === 'broken'" 
+        (click)="clickCard('broken')">
         <i mat-card-avatar class="material-icons dock">report_problem</i>
         <mat-card-actions>
-          <p>Disponible</p>
+          <p>Cassé</p>
         </mat-card-actions>
       </mat-card>
     </div>
@@ -26,9 +30,12 @@
           <p class="subtitle">Mécanique</p>
         </div>
         <div class="numbers">
-          <button mat-button class="number-picker" *ngFor="let number of numbers">
+          <button mat-button class="clickable number-picker"
+           *ngFor="let number of numbers"
+           [class.-selected]="numberMechanical === number"
+           (click)="clickMechanical(number)">
             {{number}}
-          </button>
+          </button> 
         </div>
       </div>
       <div class="selector">
@@ -37,7 +44,10 @@
           <p class="subtitle">Electrique</p>
         </div>
         <div class="numbers">
-          <button mat-button class="number-picker" *ngFor="let number of numbers">
+          <button mat-button class="clickable number-picker"
+          *ngFor="let number of numbers" 
+          [class.-selected]="numberEbike === number"
+          (click)="clickEbike(number)">
             {{number}}
           </button>
         </div>
@@ -45,18 +55,21 @@
       <div class="selector">
         <div class="selector-details">
           <i class="material-icons dock">ev_station</i>
-          <p class="subtitle">Station libre</p>
+          <p class="subtitle">Place libre</p>
         </div>
         <div class="numbers">
-          <button mat-button class="number-picker" *ngFor="let number of numbers">
+          <button mat-button class="clickable number-picker" 
+          *ngFor="let number of numbers" 
+          [class.-selected]="numberDock === number"
+          (click)="clickDock(number)">
             {{number}}
           </button>
         </div>
       </div>
     </div>
     <div class="submission-buttons">
-      <button mat-stroked-button color="warn" class="submit-button">Annuler</button>
-      <button mat-flat-button color="primary" class="submit-button">Envoyer</button>
+      <button mat-stroked-button color="warn" class="submit-button" (click)="clear()">Annuler</button>
+      <button mat-flat-button color="primary" class="submit-button" (click)="clickSubmit()">Envoyer</button>
     </div>
   </section>
 </mat-sidenav-content>

@@ -3,6 +3,14 @@
 :host {
   flex: 1;
 
+  .clickable {
+    cursor: pointer;
+
+    &.-selected {
+      @include mat-elevation(4);
+    }
+  }
+
   .title {
     display: flex;
     justify-content: center;
@@ -16,14 +24,6 @@
     display: flex;
     justify-content: center;
     margin: 24px 0px;
-
-    .clickable {
-      cursor: pointer;
-
-      &:hover {
-        @include mat-elevation(8);
-      }
-    }
 
     .mat-card {
       margin: 10px;
@@ -66,6 +66,7 @@
       margin: 2px 16px;
 
       .subtitle {
+        margin: 6px;
         font-size: 18px;
         font-weight: 400;
         color: hsl(201, 23%, 34%);
@@ -100,12 +101,17 @@
       align-items: center;
       justify-content: center;
       margin-bottom: 18px;
+      padding: 0px 16px;
+      flex-wrap: nowrap;
 
       button {
+        display: flex;
+        justify-content: center;
         min-width: 12px;
         padding: 10px;
         line-height: 18px;
         margin: 2px;
+        border: 1px solid lightgray;
       }
 
     }
@@ -114,11 +120,11 @@
 
   .submission-buttons {
     display: flex;
-    justify-content: center;
-    margin-top: 48px;
+    justify-content: flex-end;
+    margin: 32px 16px;
 
     button {
-      margin: 0px 12px;
+      margin: 0px 8px;
     }
   }
 }
