@@ -23,6 +23,8 @@ import { Coordinate, Station } from './interfaces';
 import { getStationsMapById, getZoom } from './reducers/stations-map';
 import { setPosition, setBearing } from './actions/galileo';
 import { getDistanceFromLatLonInKm, bearing } from './shared/helper';
+import { savingFeedback } from './actions/feedback';
+import { selectFeedback, getFeedback } from './reducers/feedback';
 
 @Injectable()
 export class AppEffects {
@@ -144,6 +146,18 @@ export class AppEffects {
         } else {
           return of(createAction('[TOO CLOSE TO CHANGE THE BEARING]')());
         }
+      }),
+    )
+  );
+
+  saveFeedback$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(savingFeedback),
+      withLatestFrom(this.store.pipe(select(getFeedback), filter(Boolean))),
+      mergeMap(([{ feedback }]) => {
+        return this.apiService.saveFeedback(feedback).pipe(
+          catchError(() => EMPTY)
+        );
       }),
     )
   );

@@ -1,19 +1,9 @@
-import {
-  Injectable
-} from '@angular/core';
-import {
-  HttpClient
-} from '@angular/common/http';
-import {
-  Observable
-} from 'rxjs';
-import {
-  LatLngBoundsLiteral
-} from '@agm/core';
-import {
-  Coordinate,
-  Station
-} from '../interfaces';
+import { LatLngBoundsLiteral } from '@agm/core';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable, empty, EMPTY } from 'rxjs';
+import { Coordinate, Station } from '../interfaces';
+import { Feedback } from './../interfaces/index';
 
 @Injectable({
   providedIn: 'root'
@@ -68,4 +58,12 @@ export class ApiService {
     ) as Observable<Station>;
   }
 
+  saveFeedback(
+    feedback: Feedback,
+  ): Observable<never> {
+    return this.httpClient.post(
+      `${this.baseURL}/feedback/`,
+      feedback,
+    ) as Observable<never>;
+  }
 }

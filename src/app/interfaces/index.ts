@@ -27,3 +27,16 @@ export interface Coordinate {
   lat: number;
   lng: number;
 }
+
+export enum FeedbackType {
+  confirmed,
+  broken
+}
+
+export interface Feedback {
+  stationId: number;
+  type: FeedbackType;
+  numberMechanical?: number;
+  numberEbike?: number;
+  numberDock?: number;
+}
