@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -30,6 +31,7 @@ import { DepartureComponent } from './departure/departure.component';
 import { MapComponent } from './map/map.component';
 import { metaReducers, reducers } from './reducers';
 import { DoughnutChartComponent } from './shared/doughnut-chart/doughnut-chart.component';
+import { ListButtonComponent } from './shared/list-button/list-button.component';
 import { ListComponent } from './shared/list/list.component';
 import { LoadingComponent } from './shared/loading/loading.component';
 import { RowStationComponent } from './shared/row-station/row-station.component';
@@ -37,9 +39,10 @@ import { ScoreDoughnutChartComponent } from './shared/score-doughnut-chart/score
 import { SpeedDialFabComponent } from './shared/speed-dial-fab/speed-dial-fab.component';
 import { TimePickerComponent } from './shared/time-picker/time-picker.component';
 import { StationDescriptionComponent } from './station-description/station-description.component';
-import { TopBarComponent } from './top-bar/top-bar.component';
-import { ListButtonComponent } from './shared/list-button/list-button.component';
 import { StationFeedbackComponent } from './station-feedback/station-feedback.component';
+import { TopBarComponent } from './top-bar/top-bar.component';
+
+
 
 @NgModule({
   declarations: [
@@ -72,6 +75,7 @@ import { StationFeedbackComponent } from './station-feedback/station-feedback.co
     MatListModule,
     MatMomentDateModule,
     MatProgressSpinnerModule,
+    MatFormFieldModule,
     MatCardModule,
     MatSidenavModule,
     MatToolbarModule,
