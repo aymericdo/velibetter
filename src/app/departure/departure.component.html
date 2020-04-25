@@ -1,5 +1,17 @@
 <mat-sidenav-content>
   <app-top-bar>
+    <mat-chip-list>
+      <mat-chip
+        *ngIf="!!(currentDelta$ | async)"
+        color="accent"
+        class="mat-chip-delta"
+        selected
+        removable
+        (removed)="removeDelta()">
+        {{ currentDelta$ | async }}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+    </mat-chip-list>
     <app-list-button
       (refresh)="refresh()"
       (selectedDateTime)="selectedDateTime($event)">

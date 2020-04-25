@@ -1,6 +1,14 @@
 :host {
   flex: 1;
 
+  .mat-chip-delta {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    bottom: 0;
+    z-index: 4;
+  }
+
   mat-sidenav-content {
     display: flex;
     flex-direction: column;

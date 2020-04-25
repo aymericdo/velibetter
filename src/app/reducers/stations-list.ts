@@ -87,3 +87,7 @@ export const getTravelMode = createSelector(
   selectStationsListState,
   (state: StationState) => state.travelMode,
 );
+export const getCurrentDelta = createSelector(
+  selectStationsListState,
+  (state: StationState) => state.currentDelta,
+);

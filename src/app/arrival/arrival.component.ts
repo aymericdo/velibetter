@@ -2,13 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
-import { filter, take } from 'rxjs/operators';
+import { filter, take, map } from 'rxjs/operators';
 import { fetchingClosestStations } from '../actions/stations-list';
 import { Station } from '../interfaces';
 import { AppState } from '../reducers';
 import { getCurrentPosition } from '../reducers/galileo';
-import { getIsLoading, getStationsStatus } from '../reducers/stations-list';
-
+import { getIsLoading, getStationsStatus, getCurrentDelta } from '../reducers/stations-list';
 
 @Component({
   selector: 'app-arrival',
@@ -19,11 +18,24 @@ export class ArrivalComponent implements OnInit {
   currentPosition$: Observable<{ lat: number; lng: number }>;
   stationsStatus$: Observable<Station[]>;
   isLoading$: Observable<boolean>;
+  currentDelta$: Observable<string>;
 
   constructor(private store: Store<AppState>) {
     this.currentPosition$ = store.pipe(select(getCurrentPosition));
     this.stationsStatus$ = store.pipe(select(getStationsStatus));
     this.isLoading$ = store.pipe(select(getIsLoading));
+    this.currentDelta$ = store.pipe(
+      select(getCurrentDelta),
+      map(delta =>
+        delta ?
+          moment().isSame(moment().add(delta, 'hour'), 'day') ?
+            moment().add(delta, 'hour').format('HH:00')
+          :
+            moment().add(delta, 'hour').format('DD/MM/YYYY HH:00')
+        :
+          null
+      ),
+    );
   }
 
   ngOnInit(): void {
@@ -41,7 +53,15 @@ export class ArrivalComponent implements OnInit {
   refresh() {
     this.store.dispatch(
       fetchingClosestStations({
-        isDeparture: false
+        isDeparture: false,
+      }),
+    );
+  }
+
+  removeDelta() {
+    this.store.dispatch(
+      fetchingClosestStations({
+        isDeparture: true,
       })
     );
   }
@@ -51,8 +71,8 @@ export class ArrivalComponent implements OnInit {
     this.store.dispatch(
       fetchingClosestStations({
         isDeparture: false,
-        delta: timeDifferenceInHours
-      })
+        delta: timeDifferenceInHours,
+      }),
     );
   }
 }

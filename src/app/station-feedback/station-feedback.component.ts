@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { savingFeedback } from '../actions/feedback';
 import { Feedback, FeedbackType } from '../interfaces/index';
 import { AppState } from '../reducers';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-station-feedback',
@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./station-feedback.component.scss']
 })
 export class StationFeedbackComponent implements OnInit {
-  feedback$ : Observable<Feedback>;
+  feedback$: Observable<Feedback>;
   numbers: string[];
   selectedCard: string;
   numberMechanical: string;
@@ -21,11 +21,12 @@ export class StationFeedbackComponent implements OnInit {
   constructor(
     private store: Store<AppState>,
     private router: Router,
+    private activatedRoute: ActivatedRoute,
     ) {
   }
 
   ngOnInit() {
-    this.numbers = Array(10).fill(0).map((x,i)=>i.toString());
+    this.numbers = Array(10).fill(0).map((x, i) => i.toString());
     this.numbers.push('+');
   }
 
@@ -54,7 +55,7 @@ export class StationFeedbackComponent implements OnInit {
 
   clickSubmit() {
     const feedback = {
-      stationId: +this.router.url.split('/')[1],
+      stationId: +this.activatedRoute.snapshot.paramMap.get('stationId'),
       type: this.selectedCard === 'confirmed' ? FeedbackType.confirmed : FeedbackType.broken,
       mechanical: this.numberMechanical,
       ebike: this.numberEbike,

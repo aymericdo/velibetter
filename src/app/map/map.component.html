@@ -25,7 +25,7 @@
       [longitude]="marker.lng"
       (markerClick)="clickedMarker(marker.id)"
       [opacity]="1"
-      [iconUrl]="(selectedStation$ | async)?.stationId === marker.id ? '/assets/directions_bike_selected.svg' : '/assets/directions_bike.svg'"
+      [iconUrl]="(selectedStation$ | async)?.stationId === marker.id ? '/assets/station_selected.svg' : '/assets/station.svg'"
     >
     </agm-marker>
 

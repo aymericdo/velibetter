@@ -19,6 +19,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { MatIconModule } from '@angular/material/icon';
 import { AgmDirectionModule } from 'agm-direction';
 import { FlatpickrModule } from 'angularx-flatpickr';
 import { ChartistModule } from 'ng-chartist';
@@ -41,8 +42,7 @@ import { TimePickerComponent } from './shared/time-picker/time-picker.component'
 import { StationDescriptionComponent } from './station-description/station-description.component';
 import { StationFeedbackComponent } from './station-feedback/station-feedback.component';
 import { TopBarComponent } from './top-bar/top-bar.component';
-
-
+import { MatChipsModule } from '@angular/material/chips';
 
 @NgModule({
   declarations: [
@@ -71,6 +71,8 @@ import { TopBarComponent } from './top-bar/top-bar.component';
     LayoutModule,
     MatButtonModule,
     MatDatepickerModule,
+    MatChipsModule,
+    MatIconModule,
     MatDialogModule,
     MatListModule,
     MatMomentDateModule,

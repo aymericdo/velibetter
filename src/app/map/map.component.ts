@@ -1,6 +1,6 @@
 import { LatLngBounds, LatLngBoundsLiteral } from '@agm/core/services/google-maps-types';
 import { Component, Input, OnDestroy, OnInit, Output, EventEmitter, ElementRef } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router, ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, Subject } from 'rxjs';
 import { filter, map, take, takeUntil } from 'rxjs/operators';
@@ -62,6 +62,7 @@ export class MapComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<AppState>,
     private router: Router,
+    private activatedRoute: ActivatedRoute,
     private elRef: ElementRef,
   ) {
     this.markers$ = store.pipe(select(getMarkers));

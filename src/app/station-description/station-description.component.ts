@@ -42,7 +42,7 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<AppState>,
     private router: Router,
-    private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
   ) {
     this.selectedStation$ = store.pipe(select(getSelectedStation));
     this.currentPosition$ = store.pipe(select(getCurrentPosition));
@@ -61,12 +61,12 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
       map(([position, val]) => val),
       takeUntil(this.destroy$),
     ).subscribe((val: NavigationEnd) => {
-      this.selectStationFct(+val.url.split('/')[2]);
+      this.selectStationFct(+this.activatedRoute.snapshot.paramMap.get('stationId'));
     });
 
     this.currentPosition$.pipe(filter(Boolean), take(1))
       .subscribe((position) => {
-        this.selectStationFct(+this.router.url.split('/')[2]);
+        this.selectStationFct(+this.activatedRoute.snapshot.paramMap.get('stationId'));
       });
 
     this.selectedStation$
@@ -94,7 +94,7 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
   }
 
   goToFeedback(): void {
-    this.router.navigate(['feedback'], { relativeTo: this.route });
+    this.router.navigate(['feedback'], { relativeTo: this.activatedRoute });
   }
 
   onBack(): void {
