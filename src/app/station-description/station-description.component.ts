@@ -11,6 +11,7 @@ import { getIsSelectingStation, getSelectedStation } from '../reducers/stations-
 import { ChartType } from 'ng-chartist';
 import { IChartistData, IPieChartOptions } from 'chartist';
 import { getDestination, getTravelMode } from '../reducers/stations-list';
+import ChartistTooltip from 'chartist-plugin-tooltips-updated';
 
 @Component({
   selector: 'app-station-description',
@@ -35,9 +36,15 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
         return '';
       }
     },
+    plugins: [
+      ChartistTooltip({
+        anchorToPoint: true,
+        appendToBody: true
+      })
+    ]
   };
 
-  private destroy$: Subject <boolean> = new Subject<boolean>();
+  private destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private store: Store<AppState>,
