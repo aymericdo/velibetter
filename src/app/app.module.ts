@@ -109,4 +109,4 @@ import { MatChipsModule } from '@angular/material/chips';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }
