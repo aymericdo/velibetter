@@ -3,11 +3,22 @@
 :host {
   flex: 1;
 
+  > mat-sidenav-content {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+  }
+
+  section {
+    overflow-y: auto;
+    padding: 1.25em;
+  }
+
   .clickable {
     cursor: pointer;
 
     &.-selected {
-      @include mat-elevation(4);
+      @include mat-elevation(8);
     }
   }
 
@@ -17,13 +28,14 @@
     font-size: 18px;
     font-weight: 600;
     color: rgb(16, 44, 60);
-    margin: 24px 0;
+    padding: 0.875em 0;
+    margin: 0;
   }
 
   .select-action {
     display: flex;
     justify-content: center;
-    margin: 24px 0px;
+    padding: 0.875em 0;
 
     .mat-card {
       margin: 10px;
@@ -40,7 +52,7 @@
         color: hsl(203, 15%, 47%);
       }
 
-      p {
+      span {
         color: hsl(201, 23%, 34%);
       }
     }
@@ -59,14 +71,13 @@
   }
 
   .selector {
+    padding: 0.625em 0;
 
     .selector-details {
       display: flex;
-      align-items: baseline;
-      margin: 2px 16px;
+      align-items: center;
 
       .subtitle {
-        margin: 6px;
         font-size: 18px;
         font-weight: 400;
         color: hsl(201, 23%, 34%);
@@ -80,7 +91,7 @@
         width: 25px;
         height: 25px;
         border-radius: 50%;
-        margin: 6px;
+        margin-right: 0.875em;
       }
 
       .mechanical {
@@ -99,18 +110,18 @@
     .numbers {
       display: flex;
       align-items: center;
-      justify-content: center;
-      margin-bottom: 18px;
-      padding: 0px 16px;
-      flex-wrap: nowrap;
+      justify-content: start;
+      margin-top: 0.875em;
+      flex-wrap: wrap;
 
       button {
         display: flex;
         justify-content: center;
-        min-width: 12px;
-        padding: 10px;
-        line-height: 18px;
-        margin: 2px;
+        min-width: 50px;
+        height: 50px;
+        padding: 0;
+        margin-right: 0.875em;
+        margin-bottom: 0.875em;
         border: 1px solid lightgray;
       }
 
@@ -121,10 +132,10 @@
   .submission-buttons {
     display: flex;
     justify-content: flex-end;
-    margin: 32px 16px;
+    padding: 0.875em 1em;
 
     button {
-      margin: 0px 8px;
+      margin-left: 0.875em;
     }
   }
 }

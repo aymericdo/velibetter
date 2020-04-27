@@ -4,7 +4,8 @@ import { Observable } from 'rxjs';
 import { savingFeedback } from '../actions/feedback';
 import { Feedback, FeedbackType } from '../interfaces/index';
 import { AppState } from '../reducers';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-station-feedback',
@@ -13,21 +14,20 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class StationFeedbackComponent implements OnInit {
   feedback$: Observable<Feedback>;
-  numbers: string[];
   selectedCard: string;
   numberMechanical: string;
   numberEbike: string;
   numberDock: string;
+
+  numbers: string[] = Array(10).fill(0).map((x, i) => i.toString()).concat(['+']);
+
   constructor(
     private store: Store<AppState>,
-    private router: Router,
+    private snackBar: MatSnackBar,
     private activatedRoute: ActivatedRoute,
-    ) {
-  }
+  ) { }
 
   ngOnInit() {
-    this.numbers = Array(10).fill(0).map((x, i) => i.toString());
-    this.numbers.push('+');
   }
 
   clickCard(type: string) {
@@ -47,10 +47,16 @@ export class StationFeedbackComponent implements OnInit {
   }
 
   clear() {
-    this.selectedCard = '';
-    this.numberMechanical = '';
-    this.numberEbike = '';
-    this.numberDock = '';
+    this.selectedCard = null;
+    this.numberMechanical = null;
+    this.numberEbike = null;
+    this.numberDock = null;
+  }
+
+  hasFeedback(): boolean {
+    return !!this.numberMechanical ||
+      !!this.numberEbike ||
+      !!this.numberDock;
   }
 
   clickSubmit() {
@@ -61,8 +67,10 @@ export class StationFeedbackComponent implements OnInit {
       ebike: this.numberEbike,
       dock: this.numberDock,
     };
-    this.clear();
     this.store.dispatch(savingFeedback({ feedback }));
+    this.clear();
+    this.snackBar.open('Feedback envoyé! Merci beaucoup :)', 'Ok', {
+      duration: 5000,
+    });
   }
-
 }

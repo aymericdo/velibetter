@@ -15,6 +15,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
@@ -71,6 +72,7 @@ import { MatChipsModule } from '@angular/material/chips';
     LayoutModule,
     MatButtonModule,
     MatDatepickerModule,
+    MatSnackBarModule,
     MatChipsModule,
     MatIconModule,
     MatDialogModule,
