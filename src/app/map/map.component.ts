@@ -11,6 +11,7 @@ import { Marker, Station } from '../interfaces';
 import { Coordinate } from '../interfaces/index';
 import { AppState } from '../reducers';
 import { getCurrentBearing, getCurrentPosition, getIsCompassView } from '../reducers/galileo';
+import { getRouteName } from '../reducers/route';
 import { getDestination, getItineraryType } from '../reducers/stations-list';
 import { getIsLoading, getLatLngBoundsLiteral, getMapCenter, getMarkers, getSelectedStation, getZoom } from '../reducers/stations-map';
 import { DEFAULT_COORD, DEFAULT_ZOOM } from '../shared/constants';
@@ -70,6 +71,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.isCompassView$ = store.pipe(select(getIsCompassView));
     this.currentBearing$ = store.pipe(select(getCurrentBearing));
     this.itineraryType$ = store.pipe(select(getItineraryType));
+    this.routeName$ = store.pipe(select(getRouteName));
   }
 
   ngOnInit() {
