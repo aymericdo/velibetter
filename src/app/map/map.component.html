@@ -51,7 +51,7 @@
       *ngIf="!!(currentPosition$ | async) && (destination$ | async)"
       [origin]="currentPosition$ | async"
       [destination]="destination$ | async"
-      [travelMode]="(travelMode$ | async) === 'departure' ? 'WALKING' : 'BICYCLING'"
+      [travelMode]="(itineraryType$ | async) === 'departure' ? 'WALKING' : 'BICYCLING'"
     >
     </agm-direction>
   </agm-map>

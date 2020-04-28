@@ -1,30 +1,20 @@
 import { Injectable } from '@angular/core';
-import { Actions, ofType, createEffect } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { createAction, select, Store } from '@ngrx/store';
 import { EMPTY, Observable, of } from 'rxjs';
-import { catchError, map, mergeMap, take, withLatestFrom, filter } from 'rxjs/operators';
-import {
-  setStationsList,
-  fetchingDestination,
-  setDestination,
-} from './actions/stations-list';
-import {
-  setStationsMap,
-  fetchingStationsInPolygon,
-  selectingStation,
-  selectStation,
-} from './actions/stations-map';
-import { ApiService } from './services/api.service';
-import { fetchingClosestStations } from './actions/stations-list';
-import { Store, select, createAction } from '@ngrx/store';
+import { catchError, filter, map, mergeMap, take, withLatestFrom } from 'rxjs/operators';
+import { savingFeedback } from './actions/feedback';
+import { setBearing, setPosition } from './actions/galileo';
+import { fetchingClosestStations, fetchingDestination, setDestination, setStationsList } from './actions/stations-list';
+import { fetchingStationsInPolygon, selectingStation, selectStation, setStationsMap } from './actions/stations-map';
+import { Coordinate, Station } from './interfaces';
 import { AppState } from './reducers';
+import { getFeedback } from './reducers/feedback';
 import { getCurrentPosition, getPrecedentPosition } from './reducers/galileo';
 import { getStationsStatusById } from './reducers/stations-list';
-import { Coordinate, Station } from './interfaces';
 import { getStationsMapById, getZoom } from './reducers/stations-map';
-import { setPosition, setBearing } from './actions/galileo';
-import { getDistanceFromLatLonInKm, bearing } from './shared/helper';
-import { savingFeedback } from './actions/feedback';
-import { selectFeedback, getFeedback } from './reducers/feedback';
+import { ApiService } from './services/api.service';
+import { bearing, getDistanceFromLatLonInKm } from './shared/helper';
 
 @Injectable()
 export class AppEffects {

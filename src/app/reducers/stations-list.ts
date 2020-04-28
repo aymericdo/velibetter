@@ -1,20 +1,14 @@
-import { Action, createReducer, on, createSelector } from '@ngrx/store';
-import { Station } from '../interfaces';
+import { Action, createReducer, createSelector, on } from '@ngrx/store';
 import { AppState } from '.';
-import {
-  fetchingClosestStations,
-  setStationsList,
-  setDestination,
-  unsetDestination,
-  fetchingDestination
-} from '../actions/stations-list';
+import { fetchingClosestStations, fetchingDestination, setDestination, setStationsList, unsetDestination } from '../actions/stations-list';
+import { Station } from '../interfaces';
 
 export interface StationState {
   list: Station[];
   isLoading: boolean;
   destination: Station;
   currentDelta: number;
-  travelMode: string;
+  itineraryType: string;
 }
 
 const initialState: StationState = {
@@ -22,7 +16,7 @@ const initialState: StationState = {
   isLoading: true,
   destination: null,
   currentDelta: null,
-  travelMode: null,
+  itineraryType: null,
 };
 
 export const stationsListReducer = createReducer(
@@ -51,13 +45,13 @@ export const stationsListReducer = createReducer(
     return {
       ...state,
       destination: null,
-      travelMode: null,
+      itineraryType: null,
     };
   }),
-  on(fetchingDestination, (state, { travelMode }) => {
+  on(fetchingDestination, (state, { itineraryType }) => {
     return {
       ...state,
-      travelMode,
+      itineraryType,
     };
   }),
 );
@@ -83,9 +77,9 @@ export const getDestination = createSelector(
   selectStationsListState,
   (state: StationState) => state.destination,
 );
-export const getTravelMode = createSelector(
+export const getItineraryType = createSelector(
   selectStationsListState,
-  (state: StationState) => state.travelMode,
+  (state: StationState) => state.itineraryType,
 );
 export const getCurrentDelta = createSelector(
   selectStationsListState,

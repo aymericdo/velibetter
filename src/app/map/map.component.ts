@@ -1,24 +1,19 @@
 import { LatLngBounds, LatLngBoundsLiteral } from '@agm/core/services/google-maps-types';
-import { Component, Input, OnDestroy, OnInit, Output, EventEmitter, ElementRef } from '@angular/core';
-import { NavigationEnd, Router, ActivatedRoute } from '@angular/router';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import { combineLatest, Observable, Subject } from 'rxjs';
-import { filter, map, take, takeUntil } from 'rxjs/operators';
-import { fetchingDestination, unsetDestination } from '../actions/stations-list';
-import {
-  fetchingStationsInPolygon,
-  setMapCenter, setZoom, resetZoom,
- } from '../actions/stations-map';
+import { isEqual } from 'lodash';
+import { Observable, Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+import { toggleCompassView } from '../actions/galileo';
+import { fetchingStationsInPolygon, resetZoom, setMapCenter, setZoom } from '../actions/stations-map';
 import { Marker, Station } from '../interfaces';
 import { Coordinate } from '../interfaces/index';
 import { AppState } from '../reducers';
-import { getCurrentPosition, getIsCompassView, getCurrentBearing } from '../reducers/galileo';
-import { getDestination, getTravelMode } from '../reducers/stations-list';
+import { getCurrentBearing, getCurrentPosition, getIsCompassView } from '../reducers/galileo';
+import { getDestination, getItineraryType } from '../reducers/stations-list';
 import { getIsLoading, getLatLngBoundsLiteral, getMapCenter, getMarkers, getSelectedStation, getZoom } from '../reducers/stations-map';
-import { toggleCompassView } from '../actions/galileo';
-import { isEqual } from 'lodash';
-import { DEFAULT_ZOOM, DEFAULT_COORD } from '../shared/constants';
-import { getRouteName } from '../reducers/route';
+import { DEFAULT_COORD, DEFAULT_ZOOM } from '../shared/constants';
 
 @Component({
   selector: 'app-map',
@@ -33,7 +28,7 @@ export class MapComponent implements OnInit, OnDestroy {
   markers$: Observable<Marker[]>;
   isLoading$: Observable<boolean>;
   currentPosition$: Observable<{ lat: number; lng: number }>;
-  destination$: Observable<{ lat: number; lng: number }>;
+  destination$: Observable<Station>;
   latLngBoundsLiteral$: Observable<LatLngBoundsLiteral>;
   selectedStation$: Observable<Station>;
   mapCenter$: Observable<Coordinate>;
@@ -41,7 +36,7 @@ export class MapComponent implements OnInit, OnDestroy {
   isCompassView$: Observable<boolean>;
   currentBearing$: Observable<number>;
   routeName$: Observable<string>;
-  travelMode$: Observable<string>;
+  itineraryType$: Observable<string>;
 
   compassView = false;
 
@@ -62,7 +57,6 @@ export class MapComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<AppState>,
     private router: Router,
-    private activatedRoute: ActivatedRoute,
     private elRef: ElementRef,
   ) {
     this.markers$ = store.pipe(select(getMarkers));
@@ -75,44 +69,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.zoom$ = store.pipe(select(getZoom));
     this.isCompassView$ = store.pipe(select(getIsCompassView));
     this.currentBearing$ = store.pipe(select(getCurrentBearing));
-    this.routeName$ = store.pipe(select(getRouteName));
-    this.travelMode$ = store.pipe(select(getTravelMode));
-
-    const isItineraryRoute = (route: string) => [
-      'StationDescription',
-      'StationDescriptionFeedback',
-      'DepartureItinerary',
-      'DepartureItineraryDescription',
-      'DepartureItineraryDescriptionFeedback',
-      'ArrivalItinerary',
-      'ArrivalItineraryDescription',
-      'ArrivalItineraryDescriptionFeedback',
-    ].includes(route);
-
-    combineLatest([
-      this.currentPosition$.pipe(filter(Boolean), take(1)),
-      router.events.pipe(
-        filter(event =>
-          event instanceof NavigationEnd
-          && event.url.split('/').length > 2
-          && ['departure', 'arrival'].includes(event.url.split('/')[1]),
-        )
-      ),
-    ]).pipe(
-      map(([position, val]) => val),
-    ).subscribe((val: NavigationEnd) => {
-      this.store.dispatch(fetchingDestination({ travelMode: val.url.split('/')[1], stationId: +val.url.split('/')[2] }));
-    });
-
-    combineLatest([
-      this.currentPosition$.pipe(filter(Boolean), take(1)),
-      this.routeName$,
-    ]).pipe(
-      filter(([position, name]) => !!name && !isItineraryRoute(name)),
-      takeUntil(this.destroy$),
-    ).subscribe(() => {
-      this.store.dispatch(unsetDestination());
-    });
+    this.itineraryType$ = store.pipe(select(getItineraryType));
   }
 
   ngOnInit() {
@@ -126,7 +83,13 @@ export class MapComponent implements OnInit, OnDestroy {
     });
 
     this.currentBearing$.pipe(takeUntil(this.destroy$)).subscribe((currentBearing) => {
-      const icons = [...this.elRef.nativeElement.querySelectorAll('agm-map > div.agm-map-container-inner.sebm-google-map-container-inner > div > div > div:nth-child(1) > div > div:nth-child(4) > div > img')];
+      const iconSelector = 'agm-map > div.agm-map-container-inner.sebm-google-map-container-inner >' +
+        ' div > div > div:nth-child(1) > div > div:nth-child(4) > div > img';
+
+      const icons = [
+        ...this.elRef.nativeElement.querySelectorAll(iconSelector),
+      ];
+
       if (icons && icons.length) {
         const icon = icons.find(ic => {
           const array = ic.src.split('/');
@@ -176,7 +139,17 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   clickedMarker(stationId: number): void {
-    this.router.navigate(['stations', stationId]);
+    let destination: Station;
+    this.destination$.pipe(take(1))
+    .subscribe((d) => {
+      destination = d;
+    });
+
+    if (destination) {
+      this.goToDescription(stationId);
+    } else {
+      this.router.navigate(['stations', stationId]);
+    }
   }
 
   trackByFn(index: number, marker: Marker): number {
@@ -209,11 +182,11 @@ export class MapComponent implements OnInit, OnDestroy {
   navigateTo(id: number): void {
     switch (id) {
       case 0: {
-        this.router.navigate(['departure']); break;
+        this.router.navigate(['itinerary', 'departure']); break;
       }
 
       case 1: {
-        this.router.navigate(['arrival']); break;
+        this.router.navigate(['itinerary', 'arrival']); break;
       }
     }
   }
@@ -224,25 +197,36 @@ export class MapComponent implements OnInit, OnDestroy {
 
   showTopBar(routeName: string): boolean {
     return ([
-      'DepartureItinerary',
-      'ArrivalItinerary',
+      'ItineraryMap',
     ].includes(routeName));
   }
 
   onBack(): void {
-    let travelMode: string;
-    this.travelMode$.pipe(take(1))
+    let itineraryType: string;
+    this.itineraryType$.pipe(take(1))
       .subscribe((mode) => {
-        travelMode = mode;
+        itineraryType = mode;
       });
 
-    if (travelMode) {
-      this.router.navigate([travelMode]);
+    if (itineraryType) {
+      this.router.navigate(['itinerary', itineraryType]);
     }
   }
 
-  goToDescription(): void {
-    this.router.navigate([this.router.url.split('/')[1], this.router.url.split('/')[2], 'description']);
+  goToDescription(stationId: number): void {
+    let destination: Station;
+    this.destination$.pipe(take(1))
+    .subscribe((d) => {
+      destination = d;
+    });
+
+    let itineraryType: string;
+    this.itineraryType$.pipe(take(1))
+      .subscribe((mode) => {
+        itineraryType = mode;
+      });
+
+    this.router.navigate(['itinerary', itineraryType, destination.stationId, 'description', stationId || destination.stationId]);
   }
 
   isMapCenterEqualCurrentPosition(): boolean {

@@ -10,20 +10,25 @@ import { getCurrentPosition } from '../reducers/galileo';
 import { getIsSelectingStation, getSelectedStation } from '../reducers/stations-map';
 import { ChartType } from 'ng-chartist';
 import { IChartistData, IPieChartOptions } from 'chartist';
-import { getDestination, getTravelMode } from '../reducers/stations-list';
+import { getDestination, getItineraryType } from '../reducers/stations-list';
 import ChartistTooltip from 'chartist-plugin-tooltips-updated';
+import { pageSliderAnimations } from '../animations/page-slider.animations';
 
 @Component({
   selector: 'app-station-description',
   templateUrl: './station-description.component.html',
   styleUrls: ['./station-description.component.scss'],
+  animations: [pageSliderAnimations]
 })
 export class StationDescriptionComponent implements OnInit, OnDestroy {
   currentPosition$: Observable<{ lat: number; lng: number }>;
   selectedStation$: Observable<Station>;
   isSelectingStation$: Observable<boolean>;
   destination$: Observable<Station>;
-  travelMode$: Observable<string>;
+  itineraryType$: Observable<string>;
+
+  isFeedbackOpen = false;
+  isLoading = true;
 
   chartType: ChartType = 'Pie';
   chartData: IChartistData;
@@ -55,7 +60,7 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
     this.currentPosition$ = store.pipe(select(getCurrentPosition));
     this.isSelectingStation$ = store.pipe(select(getIsSelectingStation));
     this.destination$ = store.pipe(select(getDestination));
-    this.travelMode$ = store.pipe(select(getTravelMode));
+    this.itineraryType$ = store.pipe(select(getItineraryType));
   }
 
   ngOnInit(): void {
@@ -68,12 +73,15 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
       map(([position, val]) => val),
       takeUntil(this.destroy$),
     ).subscribe((val: NavigationEnd) => {
+      this.isFeedbackOpen = this.activatedRoute.children.length === 1;
       this.selectStationFct(+this.activatedRoute.snapshot.paramMap.get('stationId'));
     });
 
     this.currentPosition$.pipe(filter(Boolean), take(1))
       .subscribe((position) => {
+        this.isFeedbackOpen = this.activatedRoute.children.length === 1;
         this.selectStationFct(+this.activatedRoute.snapshot.paramMap.get('stationId'));
+        this.isLoading = false;
       });
 
     this.selectedStation$
@@ -102,24 +110,6 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
 
   goToFeedback(): void {
     this.router.navigate(['feedback'], { relativeTo: this.activatedRoute });
-  }
-
-  onBack(): void {
-    let destination: Station;
-    let travelMode: string;
-    combineLatest([
-      this.destination$,
-      this.travelMode$,
-    ]).pipe(take(1)).subscribe(([dest, mode]) => {
-      destination = dest;
-      travelMode = mode;
-    });
-
-    if (destination && travelMode) {
-      this.router.navigate([travelMode, destination.stationId]);
-    } else {
-      this.router.navigate(['/']);
-    }
   }
 
   ngOnDestroy() {

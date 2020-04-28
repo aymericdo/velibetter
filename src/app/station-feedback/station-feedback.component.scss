@@ -1,17 +1,9 @@
 @import '~@angular/material/theming';
 
 :host {
-  flex: 1;
-
-  > mat-sidenav-content {
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-  }
-
   section {
     overflow-y: auto;
-    padding: 1.25em;
+    padding: 2em;
   }
 
   .clickable {
@@ -110,7 +102,7 @@
     .numbers {
       display: flex;
       align-items: center;
-      justify-content: start;
+      justify-content: flex-start;
       margin-top: 0.875em;
       flex-wrap: wrap;
 

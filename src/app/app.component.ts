@@ -11,13 +11,13 @@ import { getDegrees } from './reducers/galileo';
 import { getIsCompassView } from './reducers/galileo';
 import { takeUntil, filter } from 'rxjs/operators';
 import { DEFAULT_COORD } from './shared/constants';
-import { setRouteName, setUrl } from './actions/route';
-import { getRouteName } from './reducers/route';
+import { setRouteName, setUrl, setIsFullMap } from './actions/route';
+import { getIsSplitScreen } from './reducers/route';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, OnDestroy {
   constructor(
@@ -30,13 +30,13 @@ export class AppComponent implements OnInit, OnDestroy {
     this.isMobile$ = store.pipe(select(getIsMobile));
     this.deg$ = store.pipe(select(getDegrees));
     this.isCompassView$ = store.pipe(select(getIsCompassView));
-    this.routeName$ = store.pipe(select(getRouteName));
+    this.isFullMap$ = store.pipe(select(getIsSplitScreen));
   }
 
   isMobile$: Observable<boolean>;
   deg$: Observable<number>;
   isCompassView$: Observable<boolean>;
-  routeName$: Observable<string>;
+  isFullMap$: Observable<boolean>;
 
   isIOS = false;
 
@@ -83,9 +83,11 @@ export class AppComponent implements OnInit, OnDestroy {
         event instanceof NavigationEnd
       ),
     ).subscribe((event: NavigationEnd) => {
-      const routeName = this.getRouteName();
+      const routeName = this.getRouteVariables('routeName') as string;
+      const isFullMap = this.getRouteVariables('isFullMap') as boolean;
       this.store.dispatch(setUrl({ url: event.url }));
       this.store.dispatch(setRouteName({ routeName }));
+      this.store.dispatch(setIsFullMap({ isFullMap }));
     });
   }
 
@@ -95,13 +97,13 @@ export class AppComponent implements OnInit, OnDestroy {
     this.destroy$.unsubscribe();
   }
 
-  getRouteName(): string {
+  getRouteVariables(name: string): string | boolean {
     let child = this.activatedRoute.firstChild;
     while (child) {
       if (child.firstChild) {
         child = child.firstChild;
-      } else if (child.snapshot.data && child.snapshot.data.routeName) {
-        return child.snapshot.data.routeName;
+      } else if (child.snapshot.data && child.snapshot.data[name]) {
+        return child.snapshot.data[name];
       } else {
         return null;
       }
@@ -165,18 +167,5 @@ export class AppComponent implements OnInit, OnDestroy {
       case 1:
       // ...user said no ☹️
     }
-  }
-
-  isDisplayingListPages(routeName: string): boolean {
-    return ([
-      'StationDescription',
-      'StationDescriptionFeedback',
-      'Departure',
-      'Arrival',
-      'DepartureItineraryDescription',
-      'ArrivalItineraryDescription',
-      'DepartureItineraryDescriptionFeedback',
-      'ArrivalItineraryDescriptionFeedback',
-    ].includes(routeName));
   }
 }

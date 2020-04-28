@@ -1,27 +1,35 @@
 <mat-sidenav-content>
-  <app-top-bar (back)="onBack()">
-    <button mat-icon-button class="fab-secondary mat-elevation-z0 description-button" color="secondary"
-      (click)="goToFeedback()">
-      <i class="material-icons">feedback</i>
-    </button>
-  </app-top-bar>
-  <ng-container *ngIf="isSelectingStation$ | async">
-    <app-loading></app-loading>
-  </ng-container>
-  <section *ngIf="(selectedStation$ | async) && !(isSelectingStation$ | async)" class="mat-typography">
-    <div class="station-name">
-        <span class="mat-display-1 name">{{(selectedStation$ | async)?.name}}</span>
+  <app-loading *ngIf="isLoading; else loaded"></app-loading>
+  <ng-template #loaded>
+    <ng-container *ngIf="!isFeedbackOpen">
+      <app-top-bar>
+        <button mat-icon-button class="fab-secondary mat-elevation-z0 description-button" color="secondary"
+          (click)="goToFeedback()">
+          <i class="material-icons">feedback</i>
+        </button>
+      </app-top-bar>
+      <ng-container *ngIf="isSelectingStation$ | async">
+        <app-loading></app-loading>
+      </ng-container>
+      <section *ngIf="(selectedStation$ | async) && !(isSelectingStation$ | async)" class="mat-typography">
+        <div class="station-name">
+          <span class="mat-display-1 name">{{(selectedStation$ | async)?.name}}</span>
+        </div>
+        <div class="station-details">
+          <span class="mat-display-1 info"><i class="material-icons">directions</i>{{(selectedStation$ | async)?.distance | number:'1.0-0'}}m</span>
+          <span class="mat-display-1 info"><i class="material-icons">credit_card</i>{{(selectedStation$ | async)?.rentalMethods === "CREDITCARD" ? "Oui": "Non"}}</span>
+        </div>
+        <div class="chart">
+          <app-doughnut-chart
+            [type]="chartType"
+            [data]="chartData"
+            [options]="chartOptions"
+          ></app-doughnut-chart>
+        </div>
+      </section>
+    </ng-container>
+    <div *ngIf="isFeedbackOpen" [@enterAnimation]>
+      <router-outlet></router-outlet>
     </div>
-    <div class="station-details">
-      <span class="mat-display-1 info"><i class="material-icons">directions</i>{{(selectedStation$ | async)?.distance | number:'1.0-0'}}m</span>
-      <span class="mat-display-1 info"><i class="material-icons">credit_card</i>{{(selectedStation$ | async)?.rentalMethods === "CREDITCARD" ? "Oui": "Non"}}</span>
-    </div>
-    <div class="chart">
-      <app-doughnut-chart
-        [type]="chartType"
-        [data]="chartData"
-        [options]="chartOptions"
-      ></app-doughnut-chart>
-    </div>
-  </section>
+  </ng-template>
 </mat-sidenav-content>

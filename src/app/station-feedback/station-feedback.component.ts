@@ -11,7 +11,7 @@ import { getSelectedStation } from '../reducers/stations-map';
 @Component({
   selector: 'app-station-feedback',
   templateUrl: './station-feedback.component.html',
-  styleUrls: ['./station-feedback.component.scss']
+  styleUrls: ['./station-feedback.component.scss'],
 })
 export class StationFeedbackComponent implements OnInit {
   feedback$: Observable<Feedback>;

@@ -5,6 +5,11 @@ export const setRouteName = createAction(
   props<{ routeName: string }>(),
 );
 
+export const setIsFullMap = createAction(
+  '[Route] set is split screen',
+  props<{ isFullMap: boolean }>(),
+);
+
 export const setUrl = createAction(
   '[Route] set url',
   props<{ url: string }>(),

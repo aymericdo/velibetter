@@ -44,6 +44,7 @@ import { StationDescriptionComponent } from './station-description/station-descr
 import { StationFeedbackComponent } from './station-feedback/station-feedback.component';
 import { TopBarComponent } from './top-bar/top-bar.component';
 import { MatChipsModule } from '@angular/material/chips';
+import { ItineraryComponent } from './itinerary/itinerary.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { MatChipsModule } from '@angular/material/chips';
     TimePickerComponent,
     ListButtonComponent,
     TopBarComponent,
-    StationFeedbackComponent
+    StationFeedbackComponent,
+    ItineraryComponent
   ],
   imports: [
     AppRoutingModule,
