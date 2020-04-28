@@ -1,18 +1,18 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NavigationEnd, Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
+import { IChartistData, IPieChartOptions } from 'chartist';
+import ChartistTooltip from 'chartist-plugin-tooltips-updated';
+import { ChartType } from 'ng-chartist';
 import { combineLatest, Observable, Subject } from 'rxjs';
 import { filter, map, take, takeUntil } from 'rxjs/operators';
-import { selectingStation, unselectStationMap, setMapCenter } from '../actions/stations-map';
-import { Station, Coordinate } from '../interfaces';
+import { selectingStation, setMapCenter, unselectStationMap } from '../actions/stations-map';
+import { pageSliderAnimations } from '../animations/page-slider.animations';
+import { Coordinate, Station } from '../interfaces';
 import { AppState } from '../reducers';
 import { getCurrentPosition } from '../reducers/galileo';
-import { getIsSelectingStation, getSelectedStation } from '../reducers/stations-map';
-import { ChartType } from 'ng-chartist';
-import { IChartistData, IPieChartOptions } from 'chartist';
 import { getDestination, getItineraryType } from '../reducers/stations-list';
-import ChartistTooltip from 'chartist-plugin-tooltips-updated';
-import { pageSliderAnimations } from '../animations/page-slider.animations';
+import { getIsSelectingStation, getSelectedStation } from '../reducers/stations-map';
 
 @Component({
   selector: 'app-station-description',
@@ -110,6 +110,10 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
 
   goToFeedback(): void {
     this.router.navigate(['feedback'], { relativeTo: this.activatedRoute });
+  }
+
+  goToThisStation(): void {
+    this.router.navigate(['itinerary', 'departure', +this.activatedRoute.snapshot.paramMap.get('stationId')]);
   }
 
   ngOnDestroy() {

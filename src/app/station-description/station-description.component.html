@@ -3,10 +3,16 @@
   <ng-template #loaded>
     <ng-container *ngIf="!isFeedbackOpen">
       <app-top-bar>
-        <button mat-icon-button class="fab-secondary mat-elevation-z0 description-button" color="secondary"
-          (click)="goToFeedback()">
-          <i class="material-icons">feedback</i>
+        <div class="top-bar-buttons">
+          <button mat-icon-button class="fab-secondary mat-elevation-z0" color="secondary"
+            (click)="goToFeedback()">
+            <i class="material-icons">feedback</i>
+          </button>
+          <button mat-icon-button class="fab-secondary mat-elevation-z0" color="secondary"
+          (click)="goToThisStation()">
+          <i class="material-icons">directions</i>
         </button>
+      </div>
       </app-top-bar>
       <ng-container *ngIf="isSelectingStation$ | async">
         <app-loading></app-loading>
