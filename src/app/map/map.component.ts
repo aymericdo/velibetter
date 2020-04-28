@@ -213,7 +213,7 @@ export class MapComponent implements OnInit, OnDestroy {
     }
   }
 
-  goToDescription(stationId: number): void {
+  goToDescription(stationId?: number): void {
     let destination: Station;
     this.destination$.pipe(take(1))
     .subscribe((d) => {
