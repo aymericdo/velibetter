@@ -12,7 +12,7 @@ import { Coordinate } from '../interfaces/index';
 import { AppState } from '../reducers';
 import { getCurrentBearing, getCurrentPosition, getIsCompassView } from '../reducers/galileo';
 import { getRouteName } from '../reducers/route';
-import { getDestination, getItineraryType } from '../reducers/stations-list';
+import { getDestination, getItineraryType, ItineraryType } from '../reducers/stations-list';
 import { getIsLoading, getLatLngBoundsLiteral, getMapCenter, getMarkers, getSelectedStation, getZoom } from '../reducers/stations-map';
 import { DEFAULT_COORD, DEFAULT_ZOOM } from '../shared/constants';
 
@@ -37,7 +37,7 @@ export class MapComponent implements OnInit, OnDestroy {
   isCompassView$: Observable<boolean>;
   currentBearing$: Observable<number>;
   routeName$: Observable<string>;
-  itineraryType$: Observable<string>;
+  itineraryType$: Observable<ItineraryType>;
 
   compassView = false;
 
@@ -204,7 +204,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   onBack(): void {
-    let itineraryType: string;
+    let itineraryType: ItineraryType;
     this.itineraryType$.pipe(take(1))
       .subscribe((mode) => {
         itineraryType = mode;
@@ -222,7 +222,7 @@ export class MapComponent implements OnInit, OnDestroy {
       destination = d;
     });
 
-    let itineraryType: string;
+    let itineraryType: ItineraryType;
     this.itineraryType$.pipe(take(1))
       .subscribe((mode) => {
         itineraryType = mode;

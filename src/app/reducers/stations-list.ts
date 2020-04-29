@@ -3,12 +3,14 @@ import { AppState } from '.';
 import { fetchingClosestStations, fetchingDestination, setDestination, setStationsList, unsetDestination } from '../actions/stations-list';
 import { Station } from '../interfaces';
 
+export type ItineraryType = 'departure' | 'arrival';
+
 export interface StationState {
   list: Station[];
   isLoading: boolean;
   destination: Station;
   currentDelta: number;
-  itineraryType: string;
+  itineraryType: ItineraryType;
 }
 
 const initialState: StationState = {
