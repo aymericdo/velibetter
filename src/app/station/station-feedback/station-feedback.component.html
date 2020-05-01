@@ -1,0 +1,78 @@
+<mat-sidenav-content>
+  <app-top-bar></app-top-bar>
+  <ng-container *ngIf="isSelectingStation$ | async">
+    <app-loading></app-loading>
+  </ng-container>
+  <section *ngIf="!(isSelectingStation$ | async)" class="mat-typography">
+    <h3 class="title">Feedback</h3>
+    <div class="select-action">
+      <mat-card role="form" class="clickable confirmed"
+        [class.-selected]="selectedCard === 'confirmed'"
+        (click)="clickCard('confirmed')">
+        <i mat-card-avatar class="material-icons dock">visibility</i>
+        <mat-card-actions>
+          <span>Disponible</span>
+        </mat-card-actions>
+      </mat-card>
+      <mat-card role="form" class="clickable reported"
+        [class.-selected]="selectedCard === 'broken'"
+        (click)="clickCard('broken')">
+        <i mat-card-avatar class="material-icons dock">report_problem</i>
+        <mat-card-actions>
+          <span>Cassé</span>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+    <div class="selectors">
+      <div class="selector">
+        <div class="selector-details">
+          <i class="material-icons mechanical">directions_bike</i>
+          <span class="subtitle">Mécanique</span>
+        </div>
+        <div class="numbers">
+          <button mat-button class="clickable number-picker"
+            [disabled]="!selectedCard"
+            *ngFor="let number of numbers"
+            [class.-selected]="numberMechanical === number"
+            (click)="clickMechanical(number)">
+            {{number}}
+          </button>
+        </div>
+      </div>
+      <div class="selector">
+        <div class="selector-details">
+          <i class="material-icons ebike">directions_bike</i>
+          <span class="subtitle">Electrique</span>
+        </div>
+        <div class="numbers">
+          <button mat-button class="clickable number-picker"
+            [disabled]="!selectedCard"
+            *ngFor="let number of numbers"
+            [class.-selected]="numberEbike === number"
+            (click)="clickEbike(number)">
+            {{number}}
+          </button>
+        </div>
+      </div>
+      <div class="selector">
+        <div class="selector-details">
+          <i class="material-icons dock">ev_station</i>
+          <span class="subtitle">Place libre</span>
+        </div>
+        <div class="numbers">
+          <button mat-button class="clickable number-picker"
+            [disabled]="!selectedCard"
+            *ngFor="let number of numbers"
+            [class.-selected]="numberDock === number"
+            (click)="clickDock(number)">
+            {{number}}
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="submission-buttons">
+      <button mat-stroked-button color="warn" class="submit-button" [disabled]="!hasFeedback()" (click)="clear()">Annuler</button>
+      <button mat-flat-button color="primary" class="submit-button" [disabled]="!hasFeedback()" (click)="clickSubmit()">Envoyer</button>
+    </div>
+  </section>
+</mat-sidenav-content>

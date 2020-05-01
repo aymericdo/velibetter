@@ -24,6 +24,7 @@ import { DEFAULT_COORD, DEFAULT_ZOOM } from '../shared/constants';
 export class MapComponent implements OnInit, OnDestroy {
   @Input() isDisplayingListPages: boolean;
   @Input() isIOS: boolean;
+  @Input() isHide: boolean;
   @Output() requestPermissionsIOS = new EventEmitter<any>();
 
   markers$: Observable<Marker[]>;

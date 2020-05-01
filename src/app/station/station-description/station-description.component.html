@@ -1,0 +1,33 @@
+<mat-sidenav-content>
+  <app-top-bar>
+    <div class="top-bar-buttons">
+      <button mat-icon-button class="fab-secondary mat-elevation-z0" color="secondary"
+        (click)="goToFeedback()">
+        <i class="material-icons">feedback</i>
+      </button>
+      <button mat-icon-button class="fab-secondary mat-elevation-z0" color="secondary"
+      (click)="goToThisStation()">
+      <i class="material-icons">directions</i>
+    </button>
+  </div>
+  </app-top-bar>
+  <ng-container *ngIf="isSelectingStation$ | async">
+    <app-loading></app-loading>
+  </ng-container>
+  <section *ngIf="(selectedStation$ | async) && !(isSelectingStation$ | async)" class="mat-typography">
+    <div class="station-name">
+      <span class="mat-display-1 name">{{(selectedStation$ | async)?.name}}</span>
+    </div>
+    <div class="station-details">
+      <span class="mat-display-1 info"><i class="material-icons">directions</i>{{(selectedStation$ | async)?.distance | number:'1.0-0'}}m</span>
+      <span class="mat-display-1 info"><i class="material-icons">credit_card</i>{{(selectedStation$ | async)?.rentalMethods === "CREDITCARD" ? "Oui": "Non"}}</span>
+    </div>
+    <div class="chart">
+      <app-doughnut-chart
+        [type]="chartType"
+        [data]="chartData"
+        [options]="chartOptions"
+      ></app-doughnut-chart>
+    </div>
+  </section>
+</mat-sidenav-content>

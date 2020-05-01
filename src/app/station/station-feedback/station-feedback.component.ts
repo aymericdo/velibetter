@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Store, select } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { savingFeedback } from '../actions/feedback';
-import { Feedback, FeedbackType, Station } from '../interfaces/index';
-import { AppState } from '../reducers';
-import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { getSelectedStation } from '../reducers/stations-map';
+import { ActivatedRoute } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { getIsSelectingStation } from 'src/app/reducers/stations-map';
+import { savingFeedback } from '../../actions/feedback';
+import { Feedback, FeedbackType } from '../../interfaces/index';
+import { AppState } from '../../reducers';
 
 @Component({
   selector: 'app-station-feedback',
@@ -15,6 +15,7 @@ import { getSelectedStation } from '../reducers/stations-map';
 })
 export class StationFeedbackComponent implements OnInit {
   feedback$: Observable<Feedback>;
+  isSelectingStation$: Observable<boolean>;
   // selectedStation$: Observable<Station>;
 
   selectedCard: string;
@@ -29,6 +30,7 @@ export class StationFeedbackComponent implements OnInit {
     private snackBar: MatSnackBar,
     private activatedRoute: ActivatedRoute,
   ) {
+    this.isSelectingStation$ = store.pipe(select(getIsSelectingStation));
     // this.selectedStation$ = store.pipe(select(getSelectedStation));
   }
 

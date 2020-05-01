@@ -1,7 +1,7 @@
-import { Component, Output, EventEmitter } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { Store, select } from '@ngrx/store';
 import { AppState } from '../reducers';
 import { getIsCompassView } from '../reducers/galileo';
 

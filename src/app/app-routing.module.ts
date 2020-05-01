@@ -1,8 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ArrivalComponent } from './arrival/arrival.component';
+import { DepartureComponent } from './departure/departure.component';
+import { ItineraryMapComponent } from './itinerary-map/itinerary-map.component';
 import { ItineraryComponent } from './itinerary/itinerary.component';
-import { StationDescriptionComponent } from './station-description/station-description.component';
-import { StationFeedbackComponent } from './station-feedback/station-feedback.component';
+import { StationDescriptionComponent } from './station/station-description/station-description.component';
+import { StationFeedbackComponent } from './station/station-feedback/station-feedback.component';
+import { StationComponent } from './station/station.component';
 
 const routes: Routes = [
   {
@@ -17,29 +21,44 @@ const routes: Routes = [
   },
   {
     path: 'stations/:stationId',
-    component: StationDescriptionComponent,
-    data: { routeName: 'StationDescription' },
+    component: StationComponent,
     children: [
+      {
+        path: '',
+        component: StationDescriptionComponent,
+        data: { routeName: 'StationDescription', animation: 'Description' },
+      },
       {
         path: 'feedback',
         component: StationFeedbackComponent,
-        data: { routeName: 'StationDescriptionFeedback' },
+        data: { routeName: 'StationDescriptionFeedback', animation: 'Feedback' },
       },
-    ]
+    ],
   },
   {
     path: 'itinerary',
     redirectTo: '',
   },
   {
-    path: 'itinerary/:itineraryType',
+    path: 'itinerary',
     component: ItineraryComponent,
-    data: { routeName: 'ItineraryList' },
-  },
-  {
-    path: 'itinerary/:itineraryType/:destinationId',
-    component: ItineraryComponent,
-    data: { routeName: 'ItineraryMap', isFullMap: true },
+    children: [
+      {
+        path: 'departure',
+        component: DepartureComponent,
+        data: { routeName: 'Departure', animation: 'Itinerary' },
+      },
+      {
+        path: 'arrival',
+        component: ArrivalComponent,
+        data: { routeName: 'Arrival', animation: 'Itinerary' },
+      },
+      {
+        path: ':itineraryType/:destinationId',
+        component: ItineraryMapComponent,
+        data: { routeName: 'ItineraryMap', isFullMap: true, animation: 'ItineraryMap' },
+      },
+    ],
   },
   {
     path: 'itinerary/:itineraryType/:destinationId/description',
@@ -47,20 +66,27 @@ const routes: Routes = [
   },
   {
     path: 'itinerary/:itineraryType/:destinationId/description/:stationId',
-    component: StationDescriptionComponent,
-    data: { routeName: 'ItineraryDescription' },
+    component: StationComponent,
     children: [
+      {
+        path: '',
+        component: StationDescriptionComponent,
+        data: { routeName: 'ItineraryDescription', animation: 'Description' },
+      },
       {
         path: 'feedback',
         component: StationFeedbackComponent,
-        data: { routeName: 'ItineraryDescriptionFeedback' },
+        data: { routeName: 'ItineraryDescriptionFeedback', animation: 'Feedback' },
       },
-    ]
+    ],
   },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  imports: [RouterModule.forRoot(
+  routes,
+    // { enableTracing: true },
+  )],
+  exports: [RouterModule],
 })
 export class AppRoutingModule { }

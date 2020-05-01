@@ -1,25 +1,38 @@
-import { Component, OnDestroy, OnInit, HostListener, Renderer2 } from '@angular/core';
-import { Store, select } from '@ngrx/store';
-import { AppState } from './reducers';
-import { Observable, Subject } from 'rxjs';
-import { setPosition, setDegrees, toggleCompassView } from './actions/galileo';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
+import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { Observable, Subject } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
+import { setDegrees, setPosition, toggleCompassView } from './actions/galileo';
+import { setIsFullMap, setRouteName, setUrl } from './actions/route';
 import { setIsMobile } from './actions/screen';
-import { getIsMobile } from './reducers/screen';
-import { getDegrees } from './reducers/galileo';
-import { getIsCompassView } from './reducers/galileo';
-import { takeUntil, filter } from 'rxjs/operators';
-import { DEFAULT_COORD } from './shared/constants';
-import { setRouteName, setUrl, setIsFullMap } from './actions/route';
+import { animationSpeed, animationType, routerTransition } from './animations/route-animations';
+import { AppState } from './reducers';
+import { getDegrees, getIsCompassView } from './reducers/galileo';
 import { getIsSplitScreen } from './reducers/route';
+import { getIsMobile } from './reducers/screen';
+import { DEFAULT_COORD } from './shared/constants';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  animations: [routerTransition],
 })
 export class AppComponent implements OnInit, OnDestroy {
+  isMobile$: Observable<boolean>;
+  deg$: Observable<number>;
+  isCompassView$: Observable<boolean>;
+  isFullMap$: Observable<boolean>;
+
+  isIOS = false;
+  mapTransition = `width ${animationSpeed} ${animationType}`;
+
+  private deviceOrientationListener: () => void = null;
+  private watcher: number = null;
+  private destroy$: Subject<boolean> = new Subject<boolean>();
+
   constructor(
     private store: Store<AppState>,
     private activatedRoute: ActivatedRoute,
@@ -32,17 +45,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.isCompassView$ = store.pipe(select(getIsCompassView));
     this.isFullMap$ = store.pipe(select(getIsSplitScreen));
   }
-
-  isMobile$: Observable<boolean>;
-  deg$: Observable<number>;
-  isCompassView$: Observable<boolean>;
-  isFullMap$: Observable<boolean>;
-
-  isIOS = false;
-
-  private deviceOrientationListener: () => void = null;
-  private watcher: number = null;
-  private destroy$: Subject<boolean> = new Subject<boolean>();
 
   ngOnInit() {
     this.isIOS = ((/iPad|iPhone|iPod/.test(navigator.userAgent)) && (typeof (DeviceMotionEvent as any).requestPermission === 'function'));

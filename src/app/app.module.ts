@@ -6,21 +6,22 @@ import { FormsModule } from '@angular/forms';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { MatIconModule } from '@angular/material/icon';
 import { AgmDirectionModule } from 'agm-direction';
 import { FlatpickrModule } from 'angularx-flatpickr';
 import { ChartistModule } from 'ng-chartist';
@@ -30,6 +31,8 @@ import { AppComponent } from './app.component';
 import { AppEffects } from './app.effects';
 import { ArrivalComponent } from './arrival/arrival.component';
 import { DepartureComponent } from './departure/departure.component';
+import { ItineraryMapComponent } from './itinerary-map/itinerary-map.component';
+import { ItineraryComponent } from './itinerary/itinerary.component';
 import { MapComponent } from './map/map.component';
 import { metaReducers, reducers } from './reducers';
 import { DoughnutChartComponent } from './shared/doughnut-chart/doughnut-chart.component';
@@ -40,11 +43,10 @@ import { RowStationComponent } from './shared/row-station/row-station.component'
 import { ScoreDoughnutChartComponent } from './shared/score-doughnut-chart/score-doughnut-chart.component';
 import { SpeedDialFabComponent } from './shared/speed-dial-fab/speed-dial-fab.component';
 import { TimePickerComponent } from './shared/time-picker/time-picker.component';
-import { StationDescriptionComponent } from './station-description/station-description.component';
-import { StationFeedbackComponent } from './station-feedback/station-feedback.component';
+import { StationDescriptionComponent } from './station/station-description/station-description.component';
+import { StationFeedbackComponent } from './station/station-feedback/station-feedback.component';
+import { StationComponent } from './station/station.component';
 import { TopBarComponent } from './top-bar/top-bar.component';
-import { MatChipsModule } from '@angular/material/chips';
-import { ItineraryComponent } from './itinerary/itinerary.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +65,9 @@ import { ItineraryComponent } from './itinerary/itinerary.component';
     ListButtonComponent,
     TopBarComponent,
     StationFeedbackComponent,
-    ItineraryComponent
+    ItineraryComponent,
+    StationComponent,
+    ItineraryMapComponent
   ],
   imports: [
     AppRoutingModule,

@@ -56,7 +56,7 @@
     </agm-direction>
   </agm-map>
   <button
-    *ngIf="!!(currentPosition$ | async)"
+    *ngIf="!!(currentPosition$ | async) && !isDisplayingListPages"
     mat-mini-fab class="my-location-button"
     (click)="recenterMap()">
     <i class="material-icons">my_location</i>
@@ -68,4 +68,4 @@
     [fabButtons]="fabButtons"
   ></app-speed-dial-fab>
 </div>
-<app-loading *ngIf="isLoading$ | async"></app-loading>
+<app-loading *ngIf="(isLoading$ | async) && !isHide"></app-loading>

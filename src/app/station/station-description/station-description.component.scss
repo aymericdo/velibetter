@@ -1,4 +1,6 @@
 :host {
+  display: block;
+  height: 100%;
   flex: 1;
 
   mat-sidenav-content {
@@ -14,7 +16,7 @@
   }
 
   section {
-    padding: 50px;
+    padding: 3em;
     display: flex;
     flex-direction: column;
     height: 100%;

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { createAction, select, Store } from '@ngrx/store';
 import { EMPTY, Observable, of } from 'rxjs';
-import { catchError, filter, map, mergeMap, take, withLatestFrom } from 'rxjs/operators';
+import { catchError, debounceTime, filter, map, mergeMap, take, withLatestFrom } from 'rxjs/operators';
 import { savingFeedback } from './actions/feedback';
 import { setBearing, setPosition } from './actions/galileo';
 import { fetchingClosestStations, fetchingDestination, setDestination, setStationsList } from './actions/stations-list';
@@ -29,6 +29,7 @@ export class AppEffects {
   fetchingStationsInPolygon$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fetchingStationsInPolygon),
+      debounceTime(500),
       withLatestFrom(this.store.pipe(select(getCurrentPosition))),
       mergeMap(([{ latLngBoundsLiteral }, position]) => {
         // I don't understand how combineLatest could be useful in this case
