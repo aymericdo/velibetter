@@ -4,6 +4,12 @@
   width: 100%;
   position: relative;
 
+  mat-sidenav-content {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+  }
+
   .map {
     height: 100%;
 

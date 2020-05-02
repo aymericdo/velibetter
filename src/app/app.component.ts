@@ -27,7 +27,7 @@ export class AppComponent implements OnInit, OnDestroy {
   isFullMap$: Observable<boolean>;
 
   isIOS = false;
-  mapTransition = `width ${animationSpeed} ${animationType}`;
+  mapTransition = `opacity ${animationSpeed} ${animationType}, width ${animationSpeed} ${animationType}`;
 
   private deviceOrientationListener: () => void = null;
   private watcher: number = null;

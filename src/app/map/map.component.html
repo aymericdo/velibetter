@@ -1,71 +1,73 @@
-<app-top-bar *ngIf="showTopBar(routeName$ | async)" (back)="onBack()">
-  <button mat-icon-button class="fab-secondary mat-elevation-z0 description-button" color="secondary"
-    (click)="goToDescription()">
-    <i class="material-icons">description</i>
-  </button>
-</app-top-bar>
-<div
-  class="map"
-  [class.-disabled]="isLoading$ | async"
->
-  <agm-map
-    [latitude]="(mapCenter$ | async)?.lat"
-    [zoom]="(zoom$ | async)"
-    [longitude]="(mapCenter$ | async)?.lng"
-    [zoomControl]="false"
-    [streetViewControl]="false"
-    (idle)="idle()"
-    (boundsChange)="boundsChange($event)"
-    (centerChange)="centerChange($event)"
-    (zoomChange)="zoomChange($event)"
+<mat-sidenav-content>
+  <app-top-bar *ngIf="showTopBar(routeName$ | async)" (back)="onBack()">
+    <button mat-icon-button class="fab-secondary mat-elevation-z0 description-button" color="secondary"
+      (click)="goToDescription()">
+      <i class="material-icons">description</i>
+    </button>
+  </app-top-bar>
+  <div
+    class="map"
+    [class.-disabled]="isLoading$ | async"
   >
-    <agm-marker
-      *ngFor="let marker of markers$ | async; trackBy: trackByFn"
-      [latitude]="marker.lat"
-      [longitude]="marker.lng"
-      (markerClick)="clickedMarker(marker.id)"
-      [opacity]="1"
-      [iconUrl]="(selectedStation$ | async)?.stationId === marker.id ? '/assets/station_selected.svg' : '/assets/station.svg'"
+    <agm-map
+      [latitude]="(mapCenter$ | async)?.lat"
+      [zoom]="(zoom$ | async)"
+      [longitude]="(mapCenter$ | async)?.lng"
+      [zoomControl]="false"
+      [streetViewControl]="false"
+      (idle)="idle()"
+      (boundsChange)="boundsChange($event)"
+      (centerChange)="centerChange($event)"
+      (zoomChange)="zoomChange($event)"
     >
-    </agm-marker>
-
-    <ng-container *ngIf="!!(currentPosition$ | async)">
       <agm-marker
-        *ngIf="(isCompassView$ | async) && (currentBearing$ | async); else normalIcon"
-        [latitude]="(currentPosition$ | async)?.lat"
-        [longitude]="(currentPosition$ | async)?.lng"
+        *ngFor="let marker of markers$ | async; trackBy: trackByFn"
+        [latitude]="marker.lat"
+        [longitude]="marker.lng"
+        (markerClick)="clickedMarker(marker.id)"
         [opacity]="1"
-        [iconUrl]="'/assets/compass_calibration.svg'">
+        [iconUrl]="(selectedStation$ | async)?.stationId === marker.id ? '/assets/station_selected.svg' : '/assets/station.svg'"
+      >
       </agm-marker>
-      <ng-template #normalIcon>
+
+      <ng-container *ngIf="!!(currentPosition$ | async)">
         <agm-marker
+          *ngIf="(isCompassView$ | async) && (currentBearing$ | async); else normalIcon"
           [latitude]="(currentPosition$ | async)?.lat"
           [longitude]="(currentPosition$ | async)?.lng"
           [opacity]="1"
-          [iconUrl]="'/assets/my_location.svg'">
+          [iconUrl]="'/assets/compass_calibration.svg'">
         </agm-marker>
-      </ng-template>
-    </ng-container>
+        <ng-template #normalIcon>
+          <agm-marker
+            [latitude]="(currentPosition$ | async)?.lat"
+            [longitude]="(currentPosition$ | async)?.lng"
+            [opacity]="1"
+            [iconUrl]="'/assets/my_location.svg'">
+          </agm-marker>
+        </ng-template>
+      </ng-container>
 
-    <agm-direction
-      *ngIf="!!(currentPosition$ | async) && (destination$ | async)"
-      [origin]="currentPosition$ | async"
-      [destination]="destination$ | async"
-      [travelMode]="(itineraryType$ | async) === 'departure' ? 'WALKING' : 'BICYCLING'"
-    >
-    </agm-direction>
-  </agm-map>
-  <button
-    *ngIf="!!(currentPosition$ | async) && !isDisplayingListPages"
-    mat-mini-fab class="my-location-button"
-    (click)="recenterMap()">
-    <i class="material-icons">my_location</i>
-  </button>
-  <app-speed-dial-fab
-    *ngIf="!!(currentPosition$ | async) && !isDisplayingListPages"
-    (redirect)="navigateTo($event)"
-    [mainButtonIcon]="'navigation'"
-    [fabButtons]="fabButtons"
-  ></app-speed-dial-fab>
-</div>
-<app-loading *ngIf="(isLoading$ | async) && !isHide"></app-loading>
+      <agm-direction
+        *ngIf="!!(currentPosition$ | async) && (destination$ | async)"
+        [origin]="currentPosition$ | async"
+        [destination]="destination$ | async"
+        [travelMode]="(itineraryType$ | async) === 'departure' ? 'WALKING' : 'BICYCLING'"
+      >
+      </agm-direction>
+    </agm-map>
+    <button
+      *ngIf="!!(currentPosition$ | async) && !isDisplayingListPages"
+      mat-mini-fab class="my-location-button"
+      (click)="recenterMap()">
+      <i class="material-icons">my_location</i>
+    </button>
+    <app-speed-dial-fab
+      *ngIf="!!(currentPosition$ | async) && !isDisplayingListPages"
+      (redirect)="navigateTo($event)"
+      [mainButtonIcon]="'navigation'"
+      [fabButtons]="fabButtons"
+    ></app-speed-dial-fab>
+  </div>
+  <app-loading *ngIf="(isLoading$ | async) && !isHide"></app-loading>
+</mat-sidenav-content>

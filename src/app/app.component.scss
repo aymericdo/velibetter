@@ -9,7 +9,8 @@
       z-index: 3;
 
       &.-hide {
-        width: 0;
+        z-index: 0;
+        opacity: 0;
       }
     }
 
