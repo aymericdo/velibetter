@@ -7,7 +7,7 @@ import { selectingStation, setMapCenter, unselectStationMap } from '../actions/s
 import { routerTransition } from '../animations/route-animations';
 import { Coordinate } from '../interfaces';
 import { AppState } from '../reducers';
-import { getCurrentPosition } from '../reducers/galileo';
+import { getCurrentPosition, getIsNoGeolocation } from '../reducers/galileo';
 
 @Component({
   selector: 'app-station',
@@ -17,6 +17,7 @@ import { getCurrentPosition } from '../reducers/galileo';
 })
 export class StationComponent implements OnInit, OnDestroy {
   currentPosition$: Observable<Coordinate>;
+  isNoGeolocation$: Observable<boolean>;
 
   private destroy$: Subject<boolean> = new Subject<boolean>();
 
@@ -26,6 +27,7 @@ export class StationComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
   ) {
     this.currentPosition$ = store.pipe(select(getCurrentPosition));
+    this.isNoGeolocation$ = store.pipe(select(getIsNoGeolocation));
   }
 
   ngOnInit() {
@@ -43,6 +45,11 @@ export class StationComponent implements OnInit, OnDestroy {
 
     this.currentPosition$.pipe(filter(Boolean), take(1))
       .subscribe((position) => {
+        this.selectStationFct(+this.activatedRoute.snapshot.paramMap.get('stationId'));
+      });
+
+    this.isNoGeolocation$.pipe(filter(Boolean), take(1))
+      .subscribe((isNoGeolocation) => {
         this.selectStationFct(+this.activatedRoute.snapshot.paramMap.get('stationId'));
       });
   }

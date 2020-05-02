@@ -5,6 +5,11 @@ export const setPosition = createAction(
   props<{ lat: number, lng: number }>(),
 );
 
+export const setIsNoGeolocation = createAction(
+  '[galileo] set is no geolocation',
+  props<{ isNoGeolocation: boolean }>(),
+);
+
 export const setDegrees = createAction(
   '[galileo] set degrees',
   props<{ deg: number }>(),

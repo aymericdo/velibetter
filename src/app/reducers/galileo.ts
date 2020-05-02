@@ -1,6 +1,6 @@
-import { Action, createReducer, on, createSelector } from '@ngrx/store';
+import { Action, createReducer, createSelector, on } from '@ngrx/store';
 import { AppState } from '.';
-import { setPosition, setDegrees, toggleCompassView, setBearing } from '../actions/galileo';
+import { setBearing, setDegrees, setIsNoGeolocation, setPosition, toggleCompassView } from '../actions/galileo';
 import { Coordinate } from '../interfaces';
 
 export interface GalileoState {
@@ -8,6 +8,7 @@ export interface GalileoState {
   precedentPos: Coordinate;
   deg: number;
   isCompassView: boolean;
+  isNoGeolocation: boolean;
   bearing: number;
 }
 
@@ -16,6 +17,7 @@ const initialState: GalileoState = {
   precedentPos: null,
   deg: null,
   isCompassView: false,
+  isNoGeolocation: false,
   bearing: null,
 };
 
@@ -27,6 +29,12 @@ export const positionReducer = createReducer(initialState,
         lat,
         lng,
       },
+    };
+  }),
+  on(setIsNoGeolocation, (state, { isNoGeolocation }) => {
+    return {
+      ...state,
+      isNoGeolocation,
     };
   }),
   on(setBearing, (state, { bearing }) => {
@@ -60,6 +68,7 @@ export const selectPosition = (state: AppState) => state.galileo;
 export const getCurrentPosition = createSelector(selectPosition, (state: GalileoState) => state.currentPos);
 export const getPrecedentPosition = createSelector(selectPosition, (state: GalileoState) => state.precedentPos);
 export const getDegrees = createSelector(selectPosition, (state: GalileoState) => state.deg);
+export const getIsNoGeolocation = createSelector(selectPosition, (state: GalileoState) => state.isNoGeolocation);
 export const getIsCompassView = createSelector(selectPosition, (state: GalileoState) => state.isCompassView);
 export const getCurrentBearing = createSelector(selectPosition, (state: GalileoState) =>
   state.isCompassView && state.bearing !== null && state.deg !== null ?

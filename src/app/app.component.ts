@@ -4,7 +4,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
-import { setDegrees, setPosition, toggleCompassView } from './actions/galileo';
+import { setDegrees, setIsNoGeolocation, setPosition, toggleCompassView } from './actions/galileo';
 import { setIsFullMap, setRouteName, setUrl } from './actions/route';
 import { setIsMobile } from './actions/screen';
 import { animationSpeed, animationType, routerTransition } from './animations/route-animations';
@@ -164,9 +164,20 @@ export class AppComponent implements OnInit, OnDestroy {
         );
         break;
       case 2:
+        this.store.dispatch(
+          setIsNoGeolocation({
+            isNoGeolocation: true,
+          })
+        );
         // ...device can't get data
         break;
       case 1:
+        this.store.dispatch(
+          setIsNoGeolocation({
+            isNoGeolocation: true,
+          })
+        );
+        break;
       // ...user said no ☹️
     }
   }

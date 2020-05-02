@@ -6,6 +6,7 @@
         <i class="material-icons">feedback</i>
       </button>
       <button mat-icon-button class="fab-secondary mat-elevation-z0" color="secondary"
+      *ngIf="!(isNoGeolocation$ | async)"
       (click)="goToThisStation()">
       <i class="material-icons">directions</i>
     </button>
@@ -19,7 +20,7 @@
       <span class="mat-display-1 name">{{(selectedStation$ | async)?.name}}</span>
     </div>
     <div class="station-details">
-      <span class="mat-display-1 info"><i class="material-icons">directions</i>{{(selectedStation$ | async)?.distance | number:'1.0-0'}}m</span>
+      <span *ngIf="!(isNoGeolocation$ | async)" class="mat-display-1 info"><i class="material-icons">directions</i>{{(selectedStation$ | async)?.distance | number:'1.0-0'}}m</span>
       <span class="mat-display-1 info"><i class="material-icons">credit_card</i>{{(selectedStation$ | async)?.rentalMethods === "CREDITCARD" ? "Oui": "Non"}}</span>
     </div>
     <div class="chart">

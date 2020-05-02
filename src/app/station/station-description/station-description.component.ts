@@ -6,6 +6,7 @@ import ChartistTooltip from 'chartist-plugin-tooltips-updated';
 import { ChartType } from 'ng-chartist';
 import { Observable, Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
+import { getIsNoGeolocation } from 'src/app/reducers/galileo';
 import { setMapCenter } from '../../actions/stations-map';
 import { Station } from '../../interfaces';
 import { AppState } from '../../reducers';
@@ -19,6 +20,7 @@ import { getIsSelectingStation, getSelectedStation } from '../../reducers/statio
 export class StationDescriptionComponent implements OnInit, OnDestroy {
   selectedStation$: Observable<Station>;
   isSelectingStation$: Observable<boolean>;
+  isNoGeolocation$: Observable<boolean>;
 
   chartType: ChartType = 'Pie';
   chartData: IChartistData;
@@ -48,6 +50,7 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
   ) {
     this.selectedStation$ = store.pipe(select(getSelectedStation));
     this.isSelectingStation$ = store.pipe(select(getIsSelectingStation));
+    this.isNoGeolocation$ = store.pipe(select(getIsNoGeolocation));
   }
 
   ngOnInit(): void {
