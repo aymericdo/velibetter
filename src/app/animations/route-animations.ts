@@ -18,7 +18,7 @@ export const routerTransition =
       query(':enter', animateChild()),
       group([
         query(':enter', [
-          style({ transform: 'translateX(-100%)' }),
+          style({ transform: 'translateX(100%)' }),
           animate(`${animationSpeed} ${animationType}`, style({ transform: 'translateX(0%)' })),
         ]),
       ]),
@@ -37,7 +37,7 @@ export const routerTransition =
       group([
         query(':leave', [
           style({ transform: 'translateX(0%)' }),
-          animate(`${animationSpeed} ${animationType}`, style({ transform: 'translateX(-100%)' }))
+          animate(`${animationSpeed} ${animationType}`, style({ transform: 'translateX(100%)' }))
         ]),
       ]),
     ]),
