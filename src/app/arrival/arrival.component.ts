@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
-import { filter, take, map } from 'rxjs/operators';
+import { filter, map, take } from 'rxjs/operators';
 import { fetchingClosestStations } from '../actions/stations-list';
 import { Station } from '../interfaces';
 import { AppState } from '../reducers';
 import { getCurrentPosition } from '../reducers/galileo';
-import { getIsLoading, getStationsStatus, getCurrentDelta } from '../reducers/stations-list';
+import { getCurrentDelta, getIsLoading, getStationsStatus } from '../reducers/stations-list';
 
 @Component({
   selector: 'app-arrival',
@@ -67,6 +67,7 @@ export class ArrivalComponent implements OnInit {
   }
 
   selectedDateTime(dt: moment.Moment) {
+    debugger;
     const timeDifferenceInHours = dt.diff(moment(), 'hours');
     this.store.dispatch(
       fetchingClosestStations({

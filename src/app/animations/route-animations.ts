@@ -23,7 +23,7 @@ export const routerTransition =
         ]),
       ]),
     ]),
-    transition('Description => void, Itinerary => void, Itinerary => ItineraryMap', [
+    transition('Description => void, Itinerary => void, Itinerary => ItineraryMap, Description => ItineraryMap', [
       style({ position: 'relative' }),
       query(':leave', [
         style({

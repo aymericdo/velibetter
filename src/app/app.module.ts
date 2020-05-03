@@ -31,6 +31,8 @@ import { AppComponent } from './app.component';
 import { AppEffects } from './app.effects';
 import { ArrivalComponent } from './arrival/arrival.component';
 import { DepartureComponent } from './departure/departure.component';
+import { ItineraryTypeChoiceListComponent } from './dialogs/itinerary-type-choice-list/itinerary-type-choice-list.dialog';
+import { TimePickerComponent } from './dialogs/time-picker/time-picker.dialog';
 import { ItineraryMapComponent } from './itinerary-map/itinerary-map.component';
 import { ItineraryComponent } from './itinerary/itinerary.component';
 import { MapComponent } from './map/map.component';
@@ -42,7 +44,6 @@ import { LoadingComponent } from './shared/loading/loading.component';
 import { RowStationComponent } from './shared/row-station/row-station.component';
 import { ScoreDoughnutChartComponent } from './shared/score-doughnut-chart/score-doughnut-chart.component';
 import { SpeedDialFabComponent } from './shared/speed-dial-fab/speed-dial-fab.component';
-import { TimePickerComponent } from './shared/time-picker/time-picker.component';
 import { StationDescriptionComponent } from './station/station-description/station-description.component';
 import { StationFeedbackComponent } from './station/station-feedback/station-feedback.component';
 import { StationComponent } from './station/station.component';
@@ -67,7 +68,8 @@ import { TopBarComponent } from './top-bar/top-bar.component';
     StationFeedbackComponent,
     ItineraryComponent,
     StationComponent,
-    ItineraryMapComponent
+    ItineraryMapComponent,
+    ItineraryTypeChoiceListComponent
   ],
   imports: [
     AppRoutingModule,

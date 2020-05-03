@@ -7,7 +7,7 @@
       </button>
       <button mat-icon-button class="fab-secondary mat-elevation-z0" color="secondary"
       *ngIf="!(isNoGeolocation$ | async)"
-      (click)="goToThisStation()">
+      (click)="openDialog()">
       <i class="material-icons">directions</i>
     </button>
   </div>

@@ -29,6 +29,7 @@ export const positionReducer = createReducer(initialState,
         lat,
         lng,
       },
+      isNoGeolocation: false,
     };
   }),
   on(setIsNoGeolocation, (state, { isNoGeolocation }) => {

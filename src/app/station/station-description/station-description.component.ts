@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { IChartistData, IPieChartOptions } from 'chartist';
@@ -6,7 +7,9 @@ import ChartistTooltip from 'chartist-plugin-tooltips-updated';
 import { ChartType } from 'ng-chartist';
 import { Observable, Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
+import { ItineraryTypeChoiceListComponent } from 'src/app/dialogs/itinerary-type-choice-list/itinerary-type-choice-list.dialog';
 import { getIsNoGeolocation } from 'src/app/reducers/galileo';
+import { ItineraryType } from 'src/app/reducers/stations-list';
 import { setMapCenter } from '../../actions/stations-map';
 import { Station } from '../../interfaces';
 import { AppState } from '../../reducers';
@@ -44,6 +47,7 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
   private destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
+    private dialog: MatDialog,
     private store: Store<AppState>,
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -78,8 +82,20 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
     this.router.navigate(['feedback'], { relativeTo: this.activatedRoute });
   }
 
-  goToThisStation(): void {
-    this.router.navigate(['itinerary', 'departure', +this.activatedRoute.snapshot.paramMap.get('stationId')]);
+  openDialog() {
+    const dialogRef = this.dialog.open(ItineraryTypeChoiceListComponent);
+
+    const sub = dialogRef.componentInstance.typeChanged.subscribe((type: ItineraryType) => {
+      this.goToThisStation(type);
+    });
+
+    dialogRef.afterClosed().subscribe(() => {
+      sub.unsubscribe();
+    });
+  }
+
+  goToThisStation(itineraryType: ItineraryType): void {
+    this.router.navigate(['itinerary', itineraryType, +this.activatedRoute.snapshot.paramMap.get('stationId')]);
   }
 
   ngOnDestroy() {

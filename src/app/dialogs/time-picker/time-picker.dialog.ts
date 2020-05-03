@@ -1,23 +1,23 @@
-import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import * as moment from 'moment';
-import flatpickr from "flatpickr"
-import { French } from "flatpickr/dist/l10n/fr.js"
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 import { FlatPickrOutputOptions } from 'angularx-flatpickr/flatpickr.directive';
-
-
+import flatpickr from 'flatpickr';
+import { French } from 'flatpickr/dist/l10n/fr.js';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-time-picker',
-  templateUrl: './time-picker.component.html',
-  styleUrls: ['./time-picker.component.scss']
+  templateUrl: './time-picker.dialog.html',
+  styleUrls: ['./time-picker.dialog.scss']
 })
 export class TimePickerComponent implements OnInit {
   @Output() datetimeChanged = new EventEmitter<moment.Moment>();
   datetime: Date;
   minDate = new Date();
 
-  constructor(private dialogRef: MatDialogRef<TimePickerComponent>, @Inject(MAT_DIALOG_DATA) public data: any) { }
+  constructor(
+    private dialogRef: MatDialogRef<TimePickerComponent>,
+  ) { }
 
   ngOnInit() {
     flatpickr.localize(French);
