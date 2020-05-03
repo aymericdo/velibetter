@@ -39,6 +39,16 @@
       .sidebar-wrapper {
         width: 40%;
       }
+
+      &.-is-fullmap {
+        app-map {
+          width: 100%;
+        }
+
+        .sidebar-wrapper {
+          z-index: 0;
+        }
+      }
     }
   }
 }

@@ -1,5 +1,6 @@
 <mat-sidenav-container fullscreen>
-  <main [class.-is-splitted]="!(isMobile$ | async) && !(isFullMap$ | async)">
+  <main [class.-is-splitted]="!(isMobile$ | async)"
+        [class.-is-fullmap]="isFullMap$ | async">
     <app-map
       [ngStyle]="{'transition': mapTransition}"
       [class.-hide]="(isMobile$ | async) && !(isFullMap$ | async)"
