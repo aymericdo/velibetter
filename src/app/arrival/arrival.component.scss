@@ -39,7 +39,7 @@
     }
 
     span.score {
-      color: hsl(203, 15%, 47%);
+      color: var(--tertiary-text);
     }
   }
 }

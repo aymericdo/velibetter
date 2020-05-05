@@ -32,10 +32,10 @@ export class DepartureComponent implements OnInit {
       map(delta =>
         delta ?
           moment().isSame(moment().add(delta, 'hour'), 'day') ?
-            moment().add(delta, 'hour').format('HH:00')
+            moment().add(delta + 1, 'hour').format('HH:00')
+            :
+            moment().add(delta + 1, 'hour').format('DD/MM/YYYY HH:00')
           :
-            moment().add(delta, 'hour').format('DD/MM/YYYY HH:00')
-        :
           null
       ),
     );

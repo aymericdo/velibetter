@@ -39,7 +39,8 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
     plugins: [
       ChartistTooltip({
         anchorToPoint: true,
-        appendToBody: true
+        appendToBody: true,
+        class: 'ct-tooltip'
       })
     ]
   };
