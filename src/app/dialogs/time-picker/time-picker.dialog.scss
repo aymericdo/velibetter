@@ -1,3 +1,5 @@
+@import "src/variables.scss";
+
 :host {
   display: flex;
   flex-direction: column;
@@ -10,7 +12,7 @@
 
   ::ng-deep h2 {
     font-weight: 600;
-    color: var(--important-text);
+    color: $important-text;
   }
 
 

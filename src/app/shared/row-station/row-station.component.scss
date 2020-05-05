@@ -1,3 +1,5 @@
+@import "src/variables.scss";
+
 :host {
     display: flex;
     justify-content: space-between;
@@ -12,13 +14,13 @@
       width: 80%;
       .station-name {
           font-weight: 600;
-          color: var(--important-text);
+          color: $important-text;
       }
       ::ng-deep .station-details {
           display: flex;
           align-items: center;
           font-weight: 400;
-          color: var(--secondary-text);
+          color: $secondary-text;
           &>span {
               display: flex;
               align-items: center;

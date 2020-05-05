@@ -1,13 +1,14 @@
-@import "../../../theme.scss";
 @import "~@angular/material/theming";
+@import "src/variables.scss";
+@import "src/theme.scss";
 
-::ng-deep .ct-tooltip {
+.ct-tooltip {
   color: white;
-  background: mat-color($my-app-accent);
-}
+  background: map_get($my-app-accent, 900);
 
-::ng-deep .ct-tooltip::before {
-  border-top-color: mat-color($my-app-accent);
+  &::before {
+    border-top-color: map_get($my-app-accent, 900);
+  }
 }
 
 :host {
@@ -39,7 +40,7 @@
 
       .name {
         font-weight: 600;
-        color: var(--important-text);
+        color: $important-text;
         margin: 0.875em 0;
       }
     }
@@ -57,7 +58,7 @@
         display: flex;
         align-items: center;
         font-weight: 400;
-        color: var(--secondary-text);
+        color: $secondary-text;
         font-size: 20px;
         line-height: initial;
         margin-right: 2em;
@@ -88,10 +89,9 @@
         }
 
         ::ng-deep .ct-label {
-          color: var(--tertiary-text);
+          color: $tertiary-text;
         }
       }
-      
     }
   }
 }

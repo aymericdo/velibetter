@@ -7,13 +7,13 @@ import ChartistTooltip from 'chartist-plugin-tooltips-updated';
 import { ChartType } from 'ng-chartist';
 import { Observable, Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
+import { setMapCenter } from 'src/app//actions/stations-map';
 import { ItineraryTypeChoiceListComponent } from 'src/app/dialogs/itinerary-type-choice-list/itinerary-type-choice-list.dialog';
+import { Station } from 'src/app/interfaces';
+import { AppState } from 'src/app/reducers';
 import { getIsNoGeolocation } from 'src/app/reducers/galileo';
 import { ItineraryType } from 'src/app/reducers/stations-list';
-import { setMapCenter } from '../../actions/stations-map';
-import { Station } from '../../interfaces';
-import { AppState } from '../../reducers';
-import { getIsSelectingStation, getSelectedStation } from '../../reducers/stations-map';
+import { getIsSelectingStation, getSelectedStation } from 'src/app/reducers/stations-map';
 
 @Component({
   selector: 'app-station-description',

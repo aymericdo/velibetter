@@ -1,4 +1,5 @@
 @import '~@angular/material/theming';
+@import "src/variables.scss";
 
 :host {
   display: block;
@@ -52,11 +53,11 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        color: var(--tertiary-text);
+        color: $tertiary-text;
       }
 
       span {
-        color: var(--secondary-text);
+        color: $secondary-text;
       }
     }
 
@@ -83,7 +84,7 @@
       .subtitle {
         font-size: 18px;
         font-weight: 400;
-        color: var(--secondary-text);
+        color: $secondary-text;
       }
 
       .material-icons {

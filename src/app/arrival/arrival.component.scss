@@ -1,3 +1,5 @@
+@import "src/variables.scss";
+
 :host {
   display: block;
   height: 100%;
@@ -39,7 +41,7 @@
     }
 
     span.score {
-      color: var(--tertiary-text);
+      color: $tertiary-text;
     }
   }
 }
