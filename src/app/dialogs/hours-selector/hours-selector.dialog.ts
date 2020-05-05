@@ -33,13 +33,13 @@ export class HoursSelectorComponent {
       this.scrollDelta += ((event.target as HTMLElement).scrollTop % 49 - this.precedentScrollTop % 49);
 
       if (this.precedentScrollDelta > this.scrollDelta) {
-        window.navigator.vibrate(30);
+        window.navigator.vibrate(1);
       }
     } else {
       this.scrollDelta -= (this.precedentScrollTop % 49 - (event.target as HTMLElement).scrollTop % 49);
 
       if (this.precedentScrollDelta < this.scrollDelta) {
-        window.navigator.vibrate(30);
+        window.navigator.vibrate(1);
       }
     }
 
