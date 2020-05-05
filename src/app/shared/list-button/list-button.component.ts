@@ -47,7 +47,6 @@ export class ListButtonComponent {
     //   sub.unsubscribe();
     // });
 
-
     const bottomSheetRef = this.bottomSheet.open(HoursSelectorComponent);
 
     const sub = bottomSheetRef.instance.deltaChanged.subscribe((hours: number) => {
