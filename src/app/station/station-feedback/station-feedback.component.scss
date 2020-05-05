@@ -52,11 +52,11 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        color: hsl(203, 15%, 47%);
+        color: var(--tertiary-text);
       }
 
       span {
-        color: hsl(201, 23%, 34%);
+        color: var(--secondary-text);
       }
     }
 
@@ -83,7 +83,7 @@
       .subtitle {
         font-size: 18px;
         font-weight: 400;
-        color: hsl(201, 23%, 34%);
+        color: var(--secondary-text);
       }
 
       .material-icons {

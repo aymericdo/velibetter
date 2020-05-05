@@ -1,3 +1,15 @@
+@import "../../../theme.scss";
+@import "~@angular/material/theming";
+
+::ng-deep .ct-tooltip {
+  color: white;
+  background: mat-color($my-app-accent);
+}
+
+::ng-deep .ct-tooltip::before {
+  border-top-color: mat-color($my-app-accent);
+}
+
 :host {
   display: block;
   height: 100%;
@@ -27,7 +39,7 @@
 
       .name {
         font-weight: 600;
-        color: hsl(202, 57%, 15%);
+        color: var(--important-text);
         margin: 0.875em 0;
       }
     }
@@ -45,7 +57,7 @@
         display: flex;
         align-items: center;
         font-weight: 400;
-        color: hsl(201, 23%, 34%);
+        color: var(--secondary-text);
         font-size: 20px;
         line-height: initial;
         margin-right: 2em;
@@ -76,9 +88,10 @@
         }
 
         ::ng-deep .ct-label {
-          color: hsl(203, 15%, 47%);
+          color: var(--tertiary-text);
         }
       }
+      
     }
   }
 }

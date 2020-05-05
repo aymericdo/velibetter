@@ -40,7 +40,7 @@
         stroke: hsl(208, 100%, 79.41%);
     }
     span.score {
-        color: hsl(203, 15%, 47%);
+        color: var(--tertiary-text);
     }
   }
 }
