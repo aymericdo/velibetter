@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -31,6 +32,7 @@ import { AppComponent } from './app.component';
 import { AppEffects } from './app.effects';
 import { ArrivalComponent } from './arrival/arrival.component';
 import { DepartureComponent } from './departure/departure.component';
+import { HoursSelectorComponent } from './dialogs/hours-selector/hours-selector.dialog';
 import { ItineraryTypeChoiceListComponent } from './dialogs/itinerary-type-choice-list/itinerary-type-choice-list.dialog';
 import { TimePickerComponent } from './dialogs/time-picker/time-picker.dialog';
 import { ItineraryMapComponent } from './itinerary-map/itinerary-map.component';
@@ -38,6 +40,7 @@ import { ItineraryComponent } from './itinerary/itinerary.component';
 import { MapComponent } from './map/map.component';
 import { metaReducers, reducers } from './reducers';
 import { DoughnutChartComponent } from './shared/doughnut-chart/doughnut-chart.component';
+import { InfiniteScrollComponent } from './shared/infinite-scroll/infinite-scroll.component';
 import { ListButtonComponent } from './shared/list-button/list-button.component';
 import { ListComponent } from './shared/list/list.component';
 import { LoadingComponent } from './shared/loading/loading.component';
@@ -69,7 +72,9 @@ import { TopBarComponent } from './top-bar/top-bar.component';
     ItineraryComponent,
     StationComponent,
     ItineraryMapComponent,
-    ItineraryTypeChoiceListComponent
+    ItineraryTypeChoiceListComponent,
+    InfiniteScrollComponent,
+    HoursSelectorComponent
   ],
   imports: [
     AppRoutingModule,
@@ -84,6 +89,7 @@ import { TopBarComponent } from './top-bar/top-bar.component';
     MatChipsModule,
     MatIconModule,
     MatDialogModule,
+    MatBottomSheetModule,
     MatListModule,
     MatMomentDateModule,
     MatProgressSpinnerModule,

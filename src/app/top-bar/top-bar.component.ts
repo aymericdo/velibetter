@@ -11,7 +11,7 @@ import { getIsCompassView } from '../reducers/galileo';
   styleUrls: ['./top-bar.component.scss']
 })
 export class TopBarComponent {
-  @Output() back = new EventEmitter<any>();
+  @Output() back = new EventEmitter<void>();
   isCompassView$: Observable<boolean>;
 
   constructor(

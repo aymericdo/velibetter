@@ -25,7 +25,7 @@ export class MapComponent implements OnInit, OnDestroy {
   @Input() isDisplayingListPages: boolean;
   @Input() isIOS: boolean;
   @Input() isHide: boolean;
-  @Output() requestPermissionsIOS = new EventEmitter<any>();
+  @Output() requestPermissionsIOS = new EventEmitter<void>();
 
   markers$: Observable<Marker[]>;
   isLoading$: Observable<boolean>;

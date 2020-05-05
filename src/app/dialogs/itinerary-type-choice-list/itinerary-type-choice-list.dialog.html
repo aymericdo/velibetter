@@ -1,6 +1,6 @@
 <div mat-dialog-content>
   <mat-nav-list>
-    <a *ngFor="let type of types" class="mat-list-item-override" mat-list-item (click)="handleClick(type.code)">
+    <a *ngFor="let type of types" mat-list-item (click)="handleClick(type.code)">
       {{type.label}}
     </a>
   </mat-nav-list>

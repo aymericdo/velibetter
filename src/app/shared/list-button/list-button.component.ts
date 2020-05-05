@@ -1,13 +1,12 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { MatDialog } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { HoursSelectorComponent } from 'src/app/dialogs/hours-selector/hours-selector.dialog';
 import { AppState } from 'src/app/reducers';
 import { getIsMobile } from 'src/app/reducers/screen';
-import { TimePickerComponent } from '../../dialogs/time-picker/time-picker.dialog';
-
 
 @Component({
   selector: 'app-list-button',
@@ -15,13 +14,14 @@ import { TimePickerComponent } from '../../dialogs/time-picker/time-picker.dialo
   styleUrls: ['./list-button.component.scss']
 })
 export class ListButtonComponent {
-  @Output() refresh = new EventEmitter<any>();
+  @Output() refresh = new EventEmitter<void>();
   @Output() selectedDateTime = new EventEmitter<moment.Moment>();
   isMobile$: Observable<boolean>;
 
   constructor(
     private dialog: MatDialog,
     private store: Store<AppState>,
+    private bottomSheet: MatBottomSheet,
   ) {
     this.isMobile$ = store.pipe(select(getIsMobile));
   }
@@ -31,19 +31,30 @@ export class ListButtonComponent {
   }
 
   openDialog() {
-    let isMobile: boolean;
-    this.isMobile$.pipe(take(1)).subscribe((mobile) => isMobile = mobile);
-    let config = new MatDialogConfig();
-    config = {
-      maxWidth: isMobile ? '100vw' : 'inherit',
-    };
-    const dialogRef = this.dialog.open(TimePickerComponent, config);
+    // let isMobile: boolean;
+    // this.isMobile$.pipe(take(1)).subscribe((mobile) => isMobile = mobile);
+    // let config = new MatDialogConfig();
+    // config = {
+    //   maxWidth: isMobile ? '100vw' : 'inherit',
+    // };
+    // const dialogRef = this.dialog.open(TimePickerComponent, config);
 
-    const sub = dialogRef.componentInstance.datetimeChanged.subscribe((dt: moment.Moment) => {
-      this.selectedDateTime.emit(dt);
+    // const sub = dialogRef.componentInstance.datetimeChanged.subscribe((dt: moment.Moment) => {
+    //   this.selectedDateTime.emit(dt);
+    // });
+
+    // dialogRef.afterDismissed().subscribe(() => {
+    //   sub.unsubscribe();
+    // });
+
+
+    const bottomSheetRef = this.bottomSheet.open(HoursSelectorComponent);
+
+    const sub = bottomSheetRef.instance.deltaChanged.subscribe((hours: number) => {
+      console.log(hours);
     });
 
-    dialogRef.afterClosed().subscribe(() => {
+    bottomSheetRef.afterDismissed().subscribe(() => {
       sub.unsubscribe();
     });
   }
