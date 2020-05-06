@@ -9,8 +9,11 @@
     position: absolute;
     right: 1em;
     opacity: 0.2;
+  }
 
-    &.-selected-hour {
+  a:hover,
+  a:focus {
+    & .real-hour {
       opacity: 1;
     }
   }
