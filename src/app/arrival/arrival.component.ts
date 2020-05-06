@@ -31,7 +31,7 @@ export class ArrivalComponent implements OnInit {
           moment().isSame(moment().add(delta, 'hour'), 'day') ?
             moment().add(delta, 'hour').format('HH:00')
           :
-            moment().add(delta, 'hour').format('DD/MM/YYYY HH:00')
+            moment().add(delta, 'hour').format('DD/MM HH:00')
         :
           null
       ),
@@ -66,13 +66,11 @@ export class ArrivalComponent implements OnInit {
     );
   }
 
-  selectedDateTime(dt: moment.Moment) {
-    debugger;
-    const timeDifferenceInHours = dt.diff(moment(), 'hours');
+  selectedDateTime(delta: number) {
     this.store.dispatch(
       fetchingClosestStations({
         isDeparture: false,
-        delta: timeDifferenceInHours,
+        delta,
       }),
     );
   }

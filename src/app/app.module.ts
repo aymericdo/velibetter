@@ -24,7 +24,6 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AgmDirectionModule } from 'agm-direction';
-import { FlatpickrModule } from 'angularx-flatpickr';
 import { ChartistModule } from 'ng-chartist';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
@@ -34,7 +33,6 @@ import { ArrivalComponent } from './arrival/arrival.component';
 import { DepartureComponent } from './departure/departure.component';
 import { HoursSelectorComponent } from './dialogs/hours-selector/hours-selector.dialog';
 import { ItineraryTypeChoiceListComponent } from './dialogs/itinerary-type-choice-list/itinerary-type-choice-list.dialog';
-import { TimePickerComponent } from './dialogs/time-picker/time-picker.dialog';
 import { ItineraryMapComponent } from './itinerary-map/itinerary-map.component';
 import { ItineraryComponent } from './itinerary/itinerary.component';
 import { MapComponent } from './map/map.component';
@@ -65,7 +63,6 @@ import { TopBarComponent } from './top-bar/top-bar.component';
     DoughnutChartComponent,
     ScoreDoughnutChartComponent,
     RowStationComponent,
-    TimePickerComponent,
     ListButtonComponent,
     TopBarComponent,
     StationFeedbackComponent,
@@ -98,7 +95,6 @@ import { TopBarComponent } from './top-bar/top-bar.component';
     MatSidenavModule,
     MatToolbarModule,
     FormsModule,
-    FlatpickrModule.forRoot(),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production
     }),

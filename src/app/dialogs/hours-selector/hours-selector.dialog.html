@@ -1,8 +1,11 @@
 <h2>Départ dans</h2>
 <app-infinite-scroll (scrolled)="addNextBatch()" (scroll)="onScroll($event)">
   <mat-nav-list>
-    <a *ngFor="let hour of hours" mat-list-item (click)="handleClick(hour)" #hour>
-      {{hour}} {{ hour > 1 ? 'heures' : 'heure' }}
+    <a *ngFor="let hour of hours" mat-list-item (click)="handleClick(hour)" #hour (mouseover)="hoverHour = hour">
+      <span>{{hour}} {{ hour > 1 ? 'heures' : 'heure' }}</span>
+      <span class="real-hour" [class.-selected-hour]="hoverHour === hour">
+        {{ getRealHour(hour) }}
+      </span>
     </a>
   </mat-nav-list>
 </app-infinite-scroll>
