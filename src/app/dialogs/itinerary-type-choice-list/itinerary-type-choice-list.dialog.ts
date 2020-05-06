@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { ItineraryType } from '../../reducers/stations-list';
 
 @Component({
@@ -13,7 +13,7 @@ export class ItineraryTypeChoiceListComponent implements OnInit {
   types = [{ code: 'departure', label: 'Départ' }, { code: 'arrival', label: 'Arrivée' }];
 
   constructor(
-    private dialogRef: MatDialogRef<ItineraryTypeChoiceListComponent>,
+    private bottomSheetRef: MatBottomSheetRef<ItineraryTypeChoiceListComponent>,
   ) { }
 
   ngOnInit() {
@@ -21,10 +21,6 @@ export class ItineraryTypeChoiceListComponent implements OnInit {
 
   handleClick(type: ItineraryType) {
     this.typeChanged.emit(type);
-    this.dialogRef.close();
-  }
-
-  close() {
-    this.dialogRef.close();
+    this.bottomSheetRef.dismiss();
   }
 }

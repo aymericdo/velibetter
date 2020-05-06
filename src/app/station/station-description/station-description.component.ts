@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { IChartistData, IPieChartOptions } from 'chartist';
@@ -48,7 +48,7 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
   private destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
-    private dialog: MatDialog,
+    private bottomSheet: MatBottomSheet,
     private store: Store<AppState>,
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -84,13 +84,13 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
   }
 
   openDialog() {
-    const dialogRef = this.dialog.open(ItineraryTypeChoiceListComponent);
+    const bottomSheetRef = this.bottomSheet.open(ItineraryTypeChoiceListComponent);
 
-    const sub = dialogRef.componentInstance.typeChanged.subscribe((type: ItineraryType) => {
+    const sub = bottomSheetRef.instance.typeChanged.subscribe((type: ItineraryType) => {
       this.goToThisStation(type);
     });
 
-    dialogRef.afterClosed().subscribe(() => {
+    bottomSheetRef.afterDismissed().subscribe(() => {
       sub.unsubscribe();
     });
   }
