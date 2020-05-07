@@ -1,5 +1,5 @@
 <h2>Départ dans</h2>
-<app-infinite-scroll (scrolled)="addNextBatch()" (scroll)="onScroll($event)">
+<app-infinite-scroll (scrolled)="addNextBatch()" appScrollVibration [lineSize]="48">
   <mat-nav-list>
     <a *ngFor="let hour of hours" mat-list-item (click)="handleClick(hour)" #hour>
       <span>{{hour}} {{ hour > 1 ? 'heures' : 'heure' }}</span>

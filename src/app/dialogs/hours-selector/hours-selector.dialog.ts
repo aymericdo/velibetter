@@ -12,9 +12,6 @@ export class HoursSelectorComponent {
   hoverHour = null;
 
   private baseArray = Array.from(Array(100).keys()).slice(1);
-  private scrollDelta = 0;
-  private precedentScrollDelta = 0;
-  private precedentScrollTop = 0;
 
   hours: number[] = [...this.baseArray];
 
@@ -30,26 +27,6 @@ export class HoursSelectorComponent {
   handleClick(hours: number): void {
     this.deltaChanged.emit(hours);
     this.bottomSheetRef.dismiss();
-  }
-
-  onScroll(event: UIEvent): void {
-    const vibrate = 15;
-    if ((event.target as HTMLElement).scrollTop > this.precedentScrollTop) {
-      this.scrollDelta += ((event.target as HTMLElement).scrollTop % 49 - this.precedentScrollTop % 49);
-
-      if (this.precedentScrollDelta > this.scrollDelta) {
-        window.navigator.vibrate(vibrate);
-      }
-    } else {
-      this.scrollDelta -= (this.precedentScrollTop % 49 - (event.target as HTMLElement).scrollTop % 49);
-
-      if (this.precedentScrollDelta < this.scrollDelta) {
-        window.navigator.vibrate(vibrate);
-      }
-    }
-
-    this.precedentScrollDelta = this.scrollDelta;
-    this.precedentScrollTop = (event.target as HTMLElement).scrollTop;
   }
 
   getRealHour(delta: number): string {
