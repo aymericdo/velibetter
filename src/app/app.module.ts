@@ -33,6 +33,7 @@ import { ArrivalComponent } from './arrival/arrival.component';
 import { DepartureComponent } from './departure/departure.component';
 import { HoursSelectorComponent } from './dialogs/hours-selector/hours-selector.dialog';
 import { ItineraryTypeChoiceListComponent } from './dialogs/itinerary-type-choice-list/itinerary-type-choice-list.dialog';
+import { ScrollVibrationDirective } from './directives/scroll-vibration.directive';
 import { ItineraryMapComponent } from './itinerary-map/itinerary-map.component';
 import { ItineraryComponent } from './itinerary/itinerary.component';
 import { MapComponent } from './map/map.component';
@@ -49,7 +50,6 @@ import { StationDescriptionComponent } from './station/station-description/stati
 import { StationFeedbackComponent } from './station/station-feedback/station-feedback.component';
 import { StationComponent } from './station/station.component';
 import { TopBarComponent } from './top-bar/top-bar.component';
-import { ScrollVibrationDirective } from './scroll-vibration.directive';
 
 @NgModule({
   declarations: [
