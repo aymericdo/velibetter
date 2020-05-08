@@ -22,6 +22,7 @@ export class StationFeedbackComponent implements OnInit {
   numberMechanical: string;
   numberEbike: string;
   numberDock: string;
+  hasFeedback: boolean;
 
   numbers: string[] = Array(10).fill(0).map((x, i) => i.toString()).concat(['+']);
 
@@ -39,18 +40,22 @@ export class StationFeedbackComponent implements OnInit {
 
   clickCard(type: string) {
     this.selectedCard = type;
+    this.setFeedback();
   }
 
   clickMechanical(picked: number) {
     this.numberMechanical = picked.toString();
+    this.setFeedback();
   }
 
   clickEbike(picked: number) {
     this.numberEbike = picked.toString();
+    this.setFeedback();
   }
 
   clickDock(picked: number) {
     this.numberDock = picked.toString();
+    this.setFeedback();
   }
 
   clear() {
@@ -58,10 +63,11 @@ export class StationFeedbackComponent implements OnInit {
     this.numberMechanical = null;
     this.numberEbike = null;
     this.numberDock = null;
+    this.setFeedback();
   }
 
-  hasFeedback(): boolean {
-    return !!this.selectedCard ||
+  setFeedback(): void {
+    this.hasFeedback = !!this.selectedCard ||
       !!this.numberMechanical ||
       !!this.numberEbike ||
       !!this.numberDock;

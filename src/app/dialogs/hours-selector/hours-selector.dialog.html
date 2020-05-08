@@ -1,10 +1,10 @@
 <h2>Départ dans</h2>
 <app-infinite-scroll (scrolled)="addNextBatch()" appScrollVibration [lineSize]="48">
   <mat-nav-list>
-    <a *ngFor="let hour of hours" mat-list-item (click)="handleClick(hour)" #hour>
-      <span>{{hour}} {{ hour > 1 ? 'heures' : 'heure' }}</span>
+    <a *ngFor="let hour of hours" mat-list-item (click)="handleClick(hour[0])" #hour>
+      <span>{{hour[0]}} {{ hour > 1 ? 'heures' : 'heure' }}</span>
       <span class="real-hour">
-        {{ getRealHour(hour) }}
+        {{ hour[1] }}
       </span>
     </a>
   </mat-nav-list>

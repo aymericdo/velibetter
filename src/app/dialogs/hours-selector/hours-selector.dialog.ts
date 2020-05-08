@@ -11,16 +11,16 @@ export class HoursSelectorComponent {
   @Output() deltaChanged: EventEmitter<number> = new EventEmitter<number>();
   hoverHour = null;
 
-  private baseArray = Array.from(Array(100).keys()).slice(1);
+  private baseArray: [number, string][] = this.addRealHour(Array.from(Array(100).keys()).slice(1));
 
-  hours: number[] = [...this.baseArray];
+  hours: [number, string][] = [...this.baseArray];
 
   constructor(private bottomSheetRef: MatBottomSheetRef<HoursSelectorComponent>) { }
 
   addNextBatch(): void {
-    const lastHour = this.hours[this.hours.length - 1];
-    this.baseArray.forEach((h) => {
-      this.hours.push(lastHour + h);
+    const lastHour: number = this.hours[this.hours.length - 1][0];
+    this.baseArray.forEach(([h,]) => {
+      this.hours.push([lastHour + h, this.getRealHour(lastHour + h)]);
     });
   }
 
@@ -34,5 +34,9 @@ export class HoursSelectorComponent {
         moment().add(delta + 1, 'hour').format('HH:00')
       :
         moment().add(delta + 1, 'hour').format('DD/MM HH:00');
+  }
+
+  private addRealHour(hours: number[]): [number, string][] {
+    return hours.map(h => [h, this.getRealHour(h)]);
   }
 }
