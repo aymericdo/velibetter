@@ -1,0 +1,70 @@
+@import "src/variables.scss";
+@import "src/theme.scss";
+
+:host {
+    .title {
+        font-weight: 600;
+        color: $important-text;
+        margin: 0.75em 0.6em;
+      }
+
+    .subtitle {
+        color: $secondary-text;
+        margin: 0.5em 0.750em;
+    }
+
+    .no-wrap {
+        white-space: normal
+      }
+
+    .material-icons {
+        font-size: 14px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        margin: 4px;
+        background-color: mat-color($my-app-accent);
+        color: white;
+    }
+
+    .illustration {
+        display: block;
+        margin: 20px auto;
+        height: 120px;
+    }
+
+    .avatar {
+        border-radius: 50%;
+    }
+
+    .mat-card {
+        padding: 24px;
+        margin: 6px 16px;
+    }
+
+    .mat-card-header {
+        display: flex;
+        align-items: center;
+    }
+
+    ::ng-deep .mat-card-header-text {
+        margin: 0 32px;
+    }
+
+    .icon {
+        width: 32px;
+        height: 32px;
+    }
+
+    .mat-card-actions {
+        display: flex;
+        justify-content: space-evenly;
+
+        .mat-button {
+            margin: 0px;
+        }
+    }
+}

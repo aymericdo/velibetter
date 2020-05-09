@@ -50,6 +50,7 @@ import { StationDescriptionComponent } from './station/station-description/stati
 import { StationFeedbackComponent } from './station/station-feedback/station-feedback.component';
 import { StationComponent } from './station/station.component';
 import { TopBarComponent } from './top-bar/top-bar.component';
+import { AboutComponent } from './about/about.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { TopBarComponent } from './top-bar/top-bar.component';
     ItineraryTypeChoiceListComponent,
     InfiniteScrollComponent,
     HoursSelectorComponent,
-    ScrollVibrationDirective
+    ScrollVibrationDirective,
+    AboutComponent
   ],
   imports: [
     AppRoutingModule,

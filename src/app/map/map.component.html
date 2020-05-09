@@ -57,6 +57,11 @@
       </agm-direction>
     </agm-map>
     <button
+      mat-mini-fab class="about-button"
+      (click)="goToAbout()">
+      <i class="material-icons">help</i>
+    </button>
+    <button
       *ngIf="!!(currentPosition$ | async) && !isDisplayingListPages"
       mat-mini-fab class="my-location-button"
       (click)="recenterMap()">
