@@ -11,9 +11,17 @@
     overflow-y: auto;
   }
 
-  .illustration {
-    display: block;
-    margin: 20px auto;
-    height: 200px;
-}
+  .empty-page {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .illustration {
+      display: block;
+      margin: 20px auto;
+      height: 200px;
+    }
+  }
 }

@@ -8,6 +8,7 @@ import { routerTransition } from '../animations/route-animations';
 import { Coordinate } from '../interfaces';
 import { AppState } from '../reducers';
 import { getCurrentPosition, getIsNoGeolocation } from '../reducers/galileo';
+import { getIsMobile } from '../reducers/screen';
 
 @Component({
   selector: 'app-station',
@@ -18,6 +19,7 @@ import { getCurrentPosition, getIsNoGeolocation } from '../reducers/galileo';
 export class StationComponent implements OnInit, OnDestroy {
   currentPosition$: Observable<Coordinate>;
   isNoGeolocation$: Observable<boolean>;
+  isMobile$: Observable<boolean>;
 
   private destroy$: Subject<boolean> = new Subject<boolean>();
 
@@ -28,6 +30,7 @@ export class StationComponent implements OnInit, OnDestroy {
   ) {
     this.currentPosition$ = store.pipe(select(getCurrentPosition));
     this.isNoGeolocation$ = store.pipe(select(getIsNoGeolocation));
+    this.isMobile$ = store.pipe(select(getIsMobile));
   }
 
   ngOnInit() {

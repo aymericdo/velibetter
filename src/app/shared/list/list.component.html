@@ -1,14 +1,12 @@
 <app-loading *ngIf="isLoading; else loaded"></app-loading>
 <ng-template #loaded>
-  <mat-nav-list>
-    <div *ngIf="isEmpty; else hasResult">
-      <a class="mat-list-item-override" mat-list-item>
-        Pas de station à proximité...
-      </a>
-      <img class="illustration" src="assets/no-data.svg" />
-    </div>
-    <ng-template #hasResult>
+  <div class="empty-page" *ngIf="isEmpty; else hasResult">
+    <img class="illustration" src="assets/no-data.svg" />
+    <h3>Pas de station à proximité...</h3>
+  </div>
+  <ng-template #hasResult>
+    <mat-nav-list>
       <ng-content></ng-content>
-    </ng-template>
-  </mat-nav-list>
+    </mat-nav-list>
+  </ng-template>
 </ng-template>

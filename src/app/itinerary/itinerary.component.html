@@ -1,3 +1,6 @@
-<div class="itinerary-wrapper" [@routeAnimations]="o && o.activatedRouteData && o.activatedRouteData['animation']">
+<div class="itinerary-wrapper"
+  [@routeAnimationsMobile]="(isMobile$ | async) && o && o.activatedRouteData && o.activatedRouteData['animation']"
+  [@routeAnimationsDesktop]="!(isMobile$ | async) && o && o.activatedRouteData && o.activatedRouteData['animation']"
+>
   <router-outlet #o="outlet"></router-outlet>
 </div>
