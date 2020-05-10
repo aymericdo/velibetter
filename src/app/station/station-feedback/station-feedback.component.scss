@@ -15,7 +15,7 @@
 
   section {
     overflow-y: auto;
-    padding: 2em;
+    padding: 2rem;
   }
 
   .clickable {
@@ -32,14 +32,14 @@
     font-size: 18px;
     font-weight: 600;
     color: rgb(16, 44, 60);
-    padding: 0.875em 0;
+    padding: 0.875rem 0;
     margin: 0;
   }
 
   .select-action {
     display: flex;
     justify-content: center;
-    padding: 0.875em 0;
+    padding: 0.875rem 0;
 
     .mat-card {
       margin: 10px;
@@ -75,7 +75,7 @@
   }
 
   .selector {
-    padding: 0.625em 0;
+    padding: 0.625rem 0;
 
     .selector-details {
       display: flex;
@@ -95,7 +95,7 @@
         width: 25px;
         height: 25px;
         border-radius: 50%;
-        margin-right: 0.875em;
+        margin-right: 0.875rem;
       }
 
       .mechanical {
@@ -115,7 +115,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-top: 0.875em;
+      margin-top: 0.875rem;
       flex-wrap: wrap;
 
       button {
@@ -124,8 +124,8 @@
         min-width: 50px;
         height: 50px;
         padding: 0;
-        margin-right: 0.875em;
-        margin-bottom: 0.875em;
+        margin-right: 0.875rem;
+        margin-bottom: 0.875rem;
         border: 1px solid lightgray;
       }
 
@@ -136,10 +136,10 @@
   .submission-buttons {
     display: flex;
     justify-content: flex-end;
-    padding: 0.875em 1em;
+    padding: 0.875rem 1rem;
 
     button {
-      margin-left: 0.875em;
+      margin-left: 0.875rem;
     }
   }
 }

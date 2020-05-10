@@ -29,23 +29,23 @@
   }
 
   section {
-    padding: 3em;
+    padding: 3rem;
     display: flex;
     flex-direction: column;
     height: 100%;
 
     .station-name {
-      margin-bottom: 0.875em;
+      margin-bottom: 0.875rem;
 
       .name {
         font-weight: 600;
         color: $important-text;
-        margin: 0.875em 0;
+        margin: 0.875rem 0;
       }
     }
     .station-details {
       border-top: 2px solid hsl(210, 23%, 95%);
-      padding: 0.250em 0 1em;
+      padding: 0.250rem 0 1rem;
       display: flex;
 
       .material-icons {
@@ -60,7 +60,7 @@
         color: $secondary-text;
         font-size: 20px;
         line-height: initial;
-        margin-right: 2em;
+        margin-right: 2rem;
         margin-bottom: 0;
       }
     }

@@ -12,6 +12,7 @@
 
   .map {
     height: 100%;
+    position: relative;
 
     &.-disabled {
       opacity: 0.5;
@@ -30,7 +31,7 @@
     }
 
     .about-button {
-      position: fixed;
+      position: absolute;
       right: 1em;
       top: 1em;
       background-color: white;

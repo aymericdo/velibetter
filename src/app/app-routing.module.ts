@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AboutComponent } from './about/about.component';
 import { ArrivalComponent } from './arrival/arrival.component';
 import { DepartureComponent } from './departure/departure.component';
 import { ItineraryMapComponent } from './itinerary-map/itinerary-map.component';
@@ -7,7 +8,6 @@ import { ItineraryComponent } from './itinerary/itinerary.component';
 import { StationDescriptionComponent } from './station/station-description/station-description.component';
 import { StationFeedbackComponent } from './station/station-feedback/station-feedback.component';
 import { StationComponent } from './station/station.component';
-import { AboutComponent } from './about/about.component';
 
 const routes: Routes = [
   {
@@ -15,11 +15,6 @@ const routes: Routes = [
     redirectTo: '',
     pathMatch: 'full',
     data: { routeName: 'Root', isFullMap: true },
-  },
-  {
-    path: 'about',
-    component: AboutComponent,
-    data: { routeName: 'AboutUs', animation: 'About' },
   },
   {
     path: 'stations',
@@ -40,6 +35,11 @@ const routes: Routes = [
         data: { routeName: 'StationDescriptionFeedback', animation: 'Feedback' },
       },
     ],
+  },
+  {
+    path: 'about',
+    component: AboutComponent,
+    data: { routeName: 'AboutUs', animation: 'About' },
   },
   {
     path: 'itinerary',
@@ -85,6 +85,11 @@ const routes: Routes = [
         data: { routeName: 'ItineraryDescriptionFeedback', animation: 'Feedback' },
       },
     ],
+  },
+  {
+    path: 'itinerary/:itineraryType/:destinationId/about',
+    component: AboutComponent,
+    data: { routeName: 'AboutUs', animation: 'About' },
   },
 ];
 

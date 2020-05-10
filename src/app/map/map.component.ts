@@ -142,11 +142,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   clickedMarker(stationId: number): void {
-    let destination: Station;
-    this.destination$.pipe(take(1))
-      .subscribe((d) => {
-        destination = d;
-      });
+    const destination: Station = this.getDestination();
 
     if (destination) {
       this.goToDescription(stationId);
@@ -217,11 +213,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   goToDescription(stationId?: number): void {
-    let destination: Station;
-    this.destination$.pipe(take(1))
-      .subscribe((d) => {
-        destination = d;
-      });
+    const destination: Station = this.getDestination();
 
     let itineraryType: ItineraryType;
     this.itineraryType$.pipe(take(1))
@@ -233,7 +225,19 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   goToAbout(): void {
-    this.router.navigate(['about'])
+    const destination: Station = this.getDestination();
+
+    let itineraryType: ItineraryType;
+    this.itineraryType$.pipe(take(1))
+      .subscribe((mode) => {
+        itineraryType = mode;
+      });
+
+    if (destination) {
+      this.router.navigate(['itinerary', itineraryType, destination.stationId, 'about']);
+    } else {
+      this.router.navigate(['about']);
+    }
   }
 
   isMapCenterEqualCurrentPosition(): boolean {
@@ -244,5 +248,14 @@ export class MapComponent implements OnInit, OnDestroy {
     let mapCenter: Coordinate;
     this.mapCenter$.pipe(take(1)).subscribe((mc) => { mapCenter = mc; });
     return isEqual(mapCenter, DEFAULT_COORD) || isEqual(mapCenter, position) && zoom === DEFAULT_ZOOM;
+  }
+
+  private getDestination(): Station {
+    let destination: Station;
+    this.destination$.pipe(take(1))
+      .subscribe((d) => {
+        destination = d;
+      });
+    return destination;
   }
 }

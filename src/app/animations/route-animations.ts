@@ -5,7 +5,7 @@ export const animationType = 'ease-out';
 
 export const routerTransition =
   trigger('routeAnimations', [
-    transition('void => Description, void => Itinerary, void => About, ItineraryMap => Itinerary', [
+    transition('void => Description, void => Itinerary, ItineraryMap => Itinerary, * => About', [
       style({ position: 'relative' }),
       query(':enter', [
         style({
@@ -23,7 +23,7 @@ export const routerTransition =
         ]),
       ]),
     ]),
-    transition('Description => void, Itinerary => void, About => void, Itinerary => ItineraryMap, Description => ItineraryMap', [
+    transition('Description => void, Itinerary => void, Itinerary => ItineraryMap, Description => ItineraryMap, About => *', [
       style({ position: 'relative' }),
       query(':leave', [
         style({
