@@ -1,0 +1,28 @@
+<app-top-bar></app-top-bar>
+<h1 class="title">A propos</h1>
+
+<h2 class="subtitle">Fonctionnalités</h2>
+<img class="illustration" src="assets/features.svg" />
+<mat-list>
+  <mat-list-item *ngFor="let message of messages">
+    <mat-icon matListIcon class="material-icons">{{message.icon}}</mat-icon>
+    <p matLine>
+      <span class="no-wrap">{{message.content}} </span>
+    </p>
+  </mat-list-item>
+</mat-list>
+
+<h2 class="subtitle">Qui sommes-nous ?</h2>
+<img class="illustration" src="assets/coding.svg" />
+
+<mat-card tabindex="0" *ngFor="let dev of team">
+  <mat-card-header>
+    <div mat-card-avatar>
+      <img mat-card-image class="avatar" src={{dev.avatar}} alt="Photo of {{dev.name}}"></div>
+    <mat-card-title>{{dev.name}}</mat-card-title>
+    <mat-card-subtitle>{{dev.job}}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-actions>
+    <a mat-button href={{social.link}} *ngFor="let social of dev.socials"><img class="icon" src={{icons[social.type]}} /></a>
+  </mat-card-actions>
+</mat-card>

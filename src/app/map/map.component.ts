@@ -144,9 +144,9 @@ export class MapComponent implements OnInit, OnDestroy {
   clickedMarker(stationId: number): void {
     let destination: Station;
     this.destination$.pipe(take(1))
-    .subscribe((d) => {
-      destination = d;
-    });
+      .subscribe((d) => {
+        destination = d;
+      });
 
     if (destination) {
       this.goToDescription(stationId);
@@ -219,9 +219,9 @@ export class MapComponent implements OnInit, OnDestroy {
   goToDescription(stationId?: number): void {
     let destination: Station;
     this.destination$.pipe(take(1))
-    .subscribe((d) => {
-      destination = d;
-    });
+      .subscribe((d) => {
+        destination = d;
+      });
 
     let itineraryType: ItineraryType;
     this.itineraryType$.pipe(take(1))
@@ -230,6 +230,10 @@ export class MapComponent implements OnInit, OnDestroy {
       });
 
     this.router.navigate(['itinerary', itineraryType, destination.stationId, 'description', stationId || destination.stationId]);
+  }
+
+  goToAbout(): void {
+    this.router.navigate(['about'])
   }
 
   isMapCenterEqualCurrentPosition(): boolean {

@@ -22,7 +22,7 @@ export class HoursSelectorComponent implements OnInit, OnDestroy {
     this.interval = setInterval(() => {
       const mins = new Date().getMinutes().toString();
       if (mins === '00') {
-        this.hours = this.hours.map(([h, ]) => [h, this.getRealHour(h)]);
+        this.hours = this.hours.map(([h,]) => [h, this.getRealHour(h)]);
       }
       console.log(mins);
     }, 60000);
@@ -34,7 +34,7 @@ export class HoursSelectorComponent implements OnInit, OnDestroy {
 
   addNextBatch(): void {
     const lastHour: number = this.hours[this.hours.length - 1][0];
-    this.baseArray.forEach(([h, ]) => {
+    this.baseArray.forEach(([h,]) => {
       this.hours.push([lastHour + h, this.getRealHour(lastHour + h)]);
     });
   }
@@ -46,9 +46,9 @@ export class HoursSelectorComponent implements OnInit, OnDestroy {
 
   private getRealHour(delta: number): string {
     return moment().isSame(moment().add(delta, 'hour'), 'day') ?
-        moment().add(delta + 1, 'hour').format('HH:00')
+      moment().add(delta + 1, 'hour').format('HH:00')
       :
-        moment().add(delta + 1, 'hour').format('DD/MM HH:00');
+      moment().add(delta + 1, 'hour').format('DD/MM HH:00');
   }
 
   private addRealHour(hours: number[]): [number, string][] {

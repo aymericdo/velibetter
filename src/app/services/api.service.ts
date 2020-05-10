@@ -10,18 +10,18 @@ import { Feedback } from './../interfaces/index';
 })
 export class ApiService {
   private baseURL = 'https://velibetter.herokuapp.com';
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient) { }
 
   fetchClosestInfo(
     latLngBoundsLiteral: LatLngBoundsLiteral,
     currentPosition: Coordinate,
-  ): Observable < Station[] > {
+  ): Observable<Station[]> {
     return this.httpClient.post(
       `${this.baseURL}/stations-in-polygon/`, {
-        latLngBoundsLiteral,
-        currentPosition,
-      },
-    ) as Observable < Station[] > ;
+      latLngBoundsLiteral,
+      currentPosition,
+    },
+    ) as Observable<Station[]>;
   }
 
   fetchClosestStatusForDeparture(
@@ -30,28 +30,28 @@ export class ApiService {
   ): Observable<Station[]> {
     return this.httpClient.post(
       `${this.baseURL}/departure/`, {
-        currentPosition,
-        options: { delta },
-      },
-    ) as Observable < Station[] > ;
+      currentPosition,
+      options: { delta },
+    },
+    ) as Observable<Station[]>;
   }
 
   fetchClosestStatusForArrival(
     currentPosition: Coordinate,
-    delta ?: number,
+    delta?: number,
   ): Observable<Station[]> {
     return this.httpClient.post(
       `${this.baseURL}/arrival/`, {
-        currentPosition,
-        options: { delta },
-      },
+      currentPosition,
+      options: { delta },
+    },
     ) as Observable<Station[]>;
   }
 
   fetchStation(
     stationId: number,
     currentPosition: Coordinate,
-  ): Observable <Station> {
+  ): Observable<Station> {
     return this.httpClient.post(
       `${this.baseURL}/stations/${stationId}`,
       currentPosition,
