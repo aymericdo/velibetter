@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { getIsSelectingStation } from 'src/app/reducers/stations-map';
+import { GoogleAnalyticsService } from 'src/app/services/google-analytics.service';
 import { savingFeedback } from '../../actions/feedback';
 import { Feedback, FeedbackType } from '../../interfaces/index';
 import { AppState } from '../../reducers';
@@ -30,6 +31,7 @@ export class StationFeedbackComponent implements OnInit {
     private store: Store<AppState>,
     private snackBar: MatSnackBar,
     private activatedRoute: ActivatedRoute,
+    private googleAnalyticsService: GoogleAnalyticsService,
   ) {
     this.isSelectingStation$ = store.pipe(select(getIsSelectingStation));
     // this.selectedStation$ = store.pipe(select(getSelectedStation));
@@ -64,6 +66,9 @@ export class StationFeedbackComponent implements OnInit {
     this.numberEbike = null;
     this.numberDock = null;
     this.setFeedback();
+    this
+     .googleAnalyticsService
+     .eventEmitter('clear_feedback', 'feedback', 'cancel', 'click', 1);
   }
 
   setFeedback(): void {
@@ -74,6 +79,10 @@ export class StationFeedbackComponent implements OnInit {
   }
 
   clickSubmit() {
+    this
+     .googleAnalyticsService
+     .eventEmitter('give_feedback', 'feedback', 'submit', 'click', 1);
+
     const feedback = {
       stationId: +this.activatedRoute.snapshot.paramMap.get('stationId'),
       type: this.selectedCard === 'confirmed' ? FeedbackType.confirmed : FeedbackType.broken,

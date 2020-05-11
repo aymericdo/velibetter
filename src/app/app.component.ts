@@ -14,6 +14,14 @@ import { getIsSplitScreen } from './reducers/route';
 import { getIsMobile } from './reducers/screen';
 import { DEFAULT_COORD } from './shared/constants';
 
+declare const gtag: (
+  event: string,
+  eventName: string,
+  options: {
+    page_path: string,
+  },
+) => void;
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -85,6 +93,9 @@ export class AppComponent implements OnInit, OnDestroy {
         event instanceof NavigationEnd
       ),
     ).subscribe((event: NavigationEnd) => {
+      gtag('config', 'UA-166127239-1', {
+        page_path: event.urlAfterRedirects
+      });
       const routeName = this.getRouteVariables('routeName') as string;
       const isFullMap = this.getRouteVariables('isFullMap') as boolean;
       this.store.dispatch(setUrl({ url: event.url }));
