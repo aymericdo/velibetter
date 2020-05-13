@@ -46,6 +46,18 @@ export class StationComponent implements OnInit, OnDestroy {
       this.selectStationFct(+this.activatedRoute.snapshot.paramMap.get('stationId'));
     });
 
+    combineLatest([
+      this.isNoGeolocation$.pipe(filter(Boolean), take(1)),
+      this.router.events.pipe(
+        filter(event => event instanceof NavigationEnd),
+      ),
+    ]).pipe(
+      map(([position, val]) => val),
+      takeUntil(this.destroy$),
+    ).subscribe((val: NavigationEnd) => {
+      this.selectStationFct(+this.activatedRoute.snapshot.paramMap.get('stationId'));
+    });
+
     this.currentPosition$.pipe(filter(Boolean), take(1))
       .subscribe((position) => {
         this.selectStationFct(+this.activatedRoute.snapshot.paramMap.get('stationId'));

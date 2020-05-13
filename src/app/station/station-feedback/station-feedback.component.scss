@@ -27,13 +27,9 @@
   }
 
   .title {
-    display: flex;
-    justify-content: center;
-    font-size: 18px;
+    color: $important-text;
     font-weight: 600;
-    color: rgb(16, 44, 60);
-    padding: 0.875rem 0;
-    margin: 0;
+    margin: 0.5em 0.750em;
   }
 
   .select-action {
