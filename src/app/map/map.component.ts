@@ -1,20 +1,81 @@
-import { LatLngBounds, LatLngBoundsLiteral } from '@agm/core/services/google-maps-types';
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { Router } from '@angular/router';
-import { select, Store } from '@ngrx/store';
-import { isEqual } from 'lodash';
-import { Observable, Subject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
-import { toggleCompassView } from '../actions/galileo';
-import { fetchingStationsInPolygon, resetZoom, setMapCenter, setZoom } from '../actions/stations-map';
-import { Marker, Station } from '../interfaces';
-import { Coordinate } from '../interfaces/index';
-import { AppState } from '../reducers';
-import { getCurrentBearing, getCurrentPosition, getIsCompassView } from '../reducers/galileo';
-import { getRouteName } from '../reducers/route';
-import { getDestination, getItineraryType, ItineraryType } from '../reducers/stations-list';
-import { getIsLoading, getLatLngBoundsLiteral, getMapCenter, getMarkers, getSelectedStation, getZoom } from '../reducers/stations-map';
-import { DEFAULT_COORD, DEFAULT_ZOOM } from '../shared/constants';
+import {
+  LatLngBounds,
+  LatLngBoundsLiteral
+} from '@agm/core/services/google-maps-types';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output
+} from '@angular/core';
+import {
+  Router
+} from '@angular/router';
+import {
+  select,
+  Store
+} from '@ngrx/store';
+import {
+  isEqual
+} from 'lodash';
+import {
+  Observable,
+  Subject
+} from 'rxjs';
+import {
+  take,
+  takeUntil
+} from 'rxjs/operators';
+import {
+  toggleCompassView
+} from '../actions/galileo';
+import {
+  fetchingStationsInPolygon,
+  resetZoom,
+  setMapCenter,
+  setZoom
+} from '../actions/stations-map';
+import {
+  Marker,
+  Station
+} from '../interfaces';
+import {
+  Coordinate
+} from '../interfaces/index';
+import {
+  AppState
+} from '../reducers';
+import {
+  getCurrentBearing,
+  getCurrentPosition,
+  getIsCompassView
+} from '../reducers/galileo';
+import {
+  getRouteName
+} from '../reducers/route';
+import {
+  getDestination,
+  getItineraryType,
+  ItineraryType
+} from '../reducers/stations-list';
+import {
+  getIsLoading,
+  getLatLngBoundsLiteral,
+  getMapCenter,
+  getMarkers,
+  getSelectedStation,
+  getZoom
+} from '../reducers/stations-map';
+import {
+  DEFAULT_COORD,
+  DEFAULT_ZOOM
+} from '../shared/constants';
+import {
+  MatSnackBar
+} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-map',
@@ -29,7 +90,9 @@ export class MapComponent implements OnInit, OnDestroy {
 
   markers$: Observable<Marker[]>;
   isLoading$: Observable<boolean>;
-  currentPosition$: Observable<{ lat: number; lng: number }>;
+  currentPosition$: Observable<{
+    lat: number; lng: number
+  }>;
   destination$: Observable<Station>;
   latLngBoundsLiteral$: Observable<LatLngBoundsLiteral>;
   selectedStation$: Observable<Station>;
@@ -60,6 +123,7 @@ export class MapComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private router: Router,
     private elRef: ElementRef,
+    private snackBar: MatSnackBar,
   ) {
     this.markers$ = store.pipe(select(getMarkers));
     this.isLoading$ = store.pipe(select(getIsLoading));
@@ -120,7 +184,9 @@ export class MapComponent implements OnInit, OnDestroy {
       lat: this.currentMapCenter ? this.currentMapCenter.lat : DEFAULT_COORD.lat,
       lng: this.currentMapCenter ? this.currentMapCenter.lng : DEFAULT_COORD.lng,
     }));
-    this.store.dispatch(setZoom({ zoom: this.currentZoom }));
+    this.store.dispatch(setZoom({
+      zoom: this.currentZoom
+    }));
 
     this.isViewSyncWithCurrentPosition = this.isMapCenterEqualCurrentPosition();
 
@@ -130,8 +196,8 @@ export class MapComponent implements OnInit, OnDestroy {
         latLngBoundsLiteralLastSaved = latLng;
       });
 
-      if (!isEqual(latLngBoundsLiteralLastSaved, this.currentLatLngBounds.toJSON())
-        && !this.isFlatMap(this.currentLatLngBounds.toJSON())) {
+      if (!isEqual(latLngBoundsLiteralLastSaved, this.currentLatLngBounds.toJSON()) &&
+        !this.isFlatMap(this.currentLatLngBounds.toJSON())) {
         this.store.dispatch(
           fetchingStationsInPolygon({
             latLngBoundsLiteral: this.currentLatLngBounds.toJSON(),
@@ -160,11 +226,21 @@ export class MapComponent implements OnInit, OnDestroy {
       if (this.isIOS) {
         this.requestPermissionsIOS.emit();
       } else {
+        if (!this.store.pipe(select(getIsCompassView))) {
+          this.snackBar.open(this.store.pipe(select(getCurrentBearing)) ?
+            'Mode boussole activé' :
+            'Mode boussole activé. Marchez en tenant votre téléphone en face de vous pour plus de précision.',
+            'Ok', {
+            duration: 5000,
+          });
+        }
         this.store.dispatch(toggleCompassView());
       }
     } else {
       let position: Coordinate;
-      this.currentPosition$.pipe(take(1)).subscribe((cp) => { position = cp; });
+      this.currentPosition$.pipe(take(1)).subscribe((cp) => {
+        position = cp;
+      });
       this.store.dispatch(setMapCenter(position));
       this.store.dispatch(resetZoom());
     }
@@ -181,11 +257,13 @@ export class MapComponent implements OnInit, OnDestroy {
   navigateTo(id: number): void {
     switch (id) {
       case 0: {
-        this.router.navigate(['itinerary', 'departure']); break;
+        this.router.navigate(['itinerary', 'departure']);
+        break;
       }
 
       case 1: {
-        this.router.navigate(['itinerary', 'arrival']); break;
+        this.router.navigate(['itinerary', 'arrival']);
+        break;
       }
     }
   }
@@ -242,11 +320,17 @@ export class MapComponent implements OnInit, OnDestroy {
 
   isMapCenterEqualCurrentPosition(): boolean {
     let position: Coordinate;
-    this.currentPosition$.pipe(take(1)).subscribe((cp) => { position = cp; });
+    this.currentPosition$.pipe(take(1)).subscribe((cp) => {
+      position = cp;
+    });
     let zoom: number;
-    this.zoom$.pipe(take(1)).subscribe((z) => { zoom = z; });
+    this.zoom$.pipe(take(1)).subscribe((z) => {
+      zoom = z;
+    });
     let mapCenter: Coordinate;
-    this.mapCenter$.pipe(take(1)).subscribe((mc) => { mapCenter = mc; });
+    this.mapCenter$.pipe(take(1)).subscribe((mc) => {
+      mapCenter = mc;
+    });
     return isEqual(mapCenter, DEFAULT_COORD) || isEqual(mapCenter, position) && zoom === DEFAULT_ZOOM;
   }
 
