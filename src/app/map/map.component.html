@@ -33,6 +33,7 @@
       <ng-container *ngIf="!!(currentPosition$ | async)">
         <agm-marker
           *ngIf="(isCompassView$ | async) && (currentBearing$ | async); else normalIcon"
+          [class.-uncertain]="(isCompassView$ | async) && !(currentBearing$ | async)"
           [latitude]="(currentPosition$ | async)?.lat"
           [longitude]="(currentPosition$ | async)?.lng"
           [opacity]="1"
