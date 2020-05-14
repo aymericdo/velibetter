@@ -32,8 +32,7 @@
 
       <ng-container *ngIf="!!(currentPosition$ | async)">
         <agm-marker
-          *ngIf="(isCompassView$ | async) && (currentBearing$ | async); else normalIcon"
-          [class.-uncertain]="(isCompassView$ | async) && !(currentBearing$ | async)"
+          *ngIf="(isCompassView$ | async); else normalIcon"
           [latitude]="(currentPosition$ | async)?.lat"
           [longitude]="(currentPosition$ | async)?.lng"
           [opacity]="1"
@@ -63,10 +62,17 @@
       <i class="material-icons">help</i>
     </button>
     <button
-      *ngIf="!!(currentPosition$ | async) && !isDisplayingListPages"
+      *ngIf="!!(currentPosition$ | async) && !isDisplayingListPages && !(isCompassView$ | async)"
       mat-mini-fab class="my-location-button"
       (click)="recenterMap()">
       <i class="material-icons">my_location</i>
+    </button>
+    <button
+      *ngIf="!!(currentPosition$ | async) && !isDisplayingListPages && (isCompassView$ | async)"
+      mat-mini-fab class="my-location-button"
+      [class.-uncertain]="isCompassUncertain"
+      (click)="recenterMap()">
+      <i class="material-icons">explore</i>
     </button>
     <app-speed-dial-fab
       *ngIf="!!(currentPosition$ | async) && !isDisplayingListPages"

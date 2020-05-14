@@ -1,3 +1,5 @@
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 export function getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
   const R = 6371; // Radius of the earth in km
   const dLat = toRadians(lat2 - lat1);
@@ -34,4 +36,23 @@ export function toRadians(degrees: number): number {
 // Converts from radians to degrees.
 export function toDegrees(radians: number): number {
   return radians * 180 / Math.PI;
+}
+
+
+export function notifyCompassView(isAlreadyCompassView: boolean, currentBearing: number, snackBar: MatSnackBar): void {
+  const duration = 3000;
+  if (currentBearing && !isAlreadyCompassView) {
+    snackBar.open(
+      'Mode boussole activé',
+      'Ok', {
+      duration: duration,
+    });
+  }
+  if (!currentBearing && !isAlreadyCompassView) {
+    snackBar.open(
+      'Mode boussole activé. Marchez en tenant votre téléphone en face de vous pour plus de précision.',
+      'Ok', {
+      duration: duration,
+    });
+  }
 }

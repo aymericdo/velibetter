@@ -76,6 +76,7 @@ import {
 import {
   MatSnackBar
 } from '@angular/material/snack-bar';
+import { notifyCompassView } from '../shared/helper';
 
 @Component({
   selector: 'app-map',
@@ -118,6 +119,7 @@ export class MapComponent implements OnInit, OnDestroy {
   private currentZoom = DEFAULT_ZOOM;
   private isViewSyncWithCurrentPosition = true;
   private destroy$: Subject<boolean> = new Subject<boolean>();
+  isCompassUncertain = true;
 
   constructor(
     private store: Store<AppState>,
@@ -226,14 +228,15 @@ export class MapComponent implements OnInit, OnDestroy {
       if (this.isIOS) {
         this.requestPermissionsIOS.emit();
       } else {
-        if (!this.store.pipe(select(getIsCompassView))) {
-          this.snackBar.open(this.store.pipe(select(getCurrentBearing)) ?
-            'Mode boussole activé' :
-            'Mode boussole activé. Marchez en tenant votre téléphone en face de vous pour plus de précision.',
-            'Ok', {
-            duration: 5000,
-          });
+        let isAlreadyCompassView = null;
+        this.store.pipe(select(getIsCompassView, take(1))).subscribe((isCompassView) => isAlreadyCompassView = isCompassView);
+        let currentBearing = null;
+        this.store.pipe(select(getCurrentBearing, take(1))).subscribe((cb) => currentBearing = cb);
+        if (currentBearing && !isAlreadyCompassView) {
+          this.isCompassUncertain = false;
         }
+        notifyCompassView(isAlreadyCompassView, currentBearing, this.snackBar);
+
         this.store.dispatch(toggleCompassView());
       }
     } else {

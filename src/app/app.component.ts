@@ -3,16 +3,18 @@ import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
+import { filter, takeUntil, take } from 'rxjs/operators';
 import { setDegrees, setIsNoGeolocation, setPosition, toggleCompassView } from './actions/galileo';
 import { setIsFullMap, setRouteName, setUrl } from './actions/route';
 import { setIsMobile } from './actions/screen';
 import { animationSpeed, animationType, routerTransition } from './animations/route-animations';
 import { AppState } from './reducers';
-import { getDegrees, getIsCompassView } from './reducers/galileo';
+import { getDegrees, getIsCompassView, getCurrentBearing } from './reducers/galileo';
 import { getIsSplitScreen } from './reducers/route';
 import { getIsMobile } from './reducers/screen';
 import { DEFAULT_COORD } from './shared/constants';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { notifyCompassView } from './shared/helper';
 
 declare const gtag: (
   event: string,
@@ -47,6 +49,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private router: Router,
     private breakpointObserver: BreakpointObserver,
     private renderer: Renderer2,
+    private snackBar: MatSnackBar,
   ) {
     this.isMobile$ = store.pipe(select(getIsMobile));
     this.deg$ = store.pipe(select(getDegrees));
@@ -146,6 +149,11 @@ export class AppComponent implements OnInit, OnDestroy {
       (DeviceOrientationEvent as any).requestPermission()
         .then((permissionState: 'granted' | 'denied' | 'default') => {
           if (permissionState === 'granted') {
+            let isAlreadyCompassView = null;
+            this.store.pipe(select(getIsCompassView, take(1))).subscribe((isCompassView) => isAlreadyCompassView = isCompassView);
+            let currentBearing = null;
+            this.store.pipe(select(getCurrentBearing, take(1))).subscribe((cb) => currentBearing = cb);
+            notifyCompassView(isAlreadyCompassView, currentBearing, this.snackBar);
             this.store.dispatch(toggleCompassView());
           }
         })

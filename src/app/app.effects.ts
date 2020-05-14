@@ -130,7 +130,7 @@ export class AppEffects {
       mergeMap(([{ lat, lng }, precedentPosition]) => {
         if (!precedentPosition) {
           return of(setBearing({ bearing: null }));
-        } else if (getDistanceFromLatLonInKm(lat, lng, precedentPosition.lat, precedentPosition.lng) > 0.02) {
+        } else if (getDistanceFromLatLonInKm(lat, lng, precedentPosition.lat, precedentPosition.lng) > 0.01) {
           return of(setBearing({
             bearing: bearing(lat, lng, precedentPosition.lat, precedentPosition.lng),
           }));
