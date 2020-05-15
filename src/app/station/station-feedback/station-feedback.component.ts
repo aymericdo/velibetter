@@ -3,10 +3,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { getIsSelectingStation } from 'src/app/reducers/stations-map';
+import { take } from 'rxjs/operators';
+import { getIsSelectingStation, getSelectedStation } from 'src/app/reducers/stations-map';
 import { GoogleAnalyticsService } from 'src/app/services/google-analytics.service';
 import { savingFeedback } from '../../actions/feedback';
-import { Feedback, FeedbackType } from '../../interfaces/index';
+import { Feedback, FeedbackType, Station } from '../../interfaces/index';
 import { AppState } from '../../reducers';
 
 @Component({
@@ -14,10 +15,10 @@ import { AppState } from '../../reducers';
   templateUrl: './station-feedback.component.html',
   styleUrls: ['./station-feedback.component.scss'],
 })
-export class StationFeedbackComponent implements OnInit {
+export class StationFeedbackComponent {
   feedback$: Observable<Feedback>;
   isSelectingStation$: Observable<boolean>;
-  // selectedStation$: Observable<Station>;
+  selectedStation$: Observable<Station>;
 
   selectedCard: string;
   numberMechanical: string;
@@ -30,14 +31,10 @@ export class StationFeedbackComponent implements OnInit {
   constructor(
     private store: Store<AppState>,
     private snackBar: MatSnackBar,
-    private activatedRoute: ActivatedRoute,
     private googleAnalyticsService: GoogleAnalyticsService,
   ) {
     this.isSelectingStation$ = store.pipe(select(getIsSelectingStation));
-    // this.selectedStation$ = store.pipe(select(getSelectedStation));
-  }
-
-  ngOnInit() {
+    this.selectedStation$ = store.pipe(select(getSelectedStation));
   }
 
   clickCard(type: string) {
@@ -67,8 +64,8 @@ export class StationFeedbackComponent implements OnInit {
     this.numberDock = null;
     this.setFeedback();
     this
-     .googleAnalyticsService
-     .eventEmitter('clear_feedback', 'feedback', 'cancel', 'click', 1);
+      .googleAnalyticsService
+      .eventEmitter('clear_feedback', 'feedback', 'cancel', 'click', 1);
   }
 
   setFeedback(): void {
@@ -80,19 +77,22 @@ export class StationFeedbackComponent implements OnInit {
 
   clickSubmit() {
     this
-     .googleAnalyticsService
-     .eventEmitter('give_feedback', 'feedback', 'submit', 'click', 1);
+      .googleAnalyticsService
+      .eventEmitter('give_feedback', 'feedback', 'submit', 'click', 1);
 
-    const feedback = {
-      stationId: +this.activatedRoute.snapshot.paramMap.get('stationId'),
-      type: this.selectedCard === 'confirmed' ? FeedbackType.confirmed : FeedbackType.broken,
-      mechanical: this.numberMechanical,
-      ebike: this.numberEbike,
-      dock: this.numberDock,
-    };
+    let feedback = null;
+    this.selectedStation$.pipe(take(1)).subscribe((station: Station) => {
+      feedback = {
+        stationId: +station.stationId,
+        type: this.selectedCard === 'confirmed' ? FeedbackType.confirmed : FeedbackType.broken,
+        mechanical: this.numberMechanical ? +this.numberMechanical : station.mechanical,
+        ebike: this.numberEbike ? +this.numberEbike : station.ebike,
+        dock: this.numberDock ? +this.numberDock : station.numDocksAvailable,
+      };
+    });
     this.store.dispatch(savingFeedback({ feedback }));
     this.clear();
-    this.snackBar.open('Feedback envoyé! Merci beaucoup :)', 'Ok', {
+    this.snackBar.open('Feedback envoyé! Merci beaucoup ☺️', 'Ok', {
       duration: 5000,
     });
   }

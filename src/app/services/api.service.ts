@@ -9,7 +9,7 @@ import { Feedback } from './../interfaces/index';
   providedIn: 'root'
 })
 export class ApiService {
-  private baseURL = 'https://velibetter.herokuapp.com';
+  private baseURL = 'http://localhost:8000';
   constructor(private httpClient: HttpClient) { }
 
   fetchClosestInfo(
@@ -61,6 +61,7 @@ export class ApiService {
   saveFeedback(
     feedback: Feedback,
   ): Observable<never> {
+    console.log(feedback)
     return this.httpClient.post(
       `${this.baseURL}/feedback/`,
       feedback,
