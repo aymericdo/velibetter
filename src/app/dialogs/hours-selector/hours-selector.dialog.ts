@@ -24,7 +24,6 @@ export class HoursSelectorComponent implements OnInit, OnDestroy {
       if (mins === '00') {
         this.hours = this.hours.map(([h,]) => [h, this.getRealHour(h)]);
       }
-      console.log(mins);
     }, 60000);
   }
 

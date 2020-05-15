@@ -1,7 +1,7 @@
 import { LatLngBoundsLiteral } from '@agm/core';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, empty, EMPTY } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Coordinate, Station } from '../interfaces';
 import { Feedback } from './../interfaces/index';
 
@@ -61,7 +61,6 @@ export class ApiService {
   saveFeedback(
     feedback: Feedback,
   ): Observable<never> {
-    console.log(feedback)
     return this.httpClient.post(
       `${this.baseURL}/feedback/`,
       feedback,
