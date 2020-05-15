@@ -70,7 +70,7 @@
     <button
       *ngIf="!!(currentPosition$ | async) && !isDisplayingListPages && (isCompassView$ | async)"
       mat-mini-fab class="my-location-button"
-      [class.-uncertain]="isCompassUncertain"
+      [class.-uncertain]="!(currentBearing$ | async)"
       (click)="recenterMap()">
       <i class="material-icons">explore</i>
     </button>

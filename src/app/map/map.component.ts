@@ -1,67 +1,21 @@
-import {
-  LatLngBounds,
-  LatLngBoundsLiteral
-} from '@agm/core/services/google-maps-types';
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output
-} from '@angular/core';
+import { LatLngBounds, LatLngBoundsLiteral } from '@agm/core/services/google-maps-types';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import {
-  select,
-  Store
-} from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { isEqual } from 'lodash';
-import {
-  Observable,
-  Subject
-} from 'rxjs';
-import {
-  take,
-  takeUntil
-} from 'rxjs/operators';
+import { combineLatest, Observable, Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 import { toggleCompassView } from '../actions/galileo';
-import {
-  fetchingStationsInPolygon,
-  resetZoom,
-  setMapCenter,
-  setZoom
-} from '../actions/stations-map';
-import {
-  Marker,
-  Station
-} from '../interfaces';
+import { fetchingStationsInPolygon, resetZoom, setMapCenter, setZoom } from '../actions/stations-map';
+import { Marker, Station } from '../interfaces';
 import { Coordinate } from '../interfaces/index';
 import { AppState } from '../reducers';
-import {
-  getCurrentBearing,
-  getCurrentPosition,
-  getIsCompassView
-} from '../reducers/galileo';
+import { getCurrentBearing, getCurrentPosition, getIsCompassView } from '../reducers/galileo';
 import { getRouteName } from '../reducers/route';
-import {
-  getDestination,
-  getItineraryType,
-  ItineraryType
-} from '../reducers/stations-list';
-import {
-  getIsLoading,
-  getLatLngBoundsLiteral,
-  getMapCenter,
-  getMarkers,
-  getSelectedStation,
-  getZoom
-} from '../reducers/stations-map';
-import {
-  DEFAULT_COORD,
-  DEFAULT_ZOOM
-} from '../shared/constants';
+import { getDestination, getItineraryType, ItineraryType } from '../reducers/stations-list';
+import { getIsLoading, getLatLngBoundsLiteral, getMapCenter, getMarkers, getSelectedStation, getZoom } from '../reducers/stations-map';
+import { DEFAULT_COORD, DEFAULT_ZOOM } from '../shared/constants';
 
 @Component({
   selector: 'app-map',
@@ -104,7 +58,6 @@ export class MapComponent implements OnInit, OnDestroy {
   private currentZoom = DEFAULT_ZOOM;
   private isViewSyncWithCurrentPosition = true;
   private destroy$: Subject<boolean> = new Subject<boolean>();
-  isCompassUncertain = true;
 
   constructor(
     private store: Store<AppState>,
@@ -156,12 +109,12 @@ export class MapComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.store.pipe(select(getIsCompassView), takeUntil(this.destroy$)).subscribe((isCompassView) => {
-      let currentBearing = null;
-      this.store.pipe(select(getCurrentBearing, take(1))).subscribe((cb) => currentBearing = cb);
-      if (currentBearing && !isCompassView) {
-        this.isCompassUncertain = false;
-      }
+    combineLatest([
+      this.isCompassView$,
+      this.currentBearing$,
+    ]).pipe(
+      takeUntil(this.destroy$),
+    ).subscribe(([isCompassView, currentBearing]) => {
       const duration = 3000;
       if (currentBearing && isCompassView) {
         this.snackBar.open(
@@ -177,7 +130,7 @@ export class MapComponent implements OnInit, OnDestroy {
           duration,
         });
       }
-    })
+    });
   }
 
   ngOnDestroy() {
