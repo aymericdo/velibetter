@@ -11,16 +11,13 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import {
-  Router
-} from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import {
   select,
   Store
 } from '@ngrx/store';
-import {
-  isEqual
-} from 'lodash';
+import { isEqual } from 'lodash';
 import {
   Observable,
   Subject
@@ -29,9 +26,7 @@ import {
   take,
   takeUntil
 } from 'rxjs/operators';
-import {
-  toggleCompassView
-} from '../actions/galileo';
+import { toggleCompassView } from '../actions/galileo';
 import {
   fetchingStationsInPolygon,
   resetZoom,
@@ -42,20 +37,14 @@ import {
   Marker,
   Station
 } from '../interfaces';
-import {
-  Coordinate
-} from '../interfaces/index';
-import {
-  AppState
-} from '../reducers';
+import { Coordinate } from '../interfaces/index';
+import { AppState } from '../reducers';
 import {
   getCurrentBearing,
   getCurrentPosition,
   getIsCompassView
 } from '../reducers/galileo';
-import {
-  getRouteName
-} from '../reducers/route';
+import { getRouteName } from '../reducers/route';
 import {
   getDestination,
   getItineraryType,
@@ -73,10 +62,6 @@ import {
   DEFAULT_COORD,
   DEFAULT_ZOOM
 } from '../shared/constants';
-import {
-  MatSnackBar
-} from '@angular/material/snack-bar';
-import { notifyCompassView } from '../shared/helper';
 
 @Component({
   selector: 'app-map',
@@ -170,6 +155,29 @@ export class MapComponent implements OnInit, OnDestroy {
         }
       }
     });
+
+    this.store.pipe(select(getIsCompassView), takeUntil(this.destroy$)).subscribe((isCompassView) => {
+      let currentBearing = null;
+      this.store.pipe(select(getCurrentBearing, take(1))).subscribe((cb) => currentBearing = cb);
+      if (currentBearing && !isCompassView) {
+        this.isCompassUncertain = false;
+      }
+      const duration = 3000;
+      if (currentBearing && isCompassView) {
+        this.snackBar.open(
+          'Mode boussole activé',
+          'Ok', {
+          duration,
+        });
+      }
+      if (!currentBearing && isCompassView) {
+        this.snackBar.open(
+          'Mode boussole activé. Marchez en tenant votre téléphone en face de vous pour plus de précision.',
+          'Ok', {
+          duration,
+        });
+      }
+    })
   }
 
   ngOnDestroy() {
@@ -228,15 +236,6 @@ export class MapComponent implements OnInit, OnDestroy {
       if (this.isIOS) {
         this.requestPermissionsIOS.emit();
       } else {
-        let isAlreadyCompassView = null;
-        this.store.pipe(select(getIsCompassView, take(1))).subscribe((isCompassView) => isAlreadyCompassView = isCompassView);
-        let currentBearing = null;
-        this.store.pipe(select(getCurrentBearing, take(1))).subscribe((cb) => currentBearing = cb);
-        if (currentBearing && !isAlreadyCompassView) {
-          this.isCompassUncertain = false;
-        }
-        notifyCompassView(isAlreadyCompassView, currentBearing, this.snackBar);
-
         this.store.dispatch(toggleCompassView());
       }
     } else {

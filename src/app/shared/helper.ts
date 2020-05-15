@@ -37,22 +37,3 @@ export function toRadians(degrees: number): number {
 export function toDegrees(radians: number): number {
   return radians * 180 / Math.PI;
 }
-
-
-export function notifyCompassView(isAlreadyCompassView: boolean, currentBearing: number, snackBar: MatSnackBar): void {
-  const duration = 3000;
-  if (currentBearing && !isAlreadyCompassView) {
-    snackBar.open(
-      'Mode boussole activé',
-      'Ok', {
-      duration: duration,
-    });
-  }
-  if (!currentBearing && !isAlreadyCompassView) {
-    snackBar.open(
-      'Mode boussole activé. Marchez en tenant votre téléphone en face de vous pour plus de précision.',
-      'Ok', {
-      duration: duration,
-    });
-  }
-}
