@@ -11,7 +11,7 @@ import { fetchingStationsInPolygon, resetZoom, setMapCenter, setZoom } from '../
 import { Marker, Station } from '../interfaces';
 import { Coordinate } from '../interfaces/index';
 import { AppState } from '../reducers';
-import { getCurrentBearing, getCurrentPosition, getIsCompassView } from '../reducers/galileo';
+import { getCurrentBearing, getCurrentPosition, getIsCompassView, getHasBearing } from '../reducers/galileo';
 import { getRouteName } from '../reducers/route';
 import { getDestination, getItineraryType, ItineraryType } from '../reducers/stations-list';
 import { getIsLoading, getLatLngBoundsLiteral, getMapCenter, getMarkers, getSelectedStation, getZoom } from '../reducers/stations-map';
@@ -40,6 +40,7 @@ export class MapComponent implements OnInit, OnDestroy {
   zoom$: Observable<number>;
   isCompassView$: Observable<boolean>;
   currentBearing$: Observable<number>;
+  hasBearing$: Observable<boolean>;
   routeName$: Observable<string>;
   itineraryType$: Observable<ItineraryType>;
 
@@ -75,6 +76,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.zoom$ = store.pipe(select(getZoom));
     this.isCompassView$ = store.pipe(select(getIsCompassView));
     this.currentBearing$ = store.pipe(select(getCurrentBearing));
+    this.hasBearing$ = store.pipe(select(getHasBearing))
     this.itineraryType$ = store.pipe(select(getItineraryType));
     this.routeName$ = store.pipe(select(getRouteName));
   }
@@ -111,19 +113,19 @@ export class MapComponent implements OnInit, OnDestroy {
 
     combineLatest([
       this.isCompassView$,
-      this.currentBearing$,
+      this.hasBearing$,
     ]).pipe(
       takeUntil(this.destroy$),
-    ).subscribe(([isCompassView, currentBearing]) => {
+    ).subscribe(([isCompassView, hasBearing]) => {
       const duration = 3000;
-      if (currentBearing && isCompassView) {
+      if (hasBearing && isCompassView) {
         this.snackBar.open(
           'Mode boussole activé',
           'Ok', {
           duration,
         });
       }
-      if (!currentBearing && isCompassView) {
+      if (!hasBearing && isCompassView) {
         this.snackBar.open(
           'Mode boussole activé. Marchez en tenant votre téléphone en face de vous pour plus de précision.',
           'Ok', {
