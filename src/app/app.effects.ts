@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { createAction, select, Store } from '@ngrx/store';
 import { EMPTY, Observable, of } from 'rxjs';
-import { catchError, debounceTime, filter, map, mergeMap, take, withLatestFrom } from 'rxjs/operators';
-import { savingFeedback, setFeedback } from './actions/feedback';
+import { catchError, debounceTime, filter, map, mergeMap, switchMap, take, withLatestFrom } from 'rxjs/operators';
+import { resetFeedback, savingFeedback, setFeedback } from './actions/feedback';
 import { setBearing, setPosition } from './actions/galileo';
 import { fetchingClosestStations, fetchingDestination, setDestination, setStationsList } from './actions/stations-list';
 import { fetchingStationsInPolygon, selectingStation, selectStation, setStationsMap } from './actions/stations-map';
 import { Coordinate, Station } from './interfaces';
 import { AppState } from './reducers';
+import { getFeedback } from './reducers/feedback';
 import { getCurrentPosition, getPrecedentPosition } from './reducers/galileo';
 import { getStationsStatusById } from './reducers/stations-list';
 import { getStationsMapById, getZoom } from './reducers/stations-map';
@@ -76,19 +77,20 @@ export class AppEffects {
     this.actions$.pipe(
       ofType(selectingStation),
       withLatestFrom(this.store.pipe(select(getCurrentPosition))),
-      mergeMap(([{ stationId }, position]) => {
+      withLatestFrom(this.store.pipe(select(getFeedback))),
+      mergeMap(([[{ stationId }, position], feedback]) => {
         // I don't understand how combineLatest could be useful in this case
         let selectedStation = null;
         this.store
           .pipe(select(getStationsMapById(stationId)), take(1))
           .subscribe(s => (selectedStation = s));
 
-        if (selectedStation && selectedStation.distance) {
+        if (selectedStation && selectedStation.distance && !feedback) {
           return of(selectStation({ station: selectedStation }));
         } else {
           return this.apiService.fetchStation(stationId, position as Coordinate).pipe(
-            map((station: Station) =>
-              selectStation({ station })
+            switchMap((station: Station) =>
+              [selectStation({ station }), resetFeedback()]
             ),
             catchError(() => EMPTY)
           );

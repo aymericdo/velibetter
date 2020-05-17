@@ -1,5 +1,5 @@
 import { Action, createReducer, createSelector, on } from '@ngrx/store';
-import { setFeedback } from '../actions/feedback';
+import { resetFeedback, setFeedback } from '../actions/feedback';
 import { Feedback } from '../interfaces/index';
 import { AppState } from './index';
 
@@ -17,6 +17,12 @@ export const feedbackReducer = createReducer(
     return {
       ...state,
       feedback
+    };
+  }),
+  on(resetFeedback, (state) => {
+    return {
+      ...state,
+      feedback: null,
     };
   }),
 );

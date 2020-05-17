@@ -10,3 +10,7 @@ export const setFeedback = createAction(
   '[Feedback] set feedback',
   props<{ feedback: Feedback }>()
 );
+
+export const resetFeedback = createAction(
+  '[Feedback] reset feedback',
+);
