@@ -11,7 +11,7 @@ import { fetchingStationsInPolygon, resetZoom, setMapCenter, setZoom } from '../
 import { Marker, Station } from '../interfaces';
 import { Coordinate } from '../interfaces/index';
 import { AppState } from '../reducers';
-import { getCurrentBearing, getCurrentPosition, getHasBearing, getIsCompassView } from '../reducers/galileo';
+import { getCurrentBearing, getCurrentPosition, getHasBearingOrDeg, getIsCompassView } from '../reducers/galileo';
 import { getRouteName } from '../reducers/route';
 import { getDestination, getItineraryType, ItineraryType } from '../reducers/stations-list';
 import { getIsLoading, getLatLngBoundsLiteral, getMapCenter, getMarkers, getSelectedStation, getZoom } from '../reducers/stations-map';
@@ -76,7 +76,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.zoom$ = store.pipe(select(getZoom));
     this.isCompassView$ = store.pipe(select(getIsCompassView));
     this.currentBearing$ = store.pipe(select(getCurrentBearing));
-    this.hasBearing$ = store.pipe(select(getHasBearing));
+    this.hasBearing$ = store.pipe(select(getHasBearingOrDeg));
     this.itineraryType$ = store.pipe(select(getItineraryType));
     this.routeName$ = store.pipe(select(getRouteName));
   }
