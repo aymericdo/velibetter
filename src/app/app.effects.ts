@@ -3,13 +3,12 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { createAction, select, Store } from '@ngrx/store';
 import { EMPTY, Observable, of } from 'rxjs';
 import { catchError, debounceTime, filter, map, mergeMap, take, withLatestFrom } from 'rxjs/operators';
-import { savingFeedback } from './actions/feedback';
+import { savingFeedback, setFeedback } from './actions/feedback';
 import { setBearing, setPosition } from './actions/galileo';
 import { fetchingClosestStations, fetchingDestination, setDestination, setStationsList } from './actions/stations-list';
 import { fetchingStationsInPolygon, selectingStation, selectStation, setStationsMap } from './actions/stations-map';
 import { Coordinate, Station } from './interfaces';
 import { AppState } from './reducers';
-import { getFeedback } from './reducers/feedback';
 import { getCurrentPosition, getPrecedentPosition } from './reducers/galileo';
 import { getStationsStatusById } from './reducers/stations-list';
 import { getStationsMapById, getZoom } from './reducers/stations-map';
@@ -144,9 +143,9 @@ export class AppEffects {
   saveFeedback$ = createEffect(() =>
     this.actions$.pipe(
       ofType(savingFeedback),
-      withLatestFrom(this.store.pipe(select(getFeedback), filter(Boolean))),
-      mergeMap(([{ feedback }]) => {
+      mergeMap(({ feedback }) => {
         return this.apiService.saveFeedback(feedback).pipe(
+          map(() => setFeedback({ feedback })),
           catchError(() => EMPTY)
         );
       }),

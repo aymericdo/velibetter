@@ -68,7 +68,11 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
         }));
 
         this.chartData = {
-          labels: ['mécanique', 'ebike', 'place vide'],
+          labels: [
+            selectedStation.mechanical > 1 ? 'mécaniques' : 'mécanique',
+            selectedStation.ebike > 1 ? 'ebikes' : 'ebike',
+            selectedStation.numDocksAvailable > 1 ? 'places vides' : 'place vide',
+          ],
           series: [[selectedStation.mechanical], [selectedStation.ebike], [selectedStation.numDocksAvailable]],
         };
 
