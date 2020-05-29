@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Station } from '../interfaces';
+import { Coordinate } from '../interfaces/index';
 import { ItineraryType } from '../reducers/stations-list';
 
 export const fetchingClosestStations = createAction(
@@ -23,5 +24,5 @@ export const unsetDestination = createAction(
 
 export const setDestination = createAction(
   '[Stations List] set destination',
-  props<{ destination: Station }>(),
+  props<{ currentPosition: Coordinate, destination: Station }>(),
 );

@@ -103,7 +103,7 @@ export class AppEffects {
     this.actions$.pipe(
       ofType(fetchingDestination),
       withLatestFrom(this.store.pipe(select(getCurrentPosition), filter(Boolean))),
-      mergeMap(([{ stationId }, position]) => {
+      mergeMap(([{ stationId }, position]: [ReturnType<typeof fetchingDestination>, Coordinate]) => {
         // I don't understand how combineLatest could be useful in this case
         let destination = null;
         this.store
@@ -111,11 +111,11 @@ export class AppEffects {
           .subscribe(d => (destination = d));
 
         if (destination) {
-          return of(setDestination({ destination }));
+          return of(setDestination({ currentPosition: position, destination }));
         } else {
-          return this.apiService.fetchStation(stationId, position as Coordinate).pipe(
+          return this.apiService.fetchStation(stationId, position).pipe(
             map((station: Station) =>
-              setDestination({ destination: station })
+              setDestination({ currentPosition: position, destination: station })
             ),
             catchError(() => EMPTY)
           );

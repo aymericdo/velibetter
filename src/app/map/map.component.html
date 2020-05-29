@@ -49,8 +49,8 @@
       </ng-container>
 
       <agm-direction
-        *ngIf="!!(currentPosition$ | async) && (destination$ | async)"
-        [origin]="currentPosition$ | async"
+        *ngIf="!!(originPoint$ | async) && (destination$ | async)"
+        [origin]="originPoint$ | async"
         [destination]="destination$ | async"
         [travelMode]="(itineraryType$ | async) === 'departure' ? 'WALKING' : 'BICYCLING'"
       >
