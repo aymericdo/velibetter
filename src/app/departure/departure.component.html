@@ -20,7 +20,7 @@
   <app-list [isLoading]="isLoading$ | async" [isEmpty]="!(stationsStatus$ | async).length">
     <ng-container *ngIf="!(isLoading$ | async)">
       <a *ngFor="let station of stationsStatus$ | async; trackBy: trackByFn" class="mat-list-item-override" mat-list-item
-        [routerLink]="[station.stationId]">
+        [href]="'https://www.google.fr/maps/dir/' + (currentPosition$ | async)?.lat + ',' + (currentPosition$ | async)?.lng + '/' + station.lat + ',' + station.lng + '/data=!3m1!4b1!4m2!4m1!3e2'" target="_blank">
         <app-row-station [station]="station">
           <span>{{ station.distance | number:'1.0-0' }}m</span>
           <span>{{ station.mechanical }}<i class="material-icons mechanical">directions_bike</i></span>
