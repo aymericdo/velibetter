@@ -3,7 +3,6 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { IChartistData, IPieChartOptions } from 'chartist';
-import ChartistTooltip from 'chartist-plugin-tooltips-updated';
 import { ChartType } from 'ng-chartist';
 import { Observable, Subject } from 'rxjs';
 import { filter, take, takeUntil } from 'rxjs/operators';
@@ -30,20 +29,14 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
   chartData: IChartistData;
   chartOptions: IPieChartOptions = {
     donut: true,
+    donutWidth: 80,
     labelInterpolationFnc: (value: string, idx: number) => {
       if (this.chartData.series[idx] > 0) {
-        return value;
+        return `${value} [${this.chartData.series[idx]}]`;
       } else {
         return '';
       }
     },
-    plugins: [
-      ChartistTooltip({
-        anchorToPoint: true,
-        appendToBody: true,
-        class: 'ct-tooltip'
-      })
-    ]
   };
 
   private destroy$: Subject<boolean> = new Subject<boolean>();
@@ -66,9 +59,9 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
       .subscribe((selectedStation: Station) => {
         this.chartData = {
           labels: [
-            selectedStation.mechanical > 1 ? 'mécaniques' : 'mécanique',
-            selectedStation.ebike > 1 ? 'ebikes' : 'ebike',
-            selectedStation.numDocksAvailable > 1 ? 'places vides' : 'place vide',
+            selectedStation.mechanical > 1 ? 'Mécaniques' : 'Mécanique',
+            selectedStation.ebike > 1 ? 'Ebikes' : 'Ebike',
+            selectedStation.numDocksAvailable > 1 ? 'Places vides' : 'Place vide',
           ],
           series: [[selectedStation.mechanical], [selectedStation.ebike], [selectedStation.numDocksAvailable]],
         };
