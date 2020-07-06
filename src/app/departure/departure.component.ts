@@ -82,7 +82,7 @@ export class DepartureComponent implements OnInit {
 
         case 'maps': {
           window.open(
-            `https://www.google.com/maps?saddr=My+Location&daddr=${station.lat},${station.lng}`
+            `https://www.google.com/maps?saddr=${position.lat},${position.lng}&daddr=${station.lat},${station.lng}`
             + `&dirflg=w`,
             '_blank',
           );
