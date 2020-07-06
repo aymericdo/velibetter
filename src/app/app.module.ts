@@ -26,13 +26,15 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AgmDirectionModule } from 'agm-direction';
 import { ChartistModule } from 'ng-chartist';
 import { environment } from '../environments/environment';
+import { AboutComponent } from './about/about.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AppEffects } from './app.effects';
 import { ArrivalComponent } from './arrival/arrival.component';
 import { DepartureComponent } from './departure/departure.component';
 import { HoursSelectorComponent } from './dialogs/hours-selector/hours-selector.dialog';
-import { ItineraryTypeChoiceListComponent } from './dialogs/itinerary-type-choice-list/itinerary-type-choice-list.dialog';
+import { ItineraryAppListComponent } from './dialogs/itinerary-app-list/itinerary-app-list.dialog';
+import { ItineraryTypeListComponent } from './dialogs/itinerary-type-list/itinerary-type-list.dialog';
 import { ScrollVibrationDirective } from './directives/scroll-vibration.directive';
 import { ItineraryMapComponent } from './itinerary-map/itinerary-map.component';
 import { ItineraryComponent } from './itinerary/itinerary.component';
@@ -50,7 +52,6 @@ import { StationDescriptionComponent } from './station/station-description/stati
 import { StationFeedbackComponent } from './station/station-feedback/station-feedback.component';
 import { StationComponent } from './station/station.component';
 import { TopBarComponent } from './top-bar/top-bar.component';
-import { AboutComponent } from './about/about.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import { AboutComponent } from './about/about.component';
     ItineraryComponent,
     StationComponent,
     ItineraryMapComponent,
-    ItineraryTypeChoiceListComponent,
+    ItineraryTypeListComponent,
+    ItineraryAppListComponent,
     InfiniteScrollComponent,
     HoursSelectorComponent,
     ScrollVibrationDirective,

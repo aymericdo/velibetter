@@ -26,7 +26,7 @@
         [longitude]="marker.lng"
         (markerClick)="clickedMarker(marker.id)"
         [opacity]="1"
-        [iconUrl]="(selectedStation$ | async)?.stationId === marker.id ? '/assets/station_selected.svg' : '/assets/station.svg'"
+        [iconUrl]="(selectedStation$ | async)?.stationId === marker.id || (destination$ | async)?.stationId === marker.id ? '/assets/station_selected.svg' : '/assets/station.svg'"
       >
       </agm-marker>
 
@@ -53,6 +53,8 @@
         [origin]="originPoint$ | async"
         [destination]="destination$ | async"
         [travelMode]="(itineraryType$ | async) === 'departure' ? 'WALKING' : 'BICYCLING'"
+        [renderOptions]="renderOptions"
+        [markerOptions]="markerOptions"
       >
       </agm-direction>
     </agm-map>

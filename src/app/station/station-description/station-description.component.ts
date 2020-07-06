@@ -6,12 +6,13 @@ import { IChartistData, IPieChartOptions } from 'chartist';
 import ChartistTooltip from 'chartist-plugin-tooltips-updated';
 import { ChartType } from 'ng-chartist';
 import { Observable, Subject } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
+import { filter, take, takeUntil } from 'rxjs/operators';
 import { setMapCenter } from 'src/app//actions/stations-map';
-import { ItineraryTypeChoiceListComponent } from 'src/app/dialogs/itinerary-type-choice-list/itinerary-type-choice-list.dialog';
-import { Station } from 'src/app/interfaces';
+import { ItineraryApp, ItineraryAppListComponent } from 'src/app/dialogs/itinerary-app-list/itinerary-app-list.dialog';
+import { ItineraryTypeListComponent } from 'src/app/dialogs/itinerary-type-list/itinerary-type-list.dialog';
+import { Coordinate, Station } from 'src/app/interfaces';
 import { AppState } from 'src/app/reducers';
-import { getIsNoGeolocation } from 'src/app/reducers/galileo';
+import { getCurrentPosition, getIsNoGeolocation } from 'src/app/reducers/galileo';
 import { ItineraryType } from 'src/app/reducers/stations-list';
 import { getIsSelectingStation, getSelectedStation } from 'src/app/reducers/stations-map';
 
@@ -22,6 +23,7 @@ import { getIsSelectingStation, getSelectedStation } from 'src/app/reducers/stat
 })
 export class StationDescriptionComponent implements OnInit, OnDestroy {
   selectedStation$: Observable<Station>;
+  currentPosition$: Observable<Coordinate>;
   isSelectingStation$: Observable<boolean>;
   isNoGeolocation$: Observable<boolean>;
 
@@ -53,6 +55,7 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
     private router: Router,
     private activatedRoute: ActivatedRoute,
   ) {
+    this.currentPosition$ = store.pipe(select(getCurrentPosition));
     this.selectedStation$ = store.pipe(select(getSelectedStation));
     this.isSelectingStation$ = store.pipe(select(getIsSelectingStation));
     this.isNoGeolocation$ = store.pipe(select(getIsNoGeolocation));
@@ -88,10 +91,50 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
   }
 
   openDialog() {
-    const bottomSheetRef = this.bottomSheet.open(ItineraryTypeChoiceListComponent);
+    const bottomSheetRef = this.bottomSheet.open(ItineraryTypeListComponent);
 
     const sub = bottomSheetRef.instance.typeChanged.subscribe((type: ItineraryType) => {
-      this.goToThisStation(type);
+      const bottomSheetRefBis = this.bottomSheet.open(ItineraryAppListComponent);
+
+      const subBis = bottomSheetRefBis.instance.typeChanged.subscribe((app: ItineraryApp) => {
+        let position: Coordinate;
+        this.currentPosition$.pipe(take(1)).subscribe((cp) => {
+          position = cp;
+        });
+
+        let station: Station;
+        this.selectedStation$.pipe(take(1)).subscribe((s) => {
+          station = s;
+        });
+
+        switch (app) {
+          case 'inApp': {
+            this.goToThisStation(type);
+            break;
+          }
+
+          case 'maps': {
+            window.open(
+              `https://www.google.fr/maps/dir/?saddr=${position.lat},${position.lng}&daddr=${station.lat},${station.lng}`
+              + `&dirflg=${type === 'departure' ? 'w' : 'b'}`,
+              '_blank',
+            );
+            break;
+          }
+
+          case 'plans': {
+            window.open(
+              `http://maps.apple.com/?saddr=${position.lat},${position.lng}&daddr=${station.lat},${station.lng}&dirflg=w`,
+              '_blank',
+            );
+            break;
+          }
+        }
+      });
+
+      bottomSheetRefBis.afterDismissed().subscribe(() => {
+        subBis.unsubscribe();
+      });
     });
 
     bottomSheetRef.afterDismissed().subscribe(() => {

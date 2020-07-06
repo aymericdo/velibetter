@@ -47,6 +47,13 @@ export class MapComponent implements OnInit, OnDestroy {
 
   compassView = false;
 
+  renderOptions = {
+    suppressMarkers: true,
+  };
+
+  markerOptions = {
+  };
+
   fabButtons = [{
     id: 0,
     icon: 'directions_bike',
