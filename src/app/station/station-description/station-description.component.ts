@@ -7,7 +7,6 @@ import ChartistTooltip from 'chartist-plugin-tooltips-updated';
 import { ChartType } from 'ng-chartist';
 import { Observable, Subject } from 'rxjs';
 import { filter, take, takeUntil } from 'rxjs/operators';
-import { setMapCenter } from 'src/app//actions/stations-map';
 import { ItineraryApp, ItineraryAppListComponent } from 'src/app/dialogs/itinerary-app-list/itinerary-app-list.dialog';
 import { ItineraryTypeListComponent } from 'src/app/dialogs/itinerary-type-list/itinerary-type-list.dialog';
 import { Coordinate, Station } from 'src/app/interfaces';
@@ -65,11 +64,6 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
     this.selectedStation$
       .pipe(filter(Boolean), takeUntil(this.destroy$))
       .subscribe((selectedStation: Station) => {
-        this.store.dispatch(setMapCenter({
-          lat: selectedStation.lat,
-          lng: selectedStation.lng,
-        }));
-
         this.chartData = {
           labels: [
             selectedStation.mechanical > 1 ? 'mécaniques' : 'mécanique',
