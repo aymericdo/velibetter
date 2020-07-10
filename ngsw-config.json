@@ -29,20 +29,15 @@
   ],
   "dataGroups": [
     {
-      "cacheConfig": {
-        "strategy": "freshness",
-        "maxAge": "3h"
-      }
-    },
-    {
       "name": "stations-api",
       "urls": [
         "/stations-in-polygon/"
       ],
       "cacheConfig": {
+        "maxSize": 100,
         "strategy": "performance",
         "maxAge": "90d",
-        "timeout": "2s"
+        "timeout": "3h"
       }
     }
   ]
