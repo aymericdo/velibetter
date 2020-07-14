@@ -1,20 +1,54 @@
 @import "src/variables.scss";
 @import "src/theme.scss";
 
-::ng-deep .ct-tooltip {
-  color: white;
-  background: mat-color($my-app-accent);
-
-  &::before {
-    border-top-color: mat-color($my-app-accent);
-  }
-}
+$ct-series-custom-colors: (
+  (hsl(123.05, 46.46%, 50.2%), 'a'), // mechanical
+  (hsl(123.08, 45.88%, 66.67%), 'b'), // ebike
+  (hsl(123.08, 45.88%, 83.33%), 'c'), // numDocksAvailable
+);
 
 :host {
   display: block;
   height: 100%;
   flex: 1;
   background-color: white;
+
+  ::ng-deep .ct-legend {
+    position: relative;
+    z-index: 10;
+    list-style-type: none;
+
+    li {
+        position: relative;
+        padding-left: 23px;
+        margin-bottom: 3px;
+    }
+
+    li.hide {
+      display: none;
+    }
+
+    li:before {
+        width: 12px;
+        height: 12px;
+        position: absolute;
+        left: 0;
+        content: '';
+        border: 3px solid transparent;
+        border-radius: 2px;
+    }
+
+    li.inactive:before {
+        background: transparent;
+    }
+
+    @for $i from 0 to length($ct-series-custom-colors) {
+      .ct-series-#{$i}:before {
+          background-color: nth(nth($ct-series-custom-colors, $i + 1), 1);
+          border-color: nth(nth($ct-series-custom-colors, $i + 1), 1);
+      }
+    }
+  }
 
   mat-sidenav-content {
     display: flex;
@@ -75,16 +109,10 @@
         height: 80%;
         flex: 1;
 
-        ::ng-deep .ct-series-a .ct-slice-donut {
-          stroke: hsl(123.05, 46.46%, 50.2%);
-        }
-
-        ::ng-deep .ct-series-b .ct-slice-donut {
-          stroke: hsl(123.08, 45.88%, 66.67%);
-        }
-
-        ::ng-deep .ct-series-c .ct-slice-donut {
-          stroke: hsl(123.08, 45.88%, 83.33%);
+        @for $i from 0 to length($ct-series-custom-colors) {
+          ::ng-deep .ct-series-#{nth(nth($ct-series-custom-colors, $i + 1), 2)} .ct-slice-donut {
+            stroke: nth(nth($ct-series-custom-colors, $i + 1), 1);
+          }
         }
 
         ::ng-deep .ct-label {

@@ -3,6 +3,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { IChartistData, IPieChartOptions } from 'chartist';
+import ChartistLegend from 'chartist-plugin-legend';
 import { ChartType } from 'ng-chartist';
 import { Observable, Subject } from 'rxjs';
 import { filter, take, takeUntil } from 'rxjs/operators';
@@ -29,10 +30,10 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
   chartData: IChartistData;
   chartOptions: IPieChartOptions = {
     donut: true,
-    donutWidth: 80,
+    donutWidth: 60,
     labelInterpolationFnc: (value: string, idx: number) => {
       if (this.chartData.series[idx] > 0) {
-        return `${value} [${this.chartData.series[idx]}]`;
+        return `${this.chartData.series[idx]}`;
       } else {
         return '';
       }
@@ -59,9 +60,9 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
       .subscribe((selectedStation: Station) => {
         this.chartData = {
           labels: [
-            selectedStation.mechanical > 1 ? 'Mécaniques' : 'Mécanique',
-            selectedStation.ebike > 1 ? 'Ebikes' : 'Ebike',
-            selectedStation.numDocksAvailable > 1 ? 'Places vides' : 'Place vide',
+            'Mécanique',
+            'Ebike',
+            'Place vide',
           ],
           series: [[selectedStation.mechanical], [selectedStation.ebike], [selectedStation.numDocksAvailable]],
         };
@@ -69,6 +70,17 @@ export class StationDescriptionComponent implements OnInit, OnDestroy {
         this.chartOptions = {
           ...this.chartOptions,
           total: selectedStation.mechanical + selectedStation.ebike + selectedStation.numDocksAvailable,
+          plugins: [
+            ChartistLegend({
+              clickable: false,
+              position: 'bottom',
+              classNames: [
+                selectedStation.mechanical ? 'mechanical' : 'hide',
+                selectedStation.ebike ? 'ebike' : 'hide',
+                selectedStation.numDocksAvailable ? 'numDocksAvailable' : 'hide',
+              ],
+            }),
+          ],
         };
       });
   }
