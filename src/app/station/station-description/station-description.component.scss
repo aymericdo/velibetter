@@ -67,6 +67,7 @@ $ct-series-custom-colors: (
     display: flex;
     flex-direction: column;
     height: 100%;
+    overflow-y: auto;
 
     .station-name {
       margin-bottom: 0.875rem;
