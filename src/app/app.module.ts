@@ -113,7 +113,7 @@ import { TopBarComponent } from './top-bar/top-bar.component';
     }),
     EffectsModule.forRoot([AppEffects]),
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyCcsw2lr7StRPLt0nv3KybPFtT0U4hzyks'
+      apiKey: 'AIzaSyBs0W3Y5I31TsphfGkB-9pyhZQW7Dfe7lw'
     }),
     AgmDirectionModule,
     StoreDevtoolsModule.instrument({
