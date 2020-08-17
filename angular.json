@@ -32,7 +32,7 @@
                         "styles": [
                             "src/styles.scss",
                             "src/theme.scss",
-                            "node_modules/chartist/dist/chartist.css",
+                            "node_modules/chartist/dist/chartist.css"
                         ],
                         "scripts": []
                     },

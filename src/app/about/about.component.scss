@@ -1,5 +1,4 @@
 @import "src/variables.scss";
-@import "src/theme.scss";
 
 :host {
   display: block;
@@ -37,7 +36,7 @@
     height: 25px;
     border-radius: 50%;
     margin: 4px;
-    background-color: mat-color($my-app-accent);
+    background-color: var(--color-accent);
     color: white;
   }
 
