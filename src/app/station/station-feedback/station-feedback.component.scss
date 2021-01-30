@@ -108,11 +108,7 @@
     }
 
     .numbers {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 0.875rem;
-      flex-wrap: wrap;
+      padding: 24px 0px;
 
       button {
         display: flex;

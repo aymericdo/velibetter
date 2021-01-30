@@ -9,6 +9,9 @@ import { GoogleAnalyticsService } from 'src/app/services/google-analytics.servic
 import { savingFeedback } from '../../actions/feedback';
 import { Feedback, FeedbackType, Station } from '../../interfaces/index';
 import { AppState } from '../../reducers';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzSliderModule } from 'ng-zorro-antd/slider';
+
 
 @Component({
   selector: 'app-station-feedback',
@@ -32,6 +35,7 @@ export class StationFeedbackComponent {
     private store: Store<AppState>,
     private snackBar: MatSnackBar,
     private googleAnalyticsService: GoogleAnalyticsService,
+    private message: NzMessageService,
   ) {
     this.isSelectingStation$ = store.pipe(select(getIsSelectingStation));
     this.selectedStation$ = store.pipe(select(getSelectedStation));
@@ -75,6 +79,10 @@ export class StationFeedbackComponent {
       !!this.numberDock;
   }
 
+  createMessage(message: string): void {
+
+  }
+
   clickSubmit() {
     this
       .googleAnalyticsService
@@ -92,8 +100,6 @@ export class StationFeedbackComponent {
     });
     this.store.dispatch(savingFeedback({ feedback }));
     this.clear();
-    this.snackBar.open('Feedback envoyé! Merci beaucoup ☺️', 'Ok', {
-      duration: 5000,
-    });
+    this.message.create("success", 'Feedback envoyé! Merci beaucoup ☺️');
   }
 }

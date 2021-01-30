@@ -6,22 +6,9 @@
   <section *ngIf="!(isSelectingStation$ | async)" class="mat-typography">
     <h2 class="title">Dis nous ce que tu vois ?</h2>
     <div class="select-action">
-      <mat-card role="form" class="clickable confirmed"
-        [class.-selected]="selectedCard === 'confirmed'"
-        (click)="clickCard('confirmed')">
-        <i mat-card-avatar class="material-icons dock">visibility</i>
-        <mat-card-actions>
-          <span>Disponible</span>
-        </mat-card-actions>
-      </mat-card>
-      <mat-card role="form" class="clickable reported"
-        [class.-selected]="selectedCard === 'broken'"
-        (click)="clickCard('broken')">
-        <i mat-card-avatar class="material-icons dock">report_problem</i>
-        <mat-card-actions>
-          <span>Cassé</span>
-        </mat-card-actions>
-      </mat-card>
+      <label nz-checkbox [(ngModel)]="selectedCard">
+        {{ selectedCard ? 'Présent' : 'Absent' }}
+      </label>
     </div>
     <div class="selectors">
       <div class="selector">
@@ -30,13 +17,16 @@
           <span class="subtitle">Mécanique</span>
         </div>
         <div class="numbers">
-          <button mat-button class="clickable number-picker"
-            [disabled]="!selectedCard"
-            *ngFor="let number of numbers"
-            [class.-selected]="numberMechanical === number"
-            (click)="clickMechanical(number)">
-            {{number}}
-          </button>
+          <nz-row>
+            <nz-col nzSpan="16">
+              <nz-slider [nzMin]="1" [nzMax]="20" [(ngModel)]="numberMechanical" (ngModelChange)="setFeedback()">
+              </nz-slider>
+            </nz-col>
+            <div nz-col nzSpan="4">
+              <nz-input-number [nzMin]="1" [nzMax]="20" [(ngModel)]="numberMechanical" (ngModelChange)="setFeedback()">
+              </nz-input-number>
+            </div>
+          </nz-row>
         </div>
       </div>
       <div class="selector">
@@ -45,13 +35,15 @@
           <span class="subtitle">Electrique</span>
         </div>
         <div class="numbers">
-          <button mat-button class="clickable number-picker"
-            [disabled]="!selectedCard"
-            *ngFor="let number of numbers"
-            [class.-selected]="numberEbike === number"
-            (click)="clickEbike(number)">
-            {{number}}
-          </button>
+          <nz-row>
+            <nz-col nzSpan="16">
+              <nz-slider [nzMin]="1" [nzMax]="20" [(ngModel)]="numberEbike" (ngModelChange)="setFeedback()"></nz-slider>
+            </nz-col>
+            <div nz-col nzSpan="4">
+              <nz-input-number [nzMin]="1" [nzMax]="20" [(ngModel)]="numberEbike" (ngModelChange)="setFeedback()">
+              </nz-input-number>
+            </div>
+          </nz-row>
         </div>
       </div>
       <div class="selector">
@@ -60,19 +52,23 @@
           <span class="subtitle">Place libre</span>
         </div>
         <div class="numbers">
-          <button mat-button class="clickable number-picker"
-            [disabled]="!selectedCard"
-            *ngFor="let number of numbers"
-            [class.-selected]="numberDock === number"
-            (click)="clickDock(number)">
-            {{number}}
-          </button>
+          <nz-row>
+            <nz-col nzSpan="16">
+              <nz-slider [nzMin]="1" [nzMax]="20" [(ngModel)]="numberDock" (ngModelChange)="setFeedback()"></nz-slider>
+            </nz-col>
+            <div nz-col nzSpan="4">
+              <nz-input-number [nzMin]="1" [nzMax]="20" [(ngModel)]="numberDock" (ngModelChange)="setFeedback()">
+              </nz-input-number>
+            </div>
+          </nz-row>
         </div>
       </div>
     </div>
     <div class="submission-buttons">
-      <button mat-stroked-button color="warn" class="submit-button" [disabled]="!hasFeedback" (click)="clear()">Annuler</button>
-      <button mat-flat-button color="primary" class="submit-button" [disabled]="!hasFeedback" (click)="clickSubmit()">Envoyer</button>
+      <button mat-stroked-button color="warn" class="submit-button" [disabled]="!hasFeedback"
+        (click)="clear()">Annuler</button>
+      <button mat-flat-button color="primary" class="submit-button" [disabled]="!hasFeedback"
+        (click)="clickSubmit()">Envoyer</button>
     </div>
   </section>
 </mat-sidenav-content>
